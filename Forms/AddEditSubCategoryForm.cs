@@ -44,13 +44,18 @@ namespace K_Accounting.Forms
         public AddEditSubCategoryForm(AppDbContext context, int? categoryId = null)
         {
             InitializeComponent();
-            cmbCategory.AutoCompleteCustomSource = new AutoCompleteStringCollection();
-            cmbCategory.AutoCompleteCustomSource.AddRange(
-                _context.Categories
-                    .Where(c => !c.IsDeleted)
-                    .Select(c => c.Name)
-                    .ToArray()
-                    );
+            _context = context;
+            _preselectedCategoryId = categoryId;
+            // Настройки ComboBox
+            cmbCategory.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbCategory.AutoCompleteSource = AutoCompleteSource.ListItems; // Используем элементы из DataSource
+            //cmbCategory.AutoCompleteCustomSource = new AutoCompleteStringCollection();
+            //cmbCategory.AutoCompleteCustomSource.AddRange(
+            //    _context.Categories
+            //        .Where(c => !c.IsDeleted)
+            //        .Select(c => c.Name)
+            //        .ToArray()
+            //        );
             _context = context;
             _preselectedCategoryId = categoryId;
             LoadCategories();

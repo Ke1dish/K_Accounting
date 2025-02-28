@@ -29,8 +29,8 @@ namespace K_Accounting.Forms
 
         public AddEditAdditionalForm(AppDbContext context)
         {
-            InitializeComponent();
-            _context = context;
+            //InitializeComponent();
+            //_context = context;
 
             InitializeComponent();
             _context = context;

@@ -56,6 +56,9 @@ namespace K_Accounting.Forms
                 .ToList();
             cmbAccount.DisplayMember = "Name";
             cmbAccount.ValueMember = "Id";
+            cmbAccount.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Добавить
+            cmbAccount.AutoCompleteSource = AutoCompleteSource.ListItems; // Добавить
+            cmbAccount.DropDownStyle = ComboBoxStyle.DropDown; // Добавить
 
             // Загрузка категорий
             cmbCategory.DataSource = _context.Categories
@@ -63,13 +66,15 @@ namespace K_Accounting.Forms
                 .ToList();
             cmbCategory.DisplayMember = "Name";
             cmbCategory.ValueMember = "Id";
+            cmbCategory.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Добавить
+            cmbCategory.AutoCompleteSource = AutoCompleteSource.ListItems; // Добавить
+            cmbCategory.DropDownStyle = ComboBoxStyle.DropDown; // Добавить
 
             // Загрузка подкатегорий
-            cmbSubCategory.DataSource = _context.SubCategories
-                .Where(s => !s.IsDeleted)
-                .ToList();
-            cmbSubCategory.DisplayMember = "Name";
-            cmbSubCategory.ValueMember = "Id";
+            cmbSubCategory.DataSource = null;
+            cmbSubCategory.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbSubCategory.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cmbSubCategory.DropDownStyle = ComboBoxStyle.DropDown;
 
             // Загрузка дополнений
             cmbAdditional.DataSource = _context.Additionals
@@ -77,11 +82,11 @@ namespace K_Accounting.Forms
                 .ToList();
             cmbAdditional.DisplayMember = "Name";
             cmbAdditional.ValueMember = "Id";
+            cmbAdditional.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Добавить
+            cmbAdditional.AutoCompleteSource = AutoCompleteSource.ListItems; // Добавить
+            cmbAdditional.DropDownStyle = ComboBoxStyle.DropDown; // Добавить
 
-            // Убрать предзагрузку всех подкатегорий
-            cmbSubCategory.DataSource = null;
             cmbCategory_SelectedIndexChanged(null, EventArgs.Empty);
-
         }
 
         private void LoadExpenseData()
@@ -203,6 +208,14 @@ namespace K_Accounting.Forms
             if (cmbCategory.SelectedItem == null)
             {
                 MessageBox.Show("Необходимо выбрать категорию");
+                return false;
+            }
+
+            // Проверка соответствия введенного текста существующим значениям
+            if (cmbAccount.SelectedItem == null ||
+                cmbAccount.Text != ((Account)cmbAccount.SelectedItem).Name)
+            {
+                MessageBox.Show("Выберите существующий счет из списка");
                 return false;
             }
 
@@ -363,6 +376,15 @@ namespace K_Accounting.Forms
                 .Include(s => s.Category)
                 .Where(s => !s.IsDeleted)
                 .ToList();
+
+            // Обновление автодополнения
+            cmbSubCategory.AutoCompleteCustomSource.Clear();
+            cmbSubCategory.AutoCompleteCustomSource.AddRange(
+                _context.SubCategories
+                    .Where(s => !s.IsDeleted)
+                    .Select(c => c.Name)
+                    .ToArray()
+            );
         }
 
         private void LoadAdditionals()
@@ -377,17 +399,25 @@ namespace K_Accounting.Forms
             if (cmbCategory.SelectedItem is Category selectedCategory)
             {
                 // Фильтрация подкатегорий по выбранной категории
-                cmbSubCategory.DataSource = _context.SubCategories
+                var subCategories = _context.SubCategories
                     .Where(s => s.CategoryId == selectedCategory.Id && !s.IsDeleted)
                     .ToList();
+
+                cmbSubCategory.DataSource = subCategories;
+                cmbSubCategory.DisplayMember = "Name";
+                cmbSubCategory.ValueMember = "Id";
+
+                // Обновить автодополнение при изменении данных
+                cmbSubCategory.AutoCompleteCustomSource.Clear();
+                cmbSubCategory.AutoCompleteCustomSource.AddRange(
+                    subCategories.Select(c => c.Name).ToArray()
+                );
             }
             else
             {
                 // Если категория не выбрана, очищаем подкатегории
                 cmbSubCategory.DataSource = null;
             }
-            cmbSubCategory.DisplayMember = "Name";
-            cmbSubCategory.ValueMember = "Id";
         }
     }
 }

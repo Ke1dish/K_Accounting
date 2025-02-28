@@ -44,6 +44,13 @@ namespace K_Accounting.Forms
         public AddEditSubCategoryForm(AppDbContext context, int? categoryId = null)
         {
             InitializeComponent();
+            cmbCategory.AutoCompleteCustomSource = new AutoCompleteStringCollection();
+            cmbCategory.AutoCompleteCustomSource.AddRange(
+                _context.Categories
+                    .Where(c => !c.IsDeleted)
+                    .Select(c => c.Name)
+                    .ToArray()
+                    );
             _context = context;
             _preselectedCategoryId = categoryId;
             LoadCategories();
@@ -96,10 +103,17 @@ namespace K_Accounting.Forms
                 cmbCategory.DisplayMember = "Name";
                 cmbCategory.ValueMember = "Id";
 
+                // Настройки автодополнения
+                cmbCategory.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cmbCategory.AutoCompleteSource = AutoCompleteSource.ListItems;
+                cmbCategory.DropDownStyle = ComboBoxStyle.DropDown;
+
                 // Установка предвыбранной категории
                 if (_preselectedCategoryId.HasValue)
                 {
                     cmbCategory.SelectedValue = _preselectedCategoryId.Value;
+                    cmbCategory.Text = _categories
+                        .FirstOrDefault(c => c.Id == _preselectedCategoryId)?.Name;
                 }
             }
             catch (Exception ex)
@@ -113,6 +127,7 @@ namespace K_Accounting.Forms
             txtName.Text = _subCategory.Name;
             cmbCategory.SelectedValue = _subCategory.CategoryId;
             txtComment.Text = _subCategory.Comment;
+            cmbCategory.Text = ((Category)cmbCategory.SelectedItem)?.Name;
         }
 
         private bool ValidateForm()
@@ -126,6 +141,20 @@ namespace K_Accounting.Forms
             if (cmbCategory.SelectedItem == null)
             {
                 MessageBox.Show("Необходимо выбрать категорию");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtName.Text))
+            {
+                MessageBox.Show("Название подкатегории обязательно для заполнения");
+                return false;
+            }
+
+            // Проверка корректности выбранной категории
+            if (cmbCategory.SelectedItem == null ||
+                cmbCategory.Text != ((Category)cmbCategory.SelectedItem).Name)
+            {
+                MessageBox.Show("Выберите существующую категорию из списка");
                 return false;
             }
 
@@ -177,12 +206,17 @@ namespace K_Accounting.Forms
 
         private void btnNewCategory_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditCategoryForm())
+            //            using (var form = new AddEditCategoryForm())
+            using (var form = new AddEditCategoryForm(_context)) // Передаем контекст
             {
                 form.DataUpdated += (s, args) =>
                 {
                     LoadCategories();
                     CategoryAdded?.Invoke(this, EventArgs.Empty);
+
+                    // Автовыбор новой категории
+                    if (form.SavedCategoryId > 0)
+                        cmbCategory.SelectedValue = form.SavedCategoryId;
                 };
 
                 if (form.ShowDialog() == DialogResult.OK)
@@ -196,6 +230,16 @@ namespace K_Accounting.Forms
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void cmbCategory_TextChanged(object sender, EventArgs e)
+        {
+            var searchText = cmbCategory.Text.ToLower();
+            var filtered = _categories
+                .Where(c => c.Name.ToLower().Contains(searchText))
+                .ToList();
+
+            cmbCategory.DataSource = filtered;
         }
     }
 }

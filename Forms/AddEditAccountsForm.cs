@@ -60,6 +60,10 @@ namespace K_Accounting.Forms
                 cmbCurrency.DataSource = currencies;
                 cmbCurrency.DisplayMember = "Name";
                 cmbCurrency.ValueMember = "Id";
+
+                cmbCurrency.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cmbCurrency.AutoCompleteSource = AutoCompleteSource.ListItems;
+                cmbCurrency.DropDownStyle = ComboBoxStyle.DropDown;
             }
             catch (Exception ex)
             {
@@ -73,6 +77,8 @@ namespace K_Accounting.Forms
             numBalance.Value = _account.Balance;
             cmbCurrency.SelectedValue = _account.CurrencyId;
             txtComment.Text = _account.Comment;
+
+            cmbCurrency.Text = ((Currency)cmbCurrency.SelectedItem)?.Name;
         }
 
         private bool ValidateForm()
@@ -86,6 +92,20 @@ namespace K_Accounting.Forms
             if (cmbCurrency.SelectedItem == null)
             {
                 MessageBox.Show("Необходимо выбрать валюту");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtName.Text))
+            {
+                MessageBox.Show("Название счета обязательно для заполнения");
+                return false;
+            }
+
+            // Добавленная проверка для ComboBox
+            if (cmbCurrency.SelectedItem == null ||
+                cmbCurrency.Text != ((Currency)cmbCurrency.SelectedItem).Name)
+            {
+                MessageBox.Show("Выберите существующую валюту из списка");
                 return false;
             }
 
@@ -147,6 +167,10 @@ namespace K_Accounting.Forms
                     DataUpdated?.Invoke(this, EventArgs.Empty);
                 };
                 form.ShowDialog();
+
+                // Автоматически выбираем новую добавленную валюту
+                //if (form.SavedCurrencyId > 0)                               //это пока не работает нужно бужет сделать
+                //    cmbCurrency.SelectedValue = form.SavedCurrencyId;       //это пока не работает нужно бужет сделать
             }
         }
 

@@ -154,6 +154,7 @@
             cmbCategory.Name = "cmbCategory";
             cmbCategory.Size = new Size(193, 23);
             cmbCategory.TabIndex = 1;
+            cmbCategory.TextChanged += cmbCategory_TextChanged;
             // 
             // btnNewCategory
             // 

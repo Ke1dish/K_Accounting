@@ -58,7 +58,7 @@
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
             flowLayoutPanel1.Location = new Point(0, 171);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Padding = new Padding(5, 5, 5, 5);
+            flowLayoutPanel1.Padding = new Padding(5);
             flowLayoutPanel1.Size = new Size(384, 40);
             flowLayoutPanel1.TabIndex = 1;
             // 
@@ -120,7 +120,7 @@
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.Padding = new Padding(10, 10, 10, 10);
+            tableLayoutPanel1.Padding = new Padding(10);
             tableLayoutPanel1.RowCount = 4;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
@@ -160,6 +160,7 @@
             numAmount.Size = new Size(226, 23);
             numAmount.TabIndex = 3;
             numAmount.Value = new decimal(new int[] { 1, 0, 0, 131072 });
+            numAmount.KeyPress += numAmount_KeyPress;
             // 
             // label1
             // 
@@ -190,6 +191,7 @@
             cmbToAccount.Size = new Size(193, 23);
             cmbToAccount.TabIndex = 1;
             cmbToAccount.SelectedIndexChanged += cmb_SelectedIndexChanged;
+            cmbToAccount.TextUpdate += cmbToAccount_TextUpdate;
             cmbToAccount.Format += cmbFormat;
             // 
             // label3
@@ -211,6 +213,7 @@
             cmbFromAccount.Size = new Size(226, 23);
             cmbFromAccount.TabIndex = 0;
             cmbFromAccount.SelectedIndexChanged += cmb_SelectedIndexChanged;
+            cmbFromAccount.TextUpdate += cmbFromAccount_TextUpdate;
             cmbFromAccount.Format += cmbFormat;
             // 
             // label4

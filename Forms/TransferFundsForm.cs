@@ -42,11 +42,21 @@ namespace K_Accounting.Forms
             cmbFromAccount.DataSource = _accounts;
             cmbFromAccount.DisplayMember = "Name";
             cmbFromAccount.ValueMember = "Id";
+            cmbFromAccount.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbFromAccount.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cmbFromAccount.DropDownStyle = ComboBoxStyle.DropDown;
 
             // Создаем новую BindingList с теми же элементами
             cmbToAccount.DataSource = new BindingList<Account>(_accounts.ToList());
             cmbToAccount.DisplayMember = "Name";
             cmbToAccount.ValueMember = "Id";
+            cmbToAccount.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbToAccount.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cmbToAccount.DropDownStyle = ComboBoxStyle.DropDown;
+
+            // Обновление форматирования
+            cmbFromAccount.Format += cmbFormat;
+            cmbToAccount.Format += cmbFormat;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -134,6 +144,35 @@ namespace K_Accounting.Forms
                 return false;
             }
 
+            // Проверка исходного счета
+            if (cmbFromAccount.SelectedItem == null ||
+                !_accounts.Any(a => a.Id == (int)cmbFromAccount.SelectedValue))
+            {
+                MessageBox.Show("Выберите корректный исходный счет из списка");
+                return false;
+            }
+
+            // Проверка целевого счета
+            var toAccounts = cmbToAccount.DataSource as BindingList<Account>;
+            if (cmbToAccount.SelectedItem == null ||
+                (toAccounts != null && !toAccounts.Any(a => a.Id == (int)cmbToAccount.SelectedValue)))
+            {
+                MessageBox.Show("Выберите корректный целевой счет из списка");
+                return false;
+            }
+
+            if (cmbFromAccount.SelectedValue.Equals(cmbToAccount.SelectedValue))
+            {
+                MessageBox.Show("Нельзя переводить на тот же счет");
+                return false;
+            }
+
+            if (numAmount.Value <= 0)
+            {
+                MessageBox.Show("Сумма должна быть больше нуля");
+                return false;
+            }
+
             return true;
         }
 
@@ -141,11 +180,16 @@ namespace K_Accounting.Forms
         {
             using (var form = new AddEditAccountsForm(_context))
             {
-                form.DataUpdated += (s, args) => LoadAccounts();
+                form.DataUpdated += (s, args) =>
+                {
+                    LoadAccounts(); // Полная перезагрузка данных
+                    UpdateCurrencyInfo(); // Обновление курса валют
+                };
 
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    LoadAccounts();
+                    // Автовыбор нового счета при создании
+                    cmbFromAccount.SelectedValue = form.SavedAccountId;
                 }
             }
         }
@@ -174,10 +218,37 @@ namespace K_Accounting.Forms
             var from = cmbFromAccount.SelectedItem as Account;
             var to = cmbToAccount.SelectedItem as Account;
 
-            if (from?.Currency != null && to?.Currency != null)
+           lblConversionRate.Text = from?.Currency != null && to?.Currency != null
+                ? $"1 {from.Currency.Code} = {(to.Currency.Rate / from.Currency.Rate):N4} {to.Currency.Code}"
+                : "Выберите оба счета для отображения курса";
+        }
+
+        private void numAmount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Разрешаем только цифры и управляющие символы
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',')
             {
-                lblConversionRate.Text = $"1 {from.Currency.Code} = {to.Currency.Rate / from.Currency.Rate:N4} {to.Currency.Code}";
+                e.Handled = true;
             }
+        }
+
+        private void cmbFromAccount_TextUpdate(object sender, EventArgs e)
+        {
+            var combo = sender as ComboBox;
+            var searchText = combo.Text.ToLower();
+            combo.SelectedItem = _accounts.FirstOrDefault(a =>
+                a.Name.ToLower().Contains(searchText)
+            );
+        }
+
+        private void cmbToAccount_TextUpdate(object sender, EventArgs e)
+        {
+            var combo = sender as ComboBox;
+            var searchText = combo.Text.ToLower();
+            var accounts = combo.DataSource as BindingList<Account>;
+            combo.SelectedItem = accounts?.FirstOrDefault(a =>
+                a.Name.ToLower().Contains(searchText)
+            );
         }
     }
 }

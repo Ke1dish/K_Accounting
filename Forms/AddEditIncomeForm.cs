@@ -55,16 +55,24 @@ namespace K_Accounting.Forms
             // Загрузка счетов
             cmbAccount.DataSource = _context.Accounts
                 .Where(a => !a.IsDeleted)
+                .OrderBy(a => a.Name) // Сортировка по имени
                 .ToList();
             cmbAccount.DisplayMember = "Name";
             cmbAccount.ValueMember = "Id";
+            cmbAccount.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Автодополнение
+            cmbAccount.AutoCompleteSource = AutoCompleteSource.ListItems; // Источник данных
+            cmbAccount.DropDownStyle = ComboBoxStyle.DropDown; // Разрешить ручной ввод
 
             // Загрузка источников
             cmbSource.DataSource = _context.Sources
                 .Where(s => !s.IsDeleted)
+                .OrderBy(s => s.Name) // Сортировка по имени
                 .ToList();
             cmbSource.DisplayMember = "Name";
             cmbSource.ValueMember = "Id";
+            cmbSource.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Автодополнение
+            cmbSource.AutoCompleteSource = AutoCompleteSource.ListItems; // Источник данных
+            cmbSource.DropDownStyle = ComboBoxStyle.DropDown; // Разрешить ручной ввод
         }
 
         private void LoadIncomeData()
@@ -79,6 +87,10 @@ namespace K_Accounting.Forms
             cmbAccount.SelectedValue = _income.AccountId;
             cmbSource.SelectedValue = _income.SourceId;
             txtComment.Text = _income.Comment;
+
+            // Установка текста для корректного отображения
+            cmbAccount.Text = ((Account)cmbAccount.SelectedItem)?.Name;
+            cmbSource.Text = ((Source)cmbSource.SelectedItem)?.Name;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -164,6 +176,28 @@ namespace K_Accounting.Forms
                 return false;
             }
 
+            // Проверка счета
+            if (cmbAccount.SelectedItem == null ||
+                cmbAccount.Text != ((Account)cmbAccount.SelectedItem).Name)
+            {
+                MessageBox.Show("Выберите существующий счет из списка");
+                return false;
+            }
+
+            // Проверка источника
+            if (cmbSource.SelectedItem == null ||
+                cmbSource.Text != ((Source)cmbSource.SelectedItem).Name)
+            {
+                MessageBox.Show("Выберите существующий источник из списка");
+                return false;
+            }
+
+            if (numAmount.Value <= 0)
+            {
+                MessageBox.Show("Сумма должна быть больше нуля");
+                return false;
+            }
+
             return true;
         }
 
@@ -178,7 +212,12 @@ namespace K_Accounting.Forms
         {
             using (var form = new AddEditAccountsForm(_context))
             {
-                form.DataUpdated += (s, args) => InitializeData();
+                form.DataUpdated += (s, args) =>
+                {
+                    InitializeData(); // Обновляем список счетов
+                    if (form.SavedAccountId > 0)
+                        cmbAccount.SelectedValue = form.SavedAccountId;
+                };
                 form.ShowDialog();
             }
         }
@@ -187,7 +226,12 @@ namespace K_Accounting.Forms
         {
             using (var form = new AddEditSourceForm(_context))
             {
-                form.DataUpdated += (s, args) => InitializeData();
+                form.DataUpdated += (s, args) =>
+                {
+                    InitializeData(); // Обновляем список источников
+                    //if (form.SavedSourceId > 0)                             //это пока не работает нужно сделать
+                    //    cmbSource.SelectedValue = form.SavedSourceId;       //это пока не работает нужно сделать
+                };
                 form.ShowDialog();
             }
         }

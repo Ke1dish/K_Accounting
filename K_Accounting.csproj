@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Company>Keldish</Company>
+    
+    <MajorVersion>1</MajorVersion>
+	<MinorVersion>$([System.DateTime]::Now.ToString("yy"))</MinorVersion>
+	<BuildNumber>$([System.DateTime]::Now.ToString("MM"))</BuildNumber>
+	<RevisionNumber>$([System.DateTime]::Now.ToString("dd"))</RevisionNumber>
+	<Version>$(MajorVersion).$(MinorVersion).$(BuildNumber).$(RevisionNumber)</Version>
+	<AssemblyVersion>$(Version)</AssemblyVersion>
+	  
+	<Copyright>© 2024 Семейный Проект</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="budget.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -176,7 +176,7 @@ namespace K_Accounting.Forms
         // Обработчики для кнопок добавления новых элементов
         private void btnNewAccount_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditAccountForm(_context))
+            using (var form = new AddEditAccountsForm(_context))
             {
                 form.DataUpdated += (s, args) => InitializeData();
                 form.ShowDialog();

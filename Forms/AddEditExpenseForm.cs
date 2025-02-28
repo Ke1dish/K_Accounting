@@ -217,7 +217,7 @@ namespace K_Accounting.Forms
 
         private void btnNewAccount_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditAccountForm(_context)) // Теперь корректно
+            using (var form = new AddEditAccountsForm(_context)) // Теперь корректно
             {
                 form.DataUpdated += (s, args) =>
                 {

@@ -1,6 +1,6 @@
 ﻿namespace K_Accounting.Forms
 {
-    partial class AddEditAccountForm
+    partial class AddEditAccountsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -33,13 +33,13 @@
             btnOk = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             label1 = new Label();
+            txtName = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
-            txtName = new TextBox();
             numBalance = new NumericUpDown();
             cmbCurrency = new ComboBox();
-            button1 = new Button();
+            btnNewCurrency = new Button();
             txtComment = new TextBox();
             flowLayoutPanel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -85,13 +85,13 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 32F));
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
+            tableLayoutPanel1.Controls.Add(txtName, 1, 0);
             tableLayoutPanel1.Controls.Add(label2, 0, 1);
             tableLayoutPanel1.Controls.Add(label3, 0, 2);
             tableLayoutPanel1.Controls.Add(label4, 0, 3);
-            tableLayoutPanel1.Controls.Add(txtName, 1, 0);
             tableLayoutPanel1.Controls.Add(numBalance, 1, 1);
             tableLayoutPanel1.Controls.Add(cmbCurrency, 1, 2);
-            tableLayoutPanel1.Controls.Add(button1, 2, 2);
+            tableLayoutPanel1.Controls.Add(btnNewCurrency, 2, 2);
             tableLayoutPanel1.Controls.Add(txtComment, 1, 3);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
@@ -114,33 +114,6 @@
             label1.TabIndex = 0;
             label1.Text = "Наименование:";
             // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(13, 39);
-            label2.Name = "label2";
-            label2.Size = new Size(49, 15);
-            label2.TabIndex = 1;
-            label2.Text = "Баланс:";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(13, 68);
-            label3.Name = "label3";
-            label3.Size = new Size(51, 15);
-            label3.TabIndex = 2;
-            label3.Text = "Валюта:";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(13, 97);
-            label4.Name = "label4";
-            label4.Size = new Size(87, 15);
-            label4.TabIndex = 3;
-            label4.Text = "Комментарий:";
-            // 
             // txtName
             // 
             tableLayoutPanel1.SetColumnSpan(txtName, 2);
@@ -149,6 +122,33 @@
             txtName.Name = "txtName";
             txtName.Size = new Size(226, 23);
             txtName.TabIndex = 0;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(13, 39);
+            label2.Name = "label2";
+            label2.Size = new Size(49, 15);
+            label2.TabIndex = 2;
+            label2.Text = "Баланс:";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(13, 68);
+            label3.Name = "label3";
+            label3.Size = new Size(51, 15);
+            label3.TabIndex = 3;
+            label3.Text = "Валюта:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(13, 97);
+            label4.Name = "label4";
+            label4.Size = new Size(87, 15);
+            label4.TabIndex = 4;
+            label4.Text = "Комментарий:";
             // 
             // numBalance
             // 
@@ -170,28 +170,28 @@
             cmbCurrency.Size = new Size(193, 23);
             cmbCurrency.TabIndex = 2;
             // 
-            // button1
+            // btnNewCurrency
             // 
-            button1.Dock = DockStyle.Fill;
-            button1.Location = new Point(344, 71);
-            button1.Name = "button1";
-            button1.Size = new Size(27, 23);
-            button1.TabIndex = 3;
-            button1.Text = "...";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += btnNewCurrency_Click;
+            btnNewCurrency.Dock = DockStyle.Fill;
+            btnNewCurrency.Location = new Point(344, 71);
+            btnNewCurrency.Name = "btnNewCurrency";
+            btnNewCurrency.Size = new Size(27, 23);
+            btnNewCurrency.TabIndex = 3;
+            btnNewCurrency.Text = "...";
+            btnNewCurrency.UseVisualStyleBackColor = true;
+            btnNewCurrency.Click += btnNewCurrency_Click;
             // 
             // txtComment
             // 
-            txtComment.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel1.SetColumnSpan(txtComment, 2);
+            txtComment.Dock = DockStyle.Fill;
             txtComment.Location = new Point(145, 100);
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
             txtComment.Size = new Size(226, 58);
             txtComment.TabIndex = 4;
             // 
-            // AddEditAccountForm
+            // AddEditAccountsForm
             // 
             AcceptButton = btnOk;
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -201,9 +201,9 @@
             Controls.Add(tableLayoutPanel1);
             Controls.Add(flowLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Name = "AddEditAccountForm";
+            Name = "AddEditAccountsForm";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "AddEditAccountForm";
+            Text = "AddEditAccountsForm";
             flowLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
@@ -215,16 +215,16 @@
 
         private FlowLayoutPanel flowLayoutPanel1;
         private Button btnCancel;
-        private Button btnOk;
         private TableLayoutPanel tableLayoutPanel1;
+        private Button btnOk;
         private Label label1;
+        private TextBox txtName;
         private Label label2;
         private Label label3;
         private Label label4;
-        private TextBox txtName;
         private NumericUpDown numBalance;
         private ComboBox cmbCurrency;
-        private Button button1;
+        private Button btnNewCurrency;
         private TextBox txtComment;
     }
 }

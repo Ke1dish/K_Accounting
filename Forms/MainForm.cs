@@ -441,7 +441,7 @@ namespace K_Accounting
 
         private void btnAddAccounts_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditAccountForm(_context))
+            using (var form = new AddEditAccountsForm(_context))
             {
                 form.isEditMode = false;
                 // Подписываемся на событие CurrencyAdded
@@ -463,7 +463,7 @@ namespace K_Accounting
         {
             if (_selectedAccount == null) return;
 
-            using (var form = new AddEditAccountForm(_context, _selectedAccount))
+            using (var form = new AddEditAccountsForm(_context, _selectedAccount))
             {
                 form.isEditMode = true;
                 form.DataUpdated += (s, args) =>

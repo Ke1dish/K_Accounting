@@ -139,7 +139,7 @@ namespace K_Accounting.Forms
 
         private void btnNewAccount_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditAccountForm(_context))
+            using (var form = new AddEditAccountsForm(_context))
             {
                 form.DataUpdated += (s, args) => LoadAccounts();
 

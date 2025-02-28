@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using K_Accounting.Data;
 using K_Accounting.Models;
-using System.Xml.Linq;
-using System.Security.Principal;
 
 namespace K_Accounting.Forms
 {
-    public partial class AddEditAccountForm : Form
+    public partial class AddEditAccountsForm : Form
     {
         private readonly AppDbContext _context;             // Ссылка на базу данных
 
@@ -36,7 +34,7 @@ namespace K_Accounting.Forms
         public event EventHandler DataUpdated;
 
 
-        public AddEditAccountForm(AppDbContext context) // Новый конструктор
+        public AddEditAccountsForm(AppDbContext context) // Новый конструктор
         {
             InitializeComponent();
             _context = context;
@@ -44,12 +42,10 @@ namespace K_Accounting.Forms
             txtName.Focus();
         }
 
-        public AddEditAccountForm(AppDbContext context, Account account) : this(context)
+        public AddEditAccountsForm(AppDbContext context, Account account) : this(context)
         {
-            InitializeComponent();
             _account = account;
             LoadAccountData();
-            txtName.Focus();
         }
 
         private void LoadCurrencies()

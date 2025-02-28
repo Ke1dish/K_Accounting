@@ -64,7 +64,7 @@
             flowLayoutPanel1.Controls.Add(btnAdd);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new Point(0, 241);
+            flowLayoutPanel1.Location = new Point(0, 270);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(5);
             flowLayoutPanel1.Size = new Size(384, 40);
@@ -106,9 +106,9 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 32F));
-            tableLayoutPanel1.Controls.Add(chkIsTemplate, 1, 7);
-            tableLayoutPanel1.Controls.Add(txtComment, 1, 6);
-            tableLayoutPanel1.Controls.Add(label2, 0, 6);
+            tableLayoutPanel1.Controls.Add(chkIsTemplate, 1, 6);
+            tableLayoutPanel1.Controls.Add(txtComment, 1, 7);
+            tableLayoutPanel1.Controls.Add(label2, 0, 7);
             tableLayoutPanel1.Controls.Add(btnNewAdditional, 2, 5);
             tableLayoutPanel1.Controls.Add(cmbAdditional, 1, 5);
             tableLayoutPanel1.Controls.Add(label100, 0, 5);
@@ -138,14 +138,15 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(384, 241);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Size = new Size(384, 270);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // chkIsTemplate
             // 
             chkIsTemplate.AutoSize = true;
             tableLayoutPanel1.SetColumnSpan(chkIsTemplate, 2);
-            chkIsTemplate.Location = new Point(145, 216);
+            chkIsTemplate.Location = new Point(145, 187);
             chkIsTemplate.Name = "chkIsTemplate";
             chkIsTemplate.Size = new Size(170, 19);
             chkIsTemplate.TabIndex = 11;
@@ -156,15 +157,16 @@
             // 
             tableLayoutPanel1.SetColumnSpan(txtComment, 2);
             txtComment.Dock = DockStyle.Fill;
-            txtComment.Location = new Point(145, 187);
+            txtComment.Location = new Point(145, 212);
+            txtComment.Multiline = true;
             txtComment.Name = "txtComment";
-            txtComment.Size = new Size(226, 23);
+            txtComment.Size = new Size(226, 45);
             txtComment.TabIndex = 10;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(13, 184);
+            label2.Location = new Point(13, 209);
             label2.Name = "label2";
             label2.Size = new Size(84, 15);
             label2.TabIndex = 57;
@@ -333,7 +335,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new Size(384, 281);
+            ClientSize = new Size(384, 310);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(flowLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;

@@ -91,7 +91,7 @@ namespace K_Accounting
 
         private void btnCheckUpdate_Click(object sender, EventArgs e)
         {
-            const string url = "https://github.com/your_repo";
+            const string url = "https://github.com/Ke1dish/K_Accounting"; 
 
             try
             {
@@ -499,6 +499,7 @@ namespace K_Accounting
                     {
                         int newIndex = Math.Min(savedIndex, dgwAccounts.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
                         dgwAccounts.CurrentCell = dgwAccounts.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        _selectedAccount = dgwAccounts.CurrentRow?.DataBoundItem as Account;
                     }
                 }
                 catch (Exception ex)
@@ -735,6 +736,7 @@ namespace K_Accounting
                     {
                         int newIndex = Math.Min(savedIndex, dgwExpenses.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
                         dgwExpenses.CurrentCell = dgwExpenses.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        _selectedExpense = dgwExpenses.CurrentRow?.DataBoundItem as Expense;
                     }
 
                     MessageBox.Show("Расход успешно удален. Средства возвращены на счет.");
@@ -895,6 +897,7 @@ namespace K_Accounting
                     {
                         int newIndex = Math.Min(savedIndex, dgwIncomes.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
                         dgwIncomes.CurrentCell = dgwIncomes.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        _selectedIncome = dgwIncomes.CurrentRow?.DataBoundItem as Income;
                     }
                 }
                 catch (Exception ex)
@@ -1016,6 +1019,7 @@ namespace K_Accounting
                     {
                         int newIndex = Math.Min(savedIndex, dgwCategorie.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
                         dgwCategorie.CurrentCell = dgwCategorie.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        _selectedCategory = dgwCategorie.CurrentRow?.DataBoundItem as Category;
                     }
                 }
                 catch (Exception ex)
@@ -1180,6 +1184,7 @@ namespace K_Accounting
                     {
                         int newIndex = Math.Min(savedIndex, dgwSubCategories.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
                         dgwSubCategories.CurrentCell = dgwSubCategories.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        _selectedSubCategory = dgwSubCategories.CurrentRow?.DataBoundItem as SubCategory;
                     }
                 }
                 catch (Exception ex)
@@ -1290,6 +1295,7 @@ namespace K_Accounting
                     {
                         int newIndex = Math.Min(savedIndex, dgwAdditionals.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
                         dgwAdditionals.CurrentCell = dgwAdditionals.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        _selectedAdditional = dgwAdditionals.CurrentRow?.DataBoundItem as Additional;
                     }
                 }
                 catch (Exception ex)
@@ -1400,6 +1406,7 @@ namespace K_Accounting
                     {
                         int newIndex = Math.Min(savedIndex, dgwSource.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
                         dgwSource.CurrentCell = dgwSource.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        _selectedSource = dgwSource.CurrentRow?.DataBoundItem as Source;
                     }
                 }
                 catch (Exception ex)
@@ -1533,6 +1540,7 @@ namespace K_Accounting
                     {
                         int newIndex = Math.Min(savedIndex, dgwCurrencies.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
                         dgwCurrencies.CurrentCell = dgwCurrencies.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        _selectedCurrency = dgwCurrencies.CurrentRow?.DataBoundItem as Currency;
                     }
                 }
                 catch (Exception ex)

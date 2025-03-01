@@ -37,13 +37,6 @@ namespace K_Accounting.Forms
             dtpDate.Focus();
         }
 
-        ////public AddEditExpenseForm(AppDbContext context, Expense expense) : this(context)
-        ////{
-        ////    _expense = expense;
-        ////    LoadExpenseData();
-        ////    dtpDate.Focus();
-        ////}
-
         public AddEditExpenseForm(AppDbContext context, Expense template) : this(context)
         {
             _expense = new Expense
@@ -119,28 +112,6 @@ namespace K_Accounting.Forms
 
         private void LoadExpenseData()
         {
-            ////if (_expense == null) return;
-
-            ////// Сохраняем оригинальные значения
-            ////_originalAmount = _expense.Amount;
-            ////_originalAccountId = _expense.AccountId;
-
-            ////// Заполняем контролы
-            ////dtpDate.Value = _expense.Date;
-            ////numAmount.Value = _expense.Amount;
-            ////cmbAccount.SelectedValue = _expense.AccountId;
-            ////cmbCategory.SelectedValue = _expense.CategoryId;
-            ////cmbSubCategory.SelectedValue = _expense.SubCategoryId;
-            ////cmbAdditional.SelectedValue = _expense.AdditionalId;
-            ////txtComment.Text = _expense.Comment;
-            ////chkIsTemplate.Checked = _expense.IsTemplate;
-
-            ////// Установить категорию (это вызовет событие SelectedIndexChanged)
-            ////cmbCategory.SelectedValue = _expense.CategoryId;
-
-            ////// Установить подкатегорию после загрузки списка
-            ////cmbSubCategory.SelectedValue = _expense.SubCategoryId;
-
             if (_expense == null) return;
 
             try
@@ -275,6 +246,13 @@ namespace K_Accounting.Forms
                 return false;
             }
 
+            // Проверка наличия подкатегории только если есть категория
+            if (cmbCategory.SelectedItem != null && cmbSubCategory.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите подкатегорию");
+                return false;
+            }
+
             return true;
         }
 
@@ -304,9 +282,27 @@ namespace K_Accounting.Forms
             {
                 form.DataUpdated += (s, args) =>
                 {
-                    LoadCategories();
+                    // Обновляем список категорий
+                    var categories = _context.Categories
+                        .Where(c => !c.IsDeleted)
+                        .ToList();
+
+                    cmbCategory.BeginUpdate();
+                    cmbCategory.DataSource = null;
+                    cmbCategory.DataSource = categories;
+                    cmbCategory.DisplayMember = "Name";
+                    cmbCategory.ValueMember = "Id";
+                    cmbCategory.EndUpdate();
+
+                    // Устанавливаем новую категорию
                     if (form.SavedCategoryId > 0)
+                    {
                         cmbCategory.SelectedValue = form.SavedCategoryId;
+                        cmbCategory.Text = categories.FirstOrDefault(c => c.Id == form.SavedCategoryId)?.Name;
+                    }
+                    ////LoadCategories();
+                    ////if (form.SavedCategoryId > 0)
+                    ////    cmbCategory.SelectedValue = form.SavedCategoryId;
                 };
                 form.ShowDialog();
             }
@@ -314,36 +310,67 @@ namespace K_Accounting.Forms
 
         private void btnNewSubcategory_Click(object sender, EventArgs e)
         {
-            var selectedCategory = cmbCategory.SelectedItem as Category;
-            int? categoryId = selectedCategory?.Id;
+            var selectedCategoryId = (int?)cmbCategory.SelectedValue;
 
-            using (var form = new AddEditSubCategoryForm(_context, categoryId))
+            using (var form = new AddEditSubCategoryForm(_context, selectedCategoryId))
             {
-                form.SubCategoryAddedOrUpdated += (s, args) =>
+                form.DataUpdated += (s, args) =>
                 {
-                    // Обновляем список подкатегорий для текущей категории
-                    if (categoryId.HasValue)
+                    // Обновляем подкатегории только для текущей категории
+                    if (selectedCategoryId.HasValue)
                     {
-                        cmbSubCategory.DataSource = _context.SubCategories
-                            .Where(s => s.CategoryId == categoryId && !s.IsDeleted)
+                        var subCategories = _context.SubCategories
+                            .Where(s => s.CategoryId == selectedCategoryId && !s.IsDeleted)
                             .ToList();
-                        cmbSubCategory.SelectedValue = form.SavedSubCategoryId;
+
+                        cmbSubCategory.BeginUpdate();
+                        cmbSubCategory.DataSource = null;
+                        cmbSubCategory.DataSource = subCategories;
+                        cmbSubCategory.DisplayMember = "Name";
+                        cmbSubCategory.ValueMember = "Id";
+                        cmbSubCategory.EndUpdate();
+
+                        // Устанавливаем новую подкатегорию
+                        if (form.SavedSubCategoryId > 0)
+                        {
+                            cmbSubCategory.SelectedValue = form.SavedSubCategoryId;
+                            cmbSubCategory.Text = subCategories
+                                .FirstOrDefault(s => s.Id == form.SavedSubCategoryId)?.Name;
+                        }
                     }
                 };
+
                 form.ShowDialog();
             }
         }
 
         private void btnNewAdditional_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditAdditionalForm(_context)) // Корректно
+            using (var form = new AddEditAdditionalForm(_context))
             {
                 form.DataUpdated += (s, args) =>
                 {
-                    LoadAdditionals();
+                    // Обновляем список дополнительных полей
+                    var additionals = _context.Additionals
+                        .Where(a => !a.IsDeleted)
+                        .ToList();
+
+                    cmbAdditional.BeginUpdate();
+                    cmbAdditional.DataSource = null;
+                    cmbAdditional.DataSource = additionals;
+                    cmbAdditional.DisplayMember = "Name";
+                    cmbAdditional.ValueMember = "Id";
+                    cmbAdditional.EndUpdate();
+
+                    // Устанавливаем новое значение
                     if (form.SavedAdditionalId > 0)
+                    {
                         cmbAdditional.SelectedValue = form.SavedAdditionalId;
+                        cmbAdditional.Text = additionals
+                            .FirstOrDefault(a => a.Id == form.SavedAdditionalId)?.Name;
+                    }
                 };
+
                 form.ShowDialog();
             }
         }
@@ -441,6 +468,7 @@ namespace K_Accounting.Forms
         {
             if (cmbCategory.SelectedItem is Category selectedCategory)
             {
+                cmbSubCategory.Text = "";
                 // Фильтрация подкатегорий по выбранной категории
                 var subCategories = _context.SubCategories
                     .Where(s => s.CategoryId == selectedCategory.Id && !s.IsDeleted)

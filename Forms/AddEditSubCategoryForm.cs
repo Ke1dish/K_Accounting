@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using K_Accounting.Data;
 using K_Accounting.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace K_Accounting.Forms
 {
     public partial class AddEditSubCategoryForm : Form
     {
         private readonly AppDbContext _context;
+
+        public int SavedSubCategoryId { get; private set; }
 
         private SubCategory _subCategory;
         private List<Category> _categories;
@@ -29,8 +32,6 @@ namespace K_Accounting.Forms
                 btnOk.Text = value ? "Сохранить" : "Создать";
             }
         }
-
-        public int SavedSubCategoryId { get; private set; }
 
         public event EventHandler CategoryAdded;
 
@@ -138,30 +139,33 @@ namespace K_Accounting.Forms
             {
                 if (_isEditMode)
                 {
-                    // Используем существующий контекст из главной формы
+                    // Редактирование существующей записи
                     var existing = _context.SubCategories.Find(_subCategory.Id);
                     if (existing != null)
                     {
                         existing.Name = txtName.Text.Trim();
                         existing.CategoryId = (int)cmbCategory.SelectedValue;
                         existing.Comment = txtComment.Text.Trim();
+                        _context.SaveChanges();
                         SavedSubCategoryId = existing.Id;
                     }
                 }
                 else
                 {
+                    // Создание новой записи
                     var newSubCategory = new SubCategory(
                         txtName.Text.Trim(),
                         (int)cmbCategory.SelectedValue)
                     {
                         Comment = txtComment.Text.Trim()
                     };
-                    SavedSubCategoryId = newSubCategory.Id;
+
                     _context.SubCategories.Add(newSubCategory);
+                    _context.SaveChanges(); // Сохраняем для генерации ID
+                    SavedSubCategoryId = newSubCategory.Id; // Сохраняем ID новой записи
                 }
 
                 // Сохраняем изменения в переданном контексте
-                _context.SaveChanges();
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 DialogResult = DialogResult.OK;
                 Close();
@@ -174,23 +178,46 @@ namespace K_Accounting.Forms
 
         private void btnNewCategory_Click(object sender, EventArgs e)
         {
-            //            using (var form = new AddEditCategoryForm())
-            using (var form = new AddEditCategoryForm(_context)) // Передаем контекст
+            using (var form = new AddEditCategoryForm(_context))
             {
                 form.DataUpdated += (s, args) =>
                 {
-                    LoadCategories();
-                    CategoryAdded?.Invoke(this, EventArgs.Empty);
+                    // 1. Обновляем список категорий с новыми данными
+                    var categories = _context.Categories
+                        .Where(c => !c.IsDeleted)
+                        .AsNoTracking()
+                        .ToList();
 
-                    // Автовыбор новой категории
+                    // 2. Полная перезагрузка комбобокса
+                    cmbCategory.BeginUpdate();
+                    cmbCategory.DataSource = null;
+                    cmbCategory.DataSource = categories;
+                    cmbCategory.DisplayMember = "Name";
+                    cmbCategory.ValueMember = "Id";
+                    cmbCategory.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                    cmbCategory.AutoCompleteSource = AutoCompleteSource.ListItems;
+                    cmbCategory.DropDownStyle = ComboBoxStyle.DropDown;
+                    cmbCategory.EndUpdate();
+
+                    // 3. Установка новой категории
                     if (form.SavedCategoryId > 0)
+                    {
+                        // 4. Принудительное обновление перед выбором
+                        cmbCategory.Refresh();
+
+                        // 5. Установка значения через SelectedValue
                         cmbCategory.SelectedValue = form.SavedCategoryId;
+
+                        // 6. Ручная установка текста при необходимости
+                        var newCategory = categories.FirstOrDefault(c => c.Id == form.SavedCategoryId);
+                        if (newCategory != null)
+                        {
+                            cmbCategory.Text = newCategory.Name;
+                        }
+                    }
                 };
 
-                if (form.ShowDialog() == DialogResult.OK)
-                {
-                    LoadCategories();
-                }
+                form.ShowDialog();
             }
         }
 

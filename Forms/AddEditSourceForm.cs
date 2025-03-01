@@ -9,6 +9,8 @@ namespace K_Accounting.Forms
     {
         private readonly AppDbContext _context;
 
+        public int SavedSourceId { get; private set; } // Новое свойство
+
         private Source _source;
         private bool _isEditMode;
         public bool isEditMode
@@ -70,20 +72,22 @@ namespace K_Accounting.Forms
                 {
                     if (_isEditMode)
                     {
+                        // Редактирование существующего источника
                         var existing = context.Sources.Find(_source.Id);
-                        if (existing != null)
-                        {
-                            existing.Name = txtName.Text.Trim();
-                            existing.Comment = txtComment.Text.Trim();
-                        }
+                        existing.Name = txtName.Text.Trim();
+                        existing.Comment = txtComment.Text.Trim();
+                        SavedSourceId = existing.Id;
                     }
                     else
                     {
+                        // Создание нового источника
                         var newSource = new Source(txtName.Text.Trim())
                         {
                             Comment = txtComment.Text.Trim()
                         };
                         context.Sources.Add(newSource);
+                        context.SaveChanges(); // Сохраняем чтобы получить ID
+                        SavedSourceId = newSource.Id; // Сохраняем ID нового источника
                     }
 
                     context.SaveChanges();

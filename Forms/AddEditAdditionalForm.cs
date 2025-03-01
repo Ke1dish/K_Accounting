@@ -9,6 +9,8 @@ namespace K_Accounting.Forms
     {
         private readonly AppDbContext _context;
 
+        public int SavedAdditionalId { get; private set; }
+
         private Additional _additional;
         private bool _isEditMode;
         public bool isEditMode
@@ -21,8 +23,6 @@ namespace K_Accounting.Forms
                 btnOk.Text = value ? "Сохранить" : "Создать";
             }
         }
-
-        public int SavedAdditionalId { get; private set; }
 
         // Добавляем унифицированное событие
         public event EventHandler DataUpdated;
@@ -75,27 +75,48 @@ namespace K_Accounting.Forms
                 {
                     if (_isEditMode)
                     {
+                        ////var existing = context.Additionals.Find(_additional.Id);
+                        ////if (existing != null)
+                        ////{
+                        ////    existing.Name = txtName.Text.Trim();
+                        ////    existing.Comment = txtComment.Text.Trim();
+                        ////    SavedAdditionalId = existing.Id;
+                        ////}
+                        // Редактирование существующей записи
                         var existing = context.Additionals.Find(_additional.Id);
                         if (existing != null)
                         {
                             existing.Name = txtName.Text.Trim();
                             existing.Comment = txtComment.Text.Trim();
+                            context.SaveChanges();
                             SavedAdditionalId = existing.Id;
                         }
                     }
                     else
                     {
-                        var newAdditional = new Additional(
-                            txtName.Text.Trim())
+                        ////var newAdditional = new Additional(
+                        ////    txtName.Text.Trim())
+                        ////{
+                        ////    Comment = txtComment.Text.Trim()
+                        ////};
+
+                        ////SavedAdditionalId = newAdditional.Id;
+                        ////context.Additionals.Add(newAdditional);
+                        // Создание новой записи
+                        var newAdditional = new Additional(txtName.Text.Trim())
                         {
                             Comment = txtComment.Text.Trim()
                         };
 
-                        SavedAdditionalId = newAdditional.Id;
                         context.Additionals.Add(newAdditional);
+                        context.SaveChanges(); // Сохраняем для генерации ID
+                        SavedAdditionalId = newAdditional.Id; // Сохраняем ID новой записи
                     }
 
-                    context.SaveChanges();
+                    ////context.SaveChanges();
+                    ////DataUpdated?.Invoke(this, EventArgs.Empty);
+                    ////DialogResult = DialogResult.OK;
+                    ////Close();
                     DataUpdated?.Invoke(this, EventArgs.Empty);
                     DialogResult = DialogResult.OK;
                     Close();

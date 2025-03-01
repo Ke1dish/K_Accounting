@@ -34,11 +34,14 @@ namespace K_Accounting.Forms
 
         private void LoadAccounts()
         {
-            _accounts = new BindingList<Account>(_context.Accounts
+            var accounts = _context.Accounts
                 .Include(a => a.Currency)
                 .Where(a => !a.IsDeleted)
                 .OrderBy(a => a.Name)
-                .ToList());
+                .AsNoTracking()
+                .ToList();
+
+            _accounts = new BindingList<Account>(accounts);
 
             cmbFromAccount.DataSource = _accounts;
             cmbFromAccount.DisplayMember = "Name";
@@ -48,7 +51,7 @@ namespace K_Accounting.Forms
             cmbFromAccount.DropDownStyle = ComboBoxStyle.DropDown;
 
             // Создаем новую BindingList с теми же элементами
-            cmbToAccount.DataSource = new BindingList<Account>(_accounts.ToList());
+            cmbToAccount.DataSource = new BindingList<Account>(accounts);
             cmbToAccount.DisplayMember = "Name";
             cmbToAccount.ValueMember = "Id";
             cmbToAccount.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
@@ -186,7 +189,7 @@ namespace K_Accounting.Forms
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     // Автовыбор нового счета при создании
-                    cmbFromAccount.SelectedValue = form.SavedAccountId;
+                    cmbToAccount.SelectedValue = form.SavedAccountId;
                 }
             }
         }

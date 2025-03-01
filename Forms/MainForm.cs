@@ -463,15 +463,38 @@ namespace K_Accounting
         {
             if (_selectedAccount == null) return;
 
-            using (var form = new AddEditAccountsForm(_context, _selectedAccount))
+            // 1. ѕересоздаем контекст дл€ формы редактировани€
+            using (var editContext = new AppDbContext())
             {
-                form.isEditMode = true;
-                form.DataUpdated += (s, args) =>
+                // 2. ѕолучаем свежую копию счета
+                var accountToEdit = editContext.Accounts
+                    .FirstOrDefault(a => a.Id == _selectedAccount.Id);
+
+                using (var form = new AddEditAccountsForm(editContext, accountToEdit))
                 {
-                    LoadCurrencies();
-                    LoadAccounts();
-                };
-                form.ShowDialog();
+                    form.isEditMode = true;
+                    form.DataUpdated += (s, args) =>
+                    {
+                        // 3. ќбновл€ем основной контекст
+                        _context.Entry(_selectedAccount).Reload();
+                        LoadAccounts();
+                    };
+
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        // 4. —инхронизируем изменени€
+                        _context.Entry(_selectedAccount).State = EntityState.Detached;
+                        var updatedAccount = editContext.Accounts
+                            .AsNoTracking()
+                            .FirstOrDefault(a => a.Id == _selectedAccount.Id);
+
+                        if (updatedAccount != null)
+                        {
+                            _context.Update(updatedAccount);
+                            _context.SaveChanges();
+                        }
+                    }
+                }
             }
         }
 
@@ -749,9 +772,6 @@ namespace K_Accounting
 
             private void btnEditExpenses1_Click(object sender, EventArgs e)
             {
-            //вызываем модальную форму TemplateExpensesForm
-            //если modalResult=ok создаем форму AddEditExpenseForm заполн€ем в ней соответствующие пол€ и показываем ее в модальном режиме
-            //форму  TemplateExpensesForm уничтожаем
             using (var templateForm = new TemplateExpensesForm(_context))
             {
                 if (templateForm.ShowDialog() == DialogResult.OK && templateForm.SelectedTemplate != null)

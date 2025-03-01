@@ -16,6 +16,8 @@ namespace K_Accounting.Forms
     {
         private readonly AppDbContext _context;
 
+        public int SavedCategoryId { get; private set; }
+
         private Category _category;
         private bool _isEditMode;
         public bool isEditMode
@@ -28,8 +30,6 @@ namespace K_Accounting.Forms
                 btnOk.Text = value ? "Сохранить" : "Создать";
             }
         }
-
-        public int SavedCategoryId { get; private set; }
 
         // Добавляем унифицированное событие
         public event EventHandler DataUpdated;
@@ -91,6 +91,7 @@ namespace K_Accounting.Forms
                         {
                             existing.Name = txtName.Text.Trim();
                             existing.Comment = txtComment.Text.Trim();
+                            context.SaveChanges();
                             SavedCategoryId = existing.Id;
                         }
                     }
@@ -100,11 +101,10 @@ namespace K_Accounting.Forms
                         {
                             Comment = txtComment.Text.Trim()
                         };
-                        SavedCategoryId = newCategory.Id;
                         context.Categories.Add(newCategory);
+                        context.SaveChanges();
+                        SavedCategoryId = newCategory.Id; // Сохраняем ID
                     }
-
-                    context.SaveChanges();
                     DataUpdated?.Invoke(this, EventArgs.Empty);
                     DialogResult = DialogResult.OK;
                     Close();

@@ -199,6 +199,12 @@ namespace K_Accounting.Forms
                 return false;
             }
 
+            if (cmbSource.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите источник дохода");
+                return false;
+            }
+
             return true;
         }
 
@@ -229,11 +235,33 @@ namespace K_Accounting.Forms
             {
                 form.DataUpdated += (s, args) =>
                 {
-                    InitializeData(); // Обновляем список источников
-                    //if (form.SavedSourceId > 0)                             //это пока не работает нужно сделать
-                    //    cmbSource.SelectedValue = form.SavedSourceId;       //это пока не работает нужно сделать
+                    // 1. Обновляем список источников
+                    var sources = _context.Sources
+                        .Where(s => !s.IsDeleted)
+                        .AsNoTracking()
+                        .ToList();
+
+                    // 2. Полная перезагрузка комбобокса
+                    cmbSource.BeginUpdate();
+                    cmbSource.DataSource = null;
+                    cmbSource.DataSource = sources;
+                    cmbSource.DisplayMember = "Name";
+                    cmbSource.ValueMember = "Id";
+                    cmbSource.EndUpdate();
+
+                    // 3. Установка нового источника
+                    if (form.SavedSourceId > 0)
+                    {
+                        cmbSource.SelectedValue = form.SavedSourceId;
+                        cmbSource.Text = sources.FirstOrDefault(s => s.Id == form.SavedSourceId)?.Name;
+                    }
                 };
-                form.ShowDialog();
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    // 4. Принудительное обновление привязки
+                    cmbSource.Refresh();
+                }
             }
         }
     }

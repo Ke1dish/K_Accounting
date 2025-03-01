@@ -22,6 +22,7 @@ namespace K_Accounting.Forms
         private readonly AppDbContext _context;
 
         private Currency _currency;
+        public int SavedCurrencyId { get; private set; }
 
         private bool _isEditMode;
         public bool isEditMode
@@ -109,6 +110,8 @@ namespace K_Accounting.Forms
                             existing.Symbol = txtSymbol.Text.Trim();
                             existing.Rate = numRate.Value;
                             existing.Comment = txtComment.Text.Trim();
+                            context.SaveChanges();
+                            SavedCurrencyId = existing.Id; // Сохраняем ID новой валюты
                         }
                     }
                     else
@@ -122,12 +125,12 @@ namespace K_Accounting.Forms
                             Comment = txtComment.Text.Trim()
                         };
                         context.Currencies.Add(newCurrency);
+                        context.SaveChanges();
+                        SavedCurrencyId = newCurrency.Id; // Сохраняем ID новой валюты
                     }
-
-                    context.SaveChanges();
                     DataUpdated?.Invoke(this, EventArgs.Empty);
                     DialogResult = DialogResult.OK;
-                    Close();
+                    Close();;
                 }
                 catch (Exception ex)
                 {

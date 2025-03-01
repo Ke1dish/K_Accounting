@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using K_Accounting.Data;
 using K_Accounting.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace K_Accounting.Forms
 {
@@ -53,18 +54,20 @@ namespace K_Accounting.Forms
         {
             try
             {
+                cmbCurrency.BeginUpdate();
                 var currencies = _context.Currencies
                     .Where(c => !c.IsDeleted)
-                    .OrderBy(c => c.Name)
+                    .AsNoTracking()
                     .ToList();
 
+                cmbCurrency.DataSource = null;
                 cmbCurrency.DataSource = currencies;
                 cmbCurrency.DisplayMember = "Name";
                 cmbCurrency.ValueMember = "Id";
-
                 cmbCurrency.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 cmbCurrency.AutoCompleteSource = AutoCompleteSource.ListItems;
                 cmbCurrency.DropDownStyle = ComboBoxStyle.DropDown;
+                cmbCurrency.EndUpdate();
             }
             catch (Exception ex)
             {
@@ -117,61 +120,79 @@ namespace K_Accounting.Forms
         {
             if (!ValidateForm()) return;
 
-            using (var context = new AppDbContext())
+            try
             {
-                try
+                if (_isEditMode)
                 {
-                    if (_isEditMode)
-                    {
-                        var existing = context.Accounts.Find(_account.Id);
-                        if (existing != null)
-                        {
-                            existing.Name = txtName.Text.Trim();
-                            existing.Balance = numBalance.Value;
-                            existing.CurrencyId = (int)cmbCurrency.SelectedValue;
-                            existing.Comment = txtComment.Text.Trim();
-                            SavedAccountId = existing.Id;
-                        }
-                    }
-                    else
-                    {
-                        var newAccount = new Account(
-                            txtName.Text.Trim(),
-                            numBalance.Value,
-                            (int)cmbCurrency.SelectedValue)
-                        {
-                            Comment = txtComment.Text.Trim()
-                        };
-                        SavedAccountId = newAccount.Id;
-                        context.Accounts.Add(newAccount);
-                    }
+                    // 1. Получаем сущность из текущего контекста
+                    var existing = _context.Accounts
+                        .FirstOrDefault(a => a.Id == _account.Id);
 
-                    context.SaveChanges();
-                    DataUpdated?.Invoke(this, EventArgs.Empty);
-                    DialogResult = DialogResult.OK;
-                    Close();
+                    if (existing != null)
+                    {
+                        // 2. Вносим изменения напрямую в отслеживаемую сущность
+                        existing.Name = txtName.Text.Trim();
+                        existing.Balance = numBalance.Value;
+                        existing.CurrencyId = (int)cmbCurrency.SelectedValue;
+                        existing.Comment = txtComment.Text.Trim();
+
+                        // 3. Сохраняем изменения в оригинальном контексте
+                        _context.SaveChanges();
+                        SavedAccountId = existing.Id;
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                    var newAccount = new Account(
+                        txtName.Text.Trim(),
+                        numBalance.Value,
+                        (int)cmbCurrency.SelectedValue)
+                    {
+                        Comment = txtComment.Text.Trim()
+                    };
+                    _context.Accounts.Add(newAccount);
+                    _context.SaveChanges(); // Сохраняем сразу
+                    SavedAccountId = newAccount.Id; // Сохраняем ID нового счета
                 }
+
+                DataUpdated?.Invoke(this, EventArgs.Empty);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
             }
         }
 
         private void btnNewCurrency_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditCurrencyForm(_context)) // Передаем контекст
+            using (var form = new AddEditCurrencyForm(_context))
             {
-                form.DataUpdated += (s, args) =>
+                if (form.ShowDialog() == DialogResult.OK)
                 {
-                    LoadCurrencies();
-                    DataUpdated?.Invoke(this, EventArgs.Empty);
-                };
-                form.ShowDialog();
+                    // Обновляем список валют с принудительным обновлением
+                    var currencies = _context.Currencies
+                        .Where(c => !c.IsDeleted)
+                        .AsNoTracking() // Отключаем отслеживание
+                        .ToList();
 
-                // Автоматически выбираем новую добавленную валюту
-                //if (form.SavedCurrencyId > 0)                               //это пока не работает нужно бужет сделать
-                //    cmbCurrency.SelectedValue = form.SavedCurrencyId;       //это пока не работает нужно бужет сделать
+                    cmbCurrency.BeginUpdate();
+                    cmbCurrency.DataSource = null;
+                    cmbCurrency.DataSource = currencies;
+                    cmbCurrency.DisplayMember = "Name";
+                    cmbCurrency.ValueMember = "Id";
+                    cmbCurrency.EndUpdate();
+
+                    // Устанавливаем новую валюту
+                    if (form.SavedCurrencyId > 0)
+                    {
+                        cmbCurrency.SelectedValue = form.SavedCurrencyId;
+                        cmbCurrency.Text = currencies.FirstOrDefault(c => c.Id == form.SavedCurrencyId)?.Name;
+                    }
+
+                    DataUpdated?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 

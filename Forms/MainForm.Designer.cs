@@ -1141,6 +1141,7 @@
             btnEditExpenses1.TabIndex = 1;
             btnEditExpenses1.Text = "Шаблоны";
             btnEditExpenses1.UseVisualStyleBackColor = true;
+            btnEditExpenses1.Click += btnEditExpenses1_Click;
             // 
             // cmbExpenseMonths
             // 

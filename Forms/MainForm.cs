@@ -2,7 +2,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
-using System.Windows.Forms;
 using K_Accounting.Data;
 using K_Accounting.Forms;
 using K_Accounting.Models;
@@ -480,7 +479,7 @@ namespace K_Accounting
         {
             if (_selectedAccount == null) return;
 
-            int savedIndex = dgwAccounts.CurrentRow.Index;    //********************* пробуем сохранение позиции при удалении
+            int savedIndex = dgwAccounts.CurrentRow.Index;
 
             var result = MessageBox.Show(
                 $"Вы уверены что хотите удалить счет '{_selectedAccount.Name}'?",
@@ -495,10 +494,10 @@ namespace K_Accounting
                     _context.SaveChanges();
                     LoadAccounts();
 
-                    if (dgwAccounts.Rows.Count > 0)    //********************* пробуем сохранение позиции при удалении
+                    if (dgwAccounts.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwAccounts.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
-                        dgwAccounts.CurrentCell = dgwAccounts.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        int newIndex = Math.Min(savedIndex, dgwAccounts.Rows.Count - 1);
+                        dgwAccounts.CurrentCell = dgwAccounts.Rows[newIndex].Cells[0];
                         _selectedAccount = dgwAccounts.CurrentRow?.DataBoundItem as Account;
                     }
                 }
@@ -697,7 +696,7 @@ namespace K_Accounting
         {
             if (_selectedExpense == null) return;
 
-            int savedIndex = dgwExpenses.CurrentRow.Index;    //********************* пробуем сохранение позиции при удалении
+            int savedIndex = dgwExpenses.CurrentRow.Index;
 
             var result = MessageBox.Show(
                 $"Вы уверены, что хотите удалить расход от {_selectedExpense.Date:dd.MM.yyyy} на сумму {_selectedExpense.Amount:N2}?",
@@ -732,10 +731,10 @@ namespace K_Accounting
                     LoadExpenses();
                     LoadAccounts(); // Важно обновить список счетов
 
-                    if (dgwExpenses.Rows.Count > 0)    //********************* пробуем сохранение позиции при удалении
+                    if (dgwExpenses.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwExpenses.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
-                        dgwExpenses.CurrentCell = dgwExpenses.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        int newIndex = Math.Min(savedIndex, dgwExpenses.Rows.Count - 1);
+                        dgwExpenses.CurrentCell = dgwExpenses.Rows[newIndex].Cells[0];
                         _selectedExpense = dgwExpenses.CurrentRow?.DataBoundItem as Expense;
                     }
 
@@ -747,6 +746,31 @@ namespace K_Accounting
                 MessageBox.Show($"Ошибка при удалении: {ex.Message}\n\nДетали:\n{ex.InnerException?.Message}");
             }
         }
+
+            private void btnEditExpenses1_Click(object sender, EventArgs e)
+            {
+            //вызываем модальную форму TemplateExpensesForm
+            //если modalResult=ok создаем форму AddEditExpenseForm заполняем в ней соответствующие поля и показываем ее в модальном режиме
+            //форму  TemplateExpensesForm уничтожаем
+            using (var templateForm = new TemplateExpensesForm(_context))
+            {
+                if (templateForm.ShowDialog() == DialogResult.OK && templateForm.SelectedTemplate != null)
+                {
+                    using (var expenseForm = new AddEditExpenseForm(_context, templateForm.SelectedTemplate))
+                    {
+                        expenseForm.DataUpdated += (s, args) =>
+                        {
+                            RefreshYearFilters();
+                            LoadExpenses();
+                            LoadAccounts();
+                        };
+
+                        expenseForm.ShowDialog();
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Доходы (Income)
@@ -853,7 +877,7 @@ namespace K_Accounting
                     .Name ?? "Источник удален";
             }
         }
-        
+
         private void btnAddIncomes_Click(object sender, EventArgs e)
         {
             using (var form = new AddEditIncomeForm(_context))
@@ -890,7 +914,7 @@ namespace K_Accounting
         {
             if (_selectedIncome == null) return;
 
-            int savedIndex = dgwIncomes.CurrentRow.Index;    //********************* пробуем сохранение позиции при удалении
+            int savedIndex = dgwIncomes.CurrentRow.Index;
 
             var result = MessageBox.Show(
                 $"Удалить приход от {_selectedIncome.Date:dd.MM.yyyy} на сумму {_selectedIncome.Amount:N2}?",
@@ -916,10 +940,10 @@ namespace K_Accounting
 
                     LoadIncomes();
                     LoadAccounts();
-                    if (dgwIncomes.Rows.Count > 0)    //********************* пробуем сохранение позиции при удалении
+                    if (dgwIncomes.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwIncomes.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
-                        dgwIncomes.CurrentCell = dgwIncomes.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        int newIndex = Math.Min(savedIndex, dgwIncomes.Rows.Count - 1);
+                        dgwIncomes.CurrentCell = dgwIncomes.Rows[newIndex].Cells[0];
                         _selectedIncome = dgwIncomes.CurrentRow?.DataBoundItem as Income;
                     }
                 }
@@ -1022,7 +1046,7 @@ namespace K_Accounting
         {
             if (_selectedCategory == null) return;
 
-            int savedIndex = dgwCategorie.CurrentRow.Index;    //********************* пробуем сохранение позиции при удалении
+            int savedIndex = dgwCategorie.CurrentRow.Index;
 
             var result = MessageBox.Show(
                 $"Вы уверены что хотите удалить категорию '{_selectedCategory.Name}'?",
@@ -1038,10 +1062,10 @@ namespace K_Accounting
                     LoadCategories();
                     LoadSubCategories(null); // Сбрасываем фильтр
 
-                    if (dgwCategorie.Rows.Count > 0)    //********************* пробуем сохранение позиции при удалении
+                    if (dgwCategorie.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwCategorie.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
-                        dgwCategorie.CurrentCell = dgwCategorie.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        int newIndex = Math.Min(savedIndex, dgwCategorie.Rows.Count - 1);
+                        dgwCategorie.CurrentCell = dgwCategorie.Rows[newIndex].Cells[0];
                         _selectedCategory = dgwCategorie.CurrentRow?.DataBoundItem as Category;
                     }
                 }
@@ -1174,7 +1198,7 @@ namespace K_Accounting
                     LoadSubCategories();
                     LoadSubCategories(_selectedCategory?.Id);
                 };
-                if (form.ShowDialog() == DialogResult.OK)  
+                if (form.ShowDialog() == DialogResult.OK)
                 {
                     _context.Entry(_selectedSubCategory).Reload();  //было
                     LoadSubCategories();  //было
@@ -1187,7 +1211,7 @@ namespace K_Accounting
         {
             if (_selectedSubCategory == null) return;
 
-            int savedIndex = dgwSubCategories.CurrentRow.Index;    //********************* пробуем сохранение позиции при удалении
+            int savedIndex = dgwSubCategories.CurrentRow.Index;
 
             var result = MessageBox.Show(
                 $"Вы уверены что хотите удалить подкатегорию '{_selectedSubCategory.Name}'?",
@@ -1201,10 +1225,10 @@ namespace K_Accounting
                     _selectedSubCategory.IsDeleted = true;
                     _context.SaveChanges();
                     LoadSubCategories(_selectedCategory?.Id);
-                    if (dgwSubCategories.Rows.Count > 0)    //********************* пробуем сохранение позиции при удалении
+                    if (dgwSubCategories.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwSubCategories.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
-                        dgwSubCategories.CurrentCell = dgwSubCategories.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        int newIndex = Math.Min(savedIndex, dgwSubCategories.Rows.Count - 1);
+                        dgwSubCategories.CurrentCell = dgwSubCategories.Rows[newIndex].Cells[0];
                         _selectedSubCategory = dgwSubCategories.CurrentRow?.DataBoundItem as SubCategory;
                     }
                 }
@@ -1298,7 +1322,7 @@ namespace K_Accounting
         {
             if (_selectedAdditional == null) return;
 
-            int savedIndex = dgwAdditionals.CurrentRow.Index;    //********************* пробуем сохранение позиции при удалении
+            int savedIndex = dgwAdditionals.CurrentRow.Index;
 
             var result = MessageBox.Show(
                 $"Вы уверены что хотите удалить '{_selectedAdditional.Name}'?",
@@ -1312,10 +1336,10 @@ namespace K_Accounting
                     _selectedAdditional.IsDeleted = true;
                     _context.SaveChanges();
                     LoadAdditionals();
-                    if (dgwAdditionals.Rows.Count > 0)    //********************* пробуем сохранение позиции при удалении
+                    if (dgwAdditionals.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwAdditionals.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
-                        dgwAdditionals.CurrentCell = dgwAdditionals.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        int newIndex = Math.Min(savedIndex, dgwAdditionals.Rows.Count - 1);
+                        dgwAdditionals.CurrentCell = dgwAdditionals.Rows[newIndex].Cells[0];
                         _selectedAdditional = dgwAdditionals.CurrentRow?.DataBoundItem as Additional;
                     }
                 }
@@ -1409,7 +1433,7 @@ namespace K_Accounting
         {
             if (_selectedSource == null) return;
 
-            int savedIndex = dgwSource.CurrentRow.Index;    //********************* пробуем сохранение позиции при удалении
+            int savedIndex = dgwSource.CurrentRow.Index;
 
             var result = MessageBox.Show(
                 $"Вы уверены что хотите удалить источник '{_selectedSource.Name}'?",
@@ -1423,10 +1447,10 @@ namespace K_Accounting
                     _selectedSource.IsDeleted = true;
                     _context.SaveChanges();
                     LoadSources();
-                    if (dgwSource.Rows.Count > 0)    //********************* пробуем сохранение позиции при удалении
+                    if (dgwSource.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwSource.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
-                        dgwSource.CurrentCell = dgwSource.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        int newIndex = Math.Min(savedIndex, dgwSource.Rows.Count - 1);
+                        dgwSource.CurrentCell = dgwSource.Rows[newIndex].Cells[0];
                         _selectedSource = dgwSource.CurrentRow?.DataBoundItem as Source;
                     }
                 }
@@ -1543,7 +1567,7 @@ namespace K_Accounting
         {
             if (_selectedCurrency == null) return;
 
-            int savedIndex = dgwCurrencies.CurrentRow.Index;    //********************* пробуем сохранение позиции при удалении
+            int savedIndex = dgwCurrencies.CurrentRow.Index;
 
             var result = MessageBox.Show(
                 $"Вы уверены что хотите удалить валюту {_selectedCurrency.Name}?",
@@ -1557,10 +1581,10 @@ namespace K_Accounting
                     _selectedCurrency.IsDeleted = true;
                     _context.SaveChanges();
                     LoadCurrencies();
-                    if (dgwCurrencies.Rows.Count > 0)    //********************* пробуем сохранение позиции при удалении
+                    if (dgwCurrencies.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwCurrencies.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении
-                        dgwCurrencies.CurrentCell = dgwCurrencies.Rows[newIndex].Cells[0];    //********************* пробуем сохранение позиции при удалении
+                        int newIndex = Math.Min(savedIndex, dgwCurrencies.Rows.Count - 1);
+                        dgwCurrencies.CurrentCell = dgwCurrencies.Rows[newIndex].Cells[0];
                         _selectedCurrency = dgwCurrencies.CurrentRow?.DataBoundItem as Currency;
                     }
                 }

@@ -37,11 +37,38 @@ namespace K_Accounting.Forms
             dtpDate.Focus();
         }
 
-        public AddEditExpenseForm(AppDbContext context, Expense expense) : this(context)
+        ////public AddEditExpenseForm(AppDbContext context, Expense expense) : this(context)
+        ////{
+        ////    _expense = expense;
+        ////    LoadExpenseData();
+        ////    dtpDate.Focus();
+        ////}
+
+        public AddEditExpenseForm(AppDbContext context, Expense template) : this(context)
         {
-            _expense = expense;
-            LoadExpenseData();
-            dtpDate.Focus();
+            _expense = new Expense
+            {
+                Date = DateTime.Now,
+                Amount = template.Amount,
+                AccountId = template.AccountId,
+                CategoryId = template.CategoryId,
+                SubCategoryId = template.SubCategoryId,
+                AdditionalId = template.AdditionalId,
+                Comment = template.Comment,
+                IsTemplate = false // Новые расходы по умолчанию не шаблоны
+            };
+
+            // Загрузка данных с учетом возможных удаленных связей
+            try
+            {
+                LoadExpenseData();
+                cmbCategory_SelectedIndexChanged(null, EventArgs.Empty);
+            }
+            catch
+            {
+                MessageBox.Show("Некоторые связанные элементы шаблона были удалены");
+                this.Close();
+            }
         }
 
         private void NotifyDataUpdated()
@@ -92,27 +119,55 @@ namespace K_Accounting.Forms
 
         private void LoadExpenseData()
         {
+            ////if (_expense == null) return;
+
+            ////// Сохраняем оригинальные значения
+            ////_originalAmount = _expense.Amount;
+            ////_originalAccountId = _expense.AccountId;
+
+            ////// Заполняем контролы
+            ////dtpDate.Value = _expense.Date;
+            ////numAmount.Value = _expense.Amount;
+            ////cmbAccount.SelectedValue = _expense.AccountId;
+            ////cmbCategory.SelectedValue = _expense.CategoryId;
+            ////cmbSubCategory.SelectedValue = _expense.SubCategoryId;
+            ////cmbAdditional.SelectedValue = _expense.AdditionalId;
+            ////txtComment.Text = _expense.Comment;
+            ////chkIsTemplate.Checked = _expense.IsTemplate;
+
+            ////// Установить категорию (это вызовет событие SelectedIndexChanged)
+            ////cmbCategory.SelectedValue = _expense.CategoryId;
+
+            ////// Установить подкатегорию после загрузки списка
+            ////cmbSubCategory.SelectedValue = _expense.SubCategoryId;
+
             if (_expense == null) return;
 
-            // Сохраняем оригинальные значения
-            _originalAmount = _expense.Amount;
-            _originalAccountId = _expense.AccountId;
+            try
+            {
+                // Проверка существования связанных объектов
+                var accountExists = _context.Accounts.Any(a => a.Id == _expense.AccountId);
+                var categoryExists = _context.Categories.Any(c => c.Id == _expense.CategoryId);
+                var subCategoryExists = _context.SubCategories.Any(s => s.Id == _expense.SubCategoryId);
 
-            // Заполняем контролы
-            dtpDate.Value = _expense.Date;
-            numAmount.Value = _expense.Amount;
-            cmbAccount.SelectedValue = _expense.AccountId;
-            cmbCategory.SelectedValue = _expense.CategoryId;
-            cmbSubCategory.SelectedValue = _expense.SubCategoryId;
-            cmbAdditional.SelectedValue = _expense.AdditionalId;
-            txtComment.Text = _expense.Comment;
-            chkIsTemplate.Checked = _expense.IsTemplate;
+                if (!accountExists || !categoryExists || !subCategoryExists)
+                    throw new Exception("Связанные данные не найдены");
 
-            // Установить категорию (это вызовет событие SelectedIndexChanged)
-            cmbCategory.SelectedValue = _expense.CategoryId;
-
-            // Установить подкатегорию после загрузки списка
-            cmbSubCategory.SelectedValue = _expense.SubCategoryId;
+                // Заполнение полей
+                dtpDate.Value = _expense.Date;
+                numAmount.Value = _expense.Amount;
+                cmbAccount.SelectedValue = _expense.AccountId;
+                cmbCategory.SelectedValue = _expense.CategoryId;
+                cmbSubCategory.SelectedValue = _expense.SubCategoryId;
+                cmbAdditional.SelectedValue = _expense.AdditionalId;
+                txtComment.Text = _expense.Comment;
+                chkIsTemplate.Checked = _expense.IsTemplate;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки шаблона: {ex.Message}");
+                this.Close();
+            }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -259,19 +314,6 @@ namespace K_Accounting.Forms
 
         private void btnNewSubcategory_Click(object sender, EventArgs e)
         {
-            //var selectedCategoryId = cmbCategory.SelectedValue as int?;
-
-            //using (var form = new AddEditSubCategoryForm(_context, selectedCategoryId)) // Исправлено
-            //{
-            //    form.SubCategoryAddedOrUpdated += (s, args) =>
-            //    {
-            //        LoadSubCategories();
-            //        if (form.SavedSubCategoryId > 0)
-            //            cmbSubCategory.SelectedValue = form.SavedSubCategoryId;
-            //    };
-            //    form.ShowDialog();
-            //}
-
             var selectedCategory = cmbCategory.SelectedItem as Category;
             int? categoryId = selectedCategory?.Id;
 

@@ -77,7 +77,7 @@
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(75, 23);
             btnOk.TabIndex = 0;
-            btnOk.Text = "Ок";
+            btnOk.Text = "Перевести";
             btnOk.UseVisualStyleBackColor = true;
             btnOk.Click += btnOk_Click;
             // 
@@ -92,12 +92,12 @@
             // 
             // lblConversionRate
             // 
-            lblConversionRate.Dock = DockStyle.Fill;
+            lblConversionRate.Dock = DockStyle.Left;
             lblConversionRate.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
             lblConversionRate.ForeColor = Color.Maroon;
-            lblConversionRate.Location = new Point(143, 5);
+            lblConversionRate.Location = new Point(12, 5);
             lblConversionRate.Name = "lblConversionRate";
-            lblConversionRate.Size = new Size(44, 29);
+            lblConversionRate.Size = new Size(175, 29);
             lblConversionRate.TabIndex = 14;
             lblConversionRate.Text = "label5";
             lblConversionRate.TextAlign = ContentAlignment.MiddleLeft;
@@ -154,7 +154,7 @@
             numAmount.DecimalPlaces = 2;
             numAmount.Dock = DockStyle.Fill;
             numAmount.Location = new Point(145, 71);
-            numAmount.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            numAmount.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numAmount.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numAmount.Name = "numAmount";
             numAmount.Size = new Size(226, 23);
@@ -237,7 +237,7 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "TransferFundsForm";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "TransferFundsForm";
+            Text = "Перевод со счета на счет";
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);

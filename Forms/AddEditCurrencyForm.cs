@@ -41,6 +41,7 @@ namespace K_Accounting.Forms
         public AddEditCurrencyForm(AppDbContext context) // Новый конструктор
         {
             InitializeComponent();
+            numRate.Controls[0].Visible = false;
             _context = context;
             txtName.Focus();
         }
@@ -48,6 +49,7 @@ namespace K_Accounting.Forms
         public AddEditCurrencyForm()
         {
             InitializeComponent();
+            numRate.Controls[0].Visible = false;
             txtName.Focus();
         }
 

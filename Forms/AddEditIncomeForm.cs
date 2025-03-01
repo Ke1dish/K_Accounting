@@ -38,6 +38,7 @@ namespace K_Accounting.Forms
         public AddEditIncomeForm(AppDbContext context)
         {
             InitializeComponent();
+            numAmount.Controls[0].Visible = false;
             _context = context;
             InitializeData();
             dtpDate.Focus();

@@ -91,7 +91,7 @@ namespace K_Accounting
 
         private void btnCheckUpdate_Click(object sender, EventArgs e)
         {
-            const string url = "https://github.com/Ke1dish/K_Accounting"; 
+            const string url = "https://github.com/Ke1dish/K_Accounting";
 
             try
             {
@@ -620,7 +620,7 @@ namespace K_Accounting
             if (_selectedExpense == null)
                 tbDetailsExpenses.Text = "";
             else
-                tbDetailsExpenses.Text = _selectedAccount.Comment;
+                tbDetailsExpenses.Text = _selectedExpense.Comment;
         }
 
         private void dataGridView3_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -788,7 +788,7 @@ namespace K_Accounting
                     {
                         Name = "colSource",
                         HeaderText = "Источник",
-                        DataPropertyName = "Account.Source"
+                        DataPropertyName = "Source.Name"
                     }
                 );
             }
@@ -831,6 +831,29 @@ namespace K_Accounting
                 tbDetailsIncome.Text = _selectedIncome.Comment;
         }
 
+        private void dgwIncomes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgwIncomes.Rows[e.RowIndex].DataBoundItem == null) return;
+
+            var income = dgwIncomes.Rows[e.RowIndex].DataBoundItem as Income;
+
+            // Обработка счета
+            if (dgwIncomes.Columns[e.ColumnIndex].Name == "colAccount" && e.Value == null)
+            {
+                e.Value = _context.Accounts
+                    .Find(income?.AccountId)?
+                    .Name ?? "Счет удален";
+            }
+
+            // Обработка источника
+            if (dgwIncomes.Columns[e.ColumnIndex].Name == "colSource" && e.Value == null)
+            {
+                e.Value = _context.Sources
+                    .Find(income?.SourceId)?
+                    .Name ?? "Источник удален";
+            }
+        }
+        
         private void btnAddIncomes_Click(object sender, EventArgs e)
         {
             using (var form = new AddEditIncomeForm(_context))
@@ -1143,21 +1166,19 @@ namespace K_Accounting
         {
             if (_selectedSubCategory == null) return;
 
-            using (var tempContext = new AppDbContext())
+            using (var form = new AddEditSubCategoryForm(_context, _selectedSubCategory))
             {
-                var subCategoryToEdit = tempContext.SubCategories
-                    .Include(s => s.Category)
-                    .FirstOrDefault(s => s.Id == _selectedSubCategory.Id);
-
-                using (var form = new AddEditSubCategoryForm(subCategoryToEdit))
+                form.isEditMode = true;
+                form.DataUpdated += (s, args) =>
                 {
-                    form.isEditMode = true;
-                    if (form.ShowDialog() == DialogResult.OK)
-                    {
-                        _context.Entry(_selectedSubCategory).Reload();
-                        LoadSubCategories();
-                        LoadSubCategories(_selectedCategory?.Id);
-                    }
+                    LoadSubCategories();
+                    LoadSubCategories(_selectedCategory?.Id);
+                };
+                if (form.ShowDialog() == DialogResult.OK)  
+                {
+                    _context.Entry(_selectedSubCategory).Reload();  //было
+                    LoadSubCategories();  //было
+                    LoadSubCategories(_selectedCategory?.Id);   //было
                 }
             }
         }
@@ -1179,7 +1200,7 @@ namespace K_Accounting
                 {
                     _selectedSubCategory.IsDeleted = true;
                     _context.SaveChanges();
-                    LoadSubCategories();
+                    LoadSubCategories(_selectedCategory?.Id);
                     if (dgwSubCategories.Rows.Count > 0)    //********************* пробуем сохранение позиции при удалении
                     {
                         int newIndex = Math.Min(savedIndex, dgwSubCategories.Rows.Count - 1);    //********************* пробуем сохранение позиции при удалении

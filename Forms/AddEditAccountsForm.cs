@@ -37,6 +37,7 @@ namespace K_Accounting.Forms
         public AddEditAccountsForm(AppDbContext context) // Новый конструктор
         {
             InitializeComponent();
+            numBalance.Controls[0].Visible = false;
             _context = context;
             LoadCurrencies();
             txtName.Focus();

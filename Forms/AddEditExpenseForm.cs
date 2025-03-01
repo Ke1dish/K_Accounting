@@ -31,6 +31,7 @@ namespace K_Accounting.Forms
         public AddEditExpenseForm(AppDbContext context)
         {
             InitializeComponent();
+            numAmount.Controls[0].Visible = false;
             _context = context;
             InitializeData();
             dtpDate.Focus();

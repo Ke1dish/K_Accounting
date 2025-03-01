@@ -41,43 +41,19 @@ namespace K_Accounting.Forms
 
         private readonly int? _preselectedCategoryId;
 
+        // Конструктор для добавления новой подкатегории
         public AddEditSubCategoryForm(AppDbContext context, int? categoryId = null)
         {
             InitializeComponent();
-            _context = context;
-            _preselectedCategoryId = categoryId;
-            // Настройки ComboBox
-            cmbCategory.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            cmbCategory.AutoCompleteSource = AutoCompleteSource.ListItems; // Используем элементы из DataSource
-            //cmbCategory.AutoCompleteCustomSource = new AutoCompleteStringCollection();
-            //cmbCategory.AutoCompleteCustomSource.AddRange(
-            //    _context.Categories
-            //        .Where(c => !c.IsDeleted)
-            //        .Select(c => c.Name)
-            //        .ToArray()
-            //        );
-            _context = context;
+            _context = context ?? new AppDbContext(); // Если контекст null, создаем новый
             _preselectedCategoryId = categoryId;
             LoadCategories();
             txtName.Focus();
         }
 
-        //public AddEditSubCategoryForm(AppDbContext context, int? categoryId)
-        //{
-        //    InitializeComponent();
-        //    _context = context;
-        //    // Загрузка данных
-        //    txtName.Focus();
-        //}
-
-        public AddEditSubCategoryForm()
-        {
-            InitializeComponent();
-            LoadCategories();
-            txtName.Focus();
-        }
-
-        public AddEditSubCategoryForm(SubCategory subCategory) : this()
+        // Конструктор для редактирования существующей подкатегории
+        public AddEditSubCategoryForm(AppDbContext context, SubCategory subCategory)
+            : this(context, subCategory.CategoryId) // Используем основной конструктор
         {
             _subCategory = subCategory;
             LoadSubCategoryData();
@@ -85,23 +61,11 @@ namespace K_Accounting.Forms
 
         private void LoadCategories()
         {
-            //using (var context = new AppDbContext())
-            //{
-            //    _categories = context.Categories
-            //        .Where(c => !c.IsDeleted)
-            //        .OrderBy(c => c.Name)
-            //    .ToList();
-
-            //    cmbCategory.DataSource = _categories;
-            //    cmbCategory.DisplayMember = "Name";
-            //    cmbCategory.ValueMember = "Id";
-            //}
-
             try
             {
-                _categories = _context.Categories
-                    .Where(c => !c.IsDeleted)
-                    .OrderBy(c => c.Name)
+                _categories = _context.Categories  
+                    .Where(c => !c.IsDeleted)      
+                    .OrderBy(c => c.Name)          
                     .ToList();
 
                 cmbCategory.DataSource = _categories;
@@ -170,42 +134,41 @@ namespace K_Accounting.Forms
         {
             if (!ValidateForm()) return;
 
-            using (var context = new AppDbContext())
+            try
             {
-                try
+                if (_isEditMode)
                 {
-                    if (_isEditMode)
+                    // Используем существующий контекст из главной формы
+                    var existing = _context.SubCategories.Find(_subCategory.Id);
+                    if (existing != null)
                     {
-                        var existing = context.SubCategories.Find(_subCategory.Id);
-                        if (existing != null)
-                        {
-                            existing.Name = txtName.Text.Trim();
-                            existing.CategoryId = (int)cmbCategory.SelectedValue;
-                            existing.Comment = txtComment.Text.Trim();
-                            SavedSubCategoryId = existing.Id;
-                        }
+                        existing.Name = txtName.Text.Trim();
+                        existing.CategoryId = (int)cmbCategory.SelectedValue;
+                        existing.Comment = txtComment.Text.Trim();
+                        SavedSubCategoryId = existing.Id;
                     }
-                    else
-                    {
-                        var newSubCategory = new SubCategory(
+                }
+                else
+                {
+                    var newSubCategory = new SubCategory(
                         txtName.Text.Trim(),
-                            (int)cmbCategory.SelectedValue)
-                        {
-                            Comment = txtComment.Text.Trim()
-                        };
-                        SavedSubCategoryId = newSubCategory.Id;
-                        context.SubCategories.Add(newSubCategory);
-                    }
+                        (int)cmbCategory.SelectedValue)
+                    {
+                        Comment = txtComment.Text.Trim()
+                    };
+                    SavedSubCategoryId = newSubCategory.Id;
+                    _context.SubCategories.Add(newSubCategory);
+                }
 
-                    context.SaveChanges();
-                    DataUpdated?.Invoke(this, EventArgs.Empty);
-                    DialogResult = DialogResult.OK;
-                    Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка сохранения: {ex.Message}");
-                }
+                // Сохраняем изменения в переданном контексте
+                _context.SaveChanges();
+                DataUpdated?.Invoke(this, EventArgs.Empty);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
             }
         }
 

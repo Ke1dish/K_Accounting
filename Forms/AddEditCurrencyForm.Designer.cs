@@ -55,7 +55,7 @@
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
             flowLayoutPanel1.Location = new Point(0, 190);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Padding = new Padding(5, 5, 5, 5);
+            flowLayoutPanel1.Padding = new Padding(5);
             flowLayoutPanel1.Size = new Size(384, 40);
             flowLayoutPanel1.TabIndex = 1;
             // 
@@ -98,7 +98,7 @@
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.Padding = new Padding(10, 10, 10, 10);
+            tableLayoutPanel1.Padding = new Padding(10);
             tableLayoutPanel1.RowCount = 5;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
@@ -170,7 +170,7 @@
             numRate.DecimalPlaces = 2;
             numRate.Dock = DockStyle.Fill;
             numRate.Location = new Point(145, 42);
-            numRate.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            numRate.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numRate.Name = "numRate";
             numRate.Size = new Size(226, 23);
             numRate.TabIndex = 1;

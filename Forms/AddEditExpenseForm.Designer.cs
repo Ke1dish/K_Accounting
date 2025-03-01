@@ -149,7 +149,7 @@
             chkIsTemplate.Location = new Point(145, 187);
             chkIsTemplate.Name = "chkIsTemplate";
             chkIsTemplate.Size = new Size(170, 19);
-            chkIsTemplate.TabIndex = 11;
+            chkIsTemplate.TabIndex = 10;
             chkIsTemplate.Text = "использовать как шаблон";
             chkIsTemplate.UseVisualStyleBackColor = true;
             // 
@@ -161,7 +161,7 @@
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
             txtComment.Size = new Size(226, 45);
-            txtComment.TabIndex = 10;
+            txtComment.TabIndex = 11;
             // 
             // label2
             // 
@@ -284,7 +284,7 @@
             numAmount.DecimalPlaces = 2;
             numAmount.Dock = DockStyle.Fill;
             numAmount.Location = new Point(145, 42);
-            numAmount.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            numAmount.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numAmount.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numAmount.Name = "numAmount";
             numAmount.Size = new Size(226, 23);

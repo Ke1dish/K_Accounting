@@ -204,7 +204,7 @@ namespace K_Accounting.Forms
             var account = e.ListItem as Account;
             if (account != null)
             {
-                e.Value = $"{account.Name} ({account.Balance:N2} {account.Currency?.Code})";
+                e.Value = $"{account.Name} ({account.Balance:N2})";
             }
         }
 
@@ -218,9 +218,10 @@ namespace K_Accounting.Forms
             var from = cmbFromAccount.SelectedItem as Account;
             var to = cmbToAccount.SelectedItem as Account;
 
-           lblConversionRate.Text = from?.Currency != null && to?.Currency != null
-                ? $"1 {from.Currency.Code} = {(to.Currency.Rate / from.Currency.Rate):N4} {to.Currency.Code}"
-                : "Выберите оба счета для отображения курса";
+            lblConversionRate.Text = from?.Currency != null && to?.Currency != null
+                 //                ? $"1 {from.Currency.Code} = {(to.Currency.Rate / from.Currency.Rate):N4} {to.Currency.Code}"
+                 ? $"1 {from.Currency.Symbol} = {(to.Currency.Rate / from.Currency.Rate):N4} {to.Currency.Symbol}"
+                 : "Выберите оба счета для отображения курса";
         }
 
         private void numAmount_KeyPress(object sender, KeyPressEventArgs e)

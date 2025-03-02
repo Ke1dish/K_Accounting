@@ -33,9 +33,7 @@
             btnOk = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             txtSymbol = new TextBox();
-            txtCode = new TextBox();
             label5 = new Label();
-            label4 = new Label();
             txtComment = new TextBox();
             label2 = new Label();
             numRate = new NumericUpDown();
@@ -85,12 +83,10 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 32F));
-            tableLayoutPanel1.Controls.Add(txtSymbol, 1, 3);
-            tableLayoutPanel1.Controls.Add(txtCode, 1, 2);
-            tableLayoutPanel1.Controls.Add(label5, 0, 3);
-            tableLayoutPanel1.Controls.Add(label4, 0, 2);
-            tableLayoutPanel1.Controls.Add(txtComment, 1, 4);
-            tableLayoutPanel1.Controls.Add(label2, 0, 4);
+            tableLayoutPanel1.Controls.Add(txtSymbol, 1, 2);
+            tableLayoutPanel1.Controls.Add(label5, 0, 2);
+            tableLayoutPanel1.Controls.Add(txtComment, 1, 3);
+            tableLayoutPanel1.Controls.Add(label2, 0, 3);
             tableLayoutPanel1.Controls.Add(numRate, 1, 1);
             tableLayoutPanel1.Controls.Add(label3, 0, 1);
             tableLayoutPanel1.Controls.Add(txtName, 1, 0);
@@ -99,12 +95,12 @@
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.Padding = new Padding(10);
-            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowCount = 4;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(384, 190);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -112,53 +108,34 @@
             // 
             tableLayoutPanel1.SetColumnSpan(txtSymbol, 2);
             txtSymbol.Dock = DockStyle.Fill;
-            txtSymbol.Location = new Point(145, 100);
+            txtSymbol.Location = new Point(145, 71);
             txtSymbol.Name = "txtSymbol";
             txtSymbol.Size = new Size(226, 23);
             txtSymbol.TabIndex = 3;
             // 
-            // txtCode
-            // 
-            tableLayoutPanel1.SetColumnSpan(txtCode, 2);
-            txtCode.Dock = DockStyle.Fill;
-            txtCode.Location = new Point(145, 71);
-            txtCode.Name = "txtCode";
-            txtCode.Size = new Size(226, 23);
-            txtCode.TabIndex = 2;
-            // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(13, 97);
+            label5.Location = new Point(13, 68);
             label5.Name = "label5";
             label5.Size = new Size(51, 15);
             label5.TabIndex = 19;
             label5.Text = "Символ";
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(13, 68);
-            label4.Name = "label4";
-            label4.Size = new Size(27, 15);
-            label4.TabIndex = 18;
-            label4.Text = "Код";
-            label4.Click += label4_Click;
-            // 
             // txtComment
             // 
             tableLayoutPanel1.SetColumnSpan(txtComment, 2);
             txtComment.Dock = DockStyle.Fill;
-            txtComment.Location = new Point(145, 129);
+            txtComment.Location = new Point(145, 100);
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
-            txtComment.Size = new Size(226, 48);
+            txtComment.Size = new Size(226, 77);
             txtComment.TabIndex = 4;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(13, 126);
+            label2.Location = new Point(13, 97);
             label2.Name = "label2";
             label2.Size = new Size(84, 15);
             label2.TabIndex = 16;
@@ -234,8 +211,6 @@
         private TextBox txtComment;
         private Label label2;
         private TextBox txtSymbol;
-        private TextBox txtCode;
         private Label label5;
-        private Label label4;
     }
 }

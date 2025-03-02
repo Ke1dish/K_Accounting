@@ -16,10 +16,6 @@ namespace K_Accounting.Models
         [MaxLength(50)]
         public string Name { get; set; }
 
-        [Required]
-        [MaxLength(3)]
-        public string Code { get; set; }
-
         [MaxLength(5)]
         public string Symbol { get; set; }
 
@@ -32,10 +28,10 @@ namespace K_Accounting.Models
 
         public Currency() { }
 
-        public Currency(string name, string code, decimal rate)
+        public Currency(string name, decimal rate)
         {
             Name = name;
-            Code = code;
+            //Code = code;
             Rate = rate;
         }
     }

@@ -300,9 +300,6 @@ namespace K_Accounting.Forms
                         cmbCategory.SelectedValue = form.SavedCategoryId;
                         cmbCategory.Text = categories.FirstOrDefault(c => c.Id == form.SavedCategoryId)?.Name;
                     }
-                    ////LoadCategories();
-                    ////if (form.SavedCategoryId > 0)
-                    ////    cmbCategory.SelectedValue = form.SavedCategoryId;
                 };
                 form.ShowDialog();
             }

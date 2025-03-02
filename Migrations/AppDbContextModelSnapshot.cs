@@ -130,11 +130,6 @@ namespace K_Accounting.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -166,9 +161,6 @@ namespace K_Accounting.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
 
                     b.ToTable("Currencies");
                 });

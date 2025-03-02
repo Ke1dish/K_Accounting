@@ -770,8 +770,8 @@ namespace K_Accounting
             }
         }
 
-            private void btnEditExpenses1_Click(object sender, EventArgs e)
-            {
+        private void btnEditExpenses1_Click(object sender, EventArgs e)
+        {
             using (var templateForm = new TemplateExpensesForm(_context))
             {
                 if (templateForm.ShowDialog() == DialogResult.OK && templateForm.SelectedTemplate != null)

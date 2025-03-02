@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace K_Accounting.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250223092504_InitialCreate")]
+    [Migration("20250301174957_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -133,11 +133,6 @@ namespace K_Accounting.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -169,9 +164,6 @@ namespace K_Accounting.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
 
                     b.ToTable("Currencies");
                 });

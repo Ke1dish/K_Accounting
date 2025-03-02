@@ -64,9 +64,9 @@ namespace K_Accounting.Forms
         {
             try
             {
-                _categories = _context.Categories  
-                    .Where(c => !c.IsDeleted)      
-                    .OrderBy(c => c.Name)          
+                _categories = _context.Categories
+                    .Where(c => !c.IsDeleted)
+                    .OrderBy(c => c.Name)
                     .ToList();
 
                 cmbCategory.DataSource = _categories;

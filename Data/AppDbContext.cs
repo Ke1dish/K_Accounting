@@ -53,11 +53,6 @@ namespace K_Accounting.Data
                     .OnDelete(DeleteBehavior.SetNull);
             });
 
-            modelBuilder.Entity<Currency>(c =>
-            {
-                c.HasIndex(x => x.Code).IsUnique();
-            });
-
             // Индексы
             modelBuilder.Entity<Account>().HasIndex(a => a.Name);
             modelBuilder.Entity<Income>().HasIndex(i => i.Date);

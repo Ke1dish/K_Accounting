@@ -63,7 +63,6 @@ namespace K_Accounting.Forms
         private void LoadCurrencyData()
         {
             txtName.Text = _currency.Name;
-            txtCode.Text = _currency.Code;
             txtSymbol.Text = _currency.Symbol;
             numRate.Value = _currency.Rate;
             txtComment.Text = _currency.Comment;
@@ -74,12 +73,6 @@ namespace K_Accounting.Forms
             if (string.IsNullOrWhiteSpace(txtName.Text))
             {
                 MessageBox.Show("Название валюты обязательно для заполнения");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtCode.Text))
-            {
-                MessageBox.Show("Код валюты обязателен для заполнения");
                 return false;
             }
 
@@ -106,7 +99,6 @@ namespace K_Accounting.Forms
                         if (existing != null)
                         {
                             existing.Name = txtName.Text.Trim();
-                            existing.Code = txtName.Text.Trim().ToUpper();
                             existing.Symbol = txtSymbol.Text.Trim();
                             existing.Rate = numRate.Value;
                             existing.Comment = txtComment.Text.Trim();
@@ -118,7 +110,6 @@ namespace K_Accounting.Forms
                     {
                         var newCurrency = new Currency(
                             txtName.Text.Trim(),
-                            txtCode.Text.Trim().ToUpper(),
                             numRate.Value)
                         {
                             Symbol = txtSymbol.Text.Trim(),
@@ -130,7 +121,7 @@ namespace K_Accounting.Forms
                     }
                     DataUpdated?.Invoke(this, EventArgs.Empty);
                     DialogResult = DialogResult.OK;
-                    Close();;
+                    Close(); ;
                 }
                 catch (Exception ex)
                 {

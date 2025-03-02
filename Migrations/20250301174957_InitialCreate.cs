@@ -52,7 +52,6 @@ namespace K_Accounting.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Code = table.Column<string>(type: "TEXT", maxLength: 3, nullable: false),
                     Symbol = table.Column<string>(type: "TEXT", maxLength: 5, nullable: false),
                     Rate = table.Column<decimal>(type: "TEXT", precision: 18, scale: 6, nullable: false),
                     Comment = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
@@ -219,12 +218,6 @@ namespace K_Accounting.Migrations
                 name: "IX_Accounts_Name",
                 table: "Accounts",
                 column: "Name");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Currencies_Code",
-                table: "Currencies",
-                column: "Code",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Expenses_AccountId",

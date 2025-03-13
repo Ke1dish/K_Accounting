@@ -34,8 +34,6 @@
             label5 = new Label();
             lblConversionRate = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
-            txtComment = new TextBox();
-            label2 = new Label();
             numAmount = new NumericUpDown();
             label1 = new Label();
             btnNewAccount = new Button();
@@ -108,8 +106,6 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 32F));
-            tableLayoutPanel1.Controls.Add(txtComment, 1, 3);
-            tableLayoutPanel1.Controls.Add(label2, 0, 3);
             tableLayoutPanel1.Controls.Add(numAmount, 1, 2);
             tableLayoutPanel1.Controls.Add(label1, 0, 2);
             tableLayoutPanel1.Controls.Add(btnNewAccount, 2, 1);
@@ -128,25 +124,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.Size = new Size(384, 171);
             tableLayoutPanel1.TabIndex = 0;
-            // 
-            // txtComment
-            // 
-            tableLayoutPanel1.SetColumnSpan(txtComment, 2);
-            txtComment.Dock = DockStyle.Fill;
-            txtComment.Location = new Point(145, 100);
-            txtComment.Multiline = true;
-            txtComment.Name = "txtComment";
-            txtComment.Size = new Size(226, 65);
-            txtComment.TabIndex = 4;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(13, 97);
-            label2.Name = "label2";
-            label2.Size = new Size(84, 15);
-            label2.TabIndex = 23;
-            label2.Text = "Комментарий";
             // 
             // numAmount
             // 
@@ -199,9 +176,9 @@
             label3.AutoSize = true;
             label3.Location = new Point(13, 39);
             label3.Name = "label3";
-            label3.Size = new Size(47, 15);
+            label3.Size = new Size(49, 15);
             label3.TabIndex = 18;
-            label3.Text = "на счет";
+            label3.Text = "На счет";
             // 
             // cmbFromAccount
             // 
@@ -221,9 +198,9 @@
             label4.AutoSize = true;
             label4.Location = new Point(13, 10);
             label4.Name = "label4";
-            label4.Size = new Size(53, 15);
+            label4.Size = new Size(55, 15);
             label4.TabIndex = 13;
-            label4.Text = "со счета";
+            label4.Text = "Со счета";
             // 
             // TransferFundsForm
             // 
@@ -251,8 +228,6 @@
         private Button btnCancel;
         private Button btnOk;
         private TableLayoutPanel tableLayoutPanel1;
-        private TextBox txtComment;
-        private Label label2;
         private NumericUpDown numAmount;
         private Label label1;
         private Button btnNewAccount;

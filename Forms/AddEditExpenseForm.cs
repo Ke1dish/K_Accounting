@@ -133,6 +133,8 @@ namespace K_Accounting.Forms
                 cmbAdditional.SelectedValue = _expense.AdditionalId;
                 txtComment.Text = _expense.Comment;
                 chkIsTemplate.Checked = _expense.IsTemplate;
+                _originalAmount = _expense.Amount;                     //////////////////
+                _originalAccountId = _expense.AccountId; // Важно!     //////////////////
             }
             catch (Exception ex)
             {
@@ -198,6 +200,7 @@ namespace K_Accounting.Forms
                     }
 
                     _context.SaveChanges();
+                    _context.Entry(_expense).Reload(); // Важно!
                     DataUpdated?.Invoke(this, EventArgs.Empty);
                     transaction.Commit();
 

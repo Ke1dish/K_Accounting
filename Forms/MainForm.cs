@@ -28,6 +28,7 @@ namespace K_Accounting
         public MainForm()
         {
             InitializeComponent();
+            HideReportBars();
 
             InitializeDatabase();
 
@@ -316,50 +317,69 @@ namespace K_Accounting
 
         private void cmbReportTipe_SelectedIndexChanged(object sender, EventArgs e)
         {
+            HideReportBars();
             string s = "";
             switch (cmbReportTipe.SelectedIndex)
             {
-                case 0: // Счета
+                case 0:
                     s = "Отображает текущие остатки на всех счетах (наличные, карты, вклады).";
+                    flPanel1.Visible = true;
                     break;
-                case 1: // Счета
+                case 1:
                     s = "Изменение общего баланса с течением времени.";
+                    // показать панель выбора периода
+                    flPanel2.Visible = true;
                     break;
-                case 2: // Расходы
+                case 2:
                     s = "Основные статьи расходов или источники доходов за период.";
+                    // показать панель выбора периода
+                    flPanel3.Visible = true;
                     break;
-                case 3: // Доходы
+                case 3:
                     s = "Основные источники поступлений за выбранный период.";
+                    // показать панель выбора периода
+                    flPanel4.Visible = true;
                     break;
-                case 4: // Категории и Подкатегории
+                case 4:
                     s = "Показывает, какая часть доходов сохраняется после обязательных трат.";
+                    flPanel5.Visible = true;
                     break;
-                case 5: // Источники
+                case 5:
                     s = "Визуализирует доли трат по категориям за выбранный период. Позволяет быстро определить самые затратные статьи.";
+                    // показать панель выбора периода
+                    // показать панель выбора категории
+                    flPanel6.Visible = true;
                     break;
-                case 6: // Дополнительно
+                case 6:
                     s = "Распределение трат по основным категориям.";
+                    // показать панель выбора периода
                     break;
-                case 7: // Валюты
+                case 7:
                     s = "Распределение трат по дополнительным параметрам (например, член семьи).";
+                    // показать панель выбора дополнительного
                     break;
-                case 8: // Отчеты
+                case 8:
                     s = "Сравнение доходов и расходов по месяцам.";
+                    // показать панель выбора периода
                     break;
-                case 9: // Настройки
+                case 9:
                     s = "Частота операций в разных ценовых диапазонах.";
+                    // показать панель выбора периода
                     break;
-                case 10: // О программе
+                case 10:
                     s = "Активность операций по дням.";
+                    // показать панель выбора месяца
                     break;
-                case 11: // О программе
+                case 11:
                     s = "Оценивает баланс между ключевыми финансовыми показателями (сбережения, долги, доходы и т.д.).";
                     break;
-                case 12: // О программе
+                case 12:
                     s = "Анализирует, как траты растут/падают в зависимости от уровня доходов.";
+                    // показать панель выбора года
                     break;
-                case 13: // О программе
+                case 13:
                     s = "Анализ доходов/расходов за разные периоды.";
+                    // показать панель выбора периода
                     break;
                 default:
                     break;
@@ -367,6 +387,15 @@ namespace K_Accounting
             tbDetailsReport.Text = s;
         }
 
+        private void HideReportBars()
+        {
+            flPanel1.Visible = false;
+            flPanel2.Visible = false;
+            flPanel3.Visible = false;
+            flPanel4.Visible = false;
+            flPanel5.Visible = false;
+            flPanel6.Visible = false;
+        }
         #endregion
 
         #region Счета (Account)
@@ -706,12 +735,13 @@ namespace K_Accounting
             using (var form = new AddEditExpenseForm(_context, _selectedExpense))
             {
                 form.isEditMode = true;
-                if (form.ShowDialog() == DialogResult.OK)
+                form.DataUpdated += (s, args) =>
                 {
                     RefreshYearFilters();
-                    LoadExpenses();
-                    LoadAccounts(); // Обновляем балансы счетов
-                }
+                    LoadExpenses(); // Явный вызов перезагрузки
+                    LoadAccounts();
+                };
+                form.ShowDialog();
             }
         }
 

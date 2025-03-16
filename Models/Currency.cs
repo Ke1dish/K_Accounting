@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using K_Accounting.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace K_Accounting.Models
 {
@@ -31,7 +24,6 @@ namespace K_Accounting.Models
         public Currency(string name, decimal rate)
         {
             Name = name;
-            //Code = code;
             Rate = rate;
         }
     }

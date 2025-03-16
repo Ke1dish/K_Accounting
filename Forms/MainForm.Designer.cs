@@ -28,18 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            TreeNode treeNode1 = new TreeNode("Стартовая (Start)");
-            TreeNode treeNode2 = new TreeNode("Счета (Accounts)");
-            TreeNode treeNode3 = new TreeNode("Расходы (Expenses)");
-            TreeNode treeNode4 = new TreeNode("Доходы (Income)");
-            TreeNode treeNode5 = new TreeNode("Категории (Category)");
-            TreeNode treeNode6 = new TreeNode("Источники (Source)");
-            TreeNode treeNode7 = new TreeNode("Дополнительно (Additionally)");
-            TreeNode treeNode8 = new TreeNode("Валюты (Currencies)");
-            TreeNode treeNode9 = new TreeNode("Справочники (Directory)", new TreeNode[] { treeNode5, treeNode6, treeNode7, treeNode8 });
-            TreeNode treeNode10 = new TreeNode("Отчеты (Reports)");
-            TreeNode treeNode11 = new TreeNode("Настройки (Settings)");
-            TreeNode treeNode12 = new TreeNode("О программе");
+            components = new System.ComponentModel.Container();
+            TreeNode treeNode1 = new TreeNode("Главная", 5, 5);
+            TreeNode treeNode2 = new TreeNode("Счета", 9, 9);
+            TreeNode treeNode3 = new TreeNode("Расходы", 8, 8);
+            TreeNode treeNode4 = new TreeNode("Доходы", 7, 7);
+            TreeNode treeNode5 = new TreeNode("Категории (Category)", 2, 2);
+            TreeNode treeNode6 = new TreeNode("Источники (Source)", 1, 1);
+            TreeNode treeNode7 = new TreeNode("Дополнительно (Additionally)", 10, 10);
+            TreeNode treeNode8 = new TreeNode("Валюты (Currencies)", 3, 3);
+            TreeNode treeNode9 = new TreeNode("Справочники", 2, 2, new TreeNode[] { treeNode5, treeNode6, treeNode7, treeNode8 });
+            TreeNode treeNode10 = new TreeNode("Отчеты", 6, 6);
+            TreeNode treeNode11 = new TreeNode("Настройки", 4, 4);
+            TreeNode treeNode12 = new TreeNode("О программе", 0, 0);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tableLayoutPanel5 = new TableLayoutPanel();
             label16 = new Label();
@@ -82,6 +83,7 @@
             label18 = new Label();
             splitContainer1 = new SplitContainer();
             tvMenuPanel = new TreeView();
+            imageList1 = new ImageList(components);
             tcPage = new TabControl();
             tpStart = new TabPage();
             tableLayoutPanel30 = new TableLayoutPanel();
@@ -203,13 +205,14 @@
             label11 = new Label();
             tpAbout = new TabPage();
             tableLayoutPanel27 = new TableLayoutPanel();
+            tbVersionHistory = new TextBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
             btnCheckUpdate = new Button();
             label10 = new Label();
             tbDedication = new TextBox();
             tableLayoutPanel28 = new TableLayoutPanel();
-            tbVersionHistory = new TextBox();
             tbAbout = new TextBox();
+            pictureBox1 = new PictureBox();
             tableLayoutPanel5.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -282,6 +285,7 @@
             tableLayoutPanel27.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             tableLayoutPanel28.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel5
@@ -767,14 +771,14 @@
             // 
             splitContainer1.Panel1.Controls.Add(tvMenuPanel);
             splitContainer1.Panel1.Padding = new Padding(5);
-            splitContainer1.Panel1MinSize = 205;
+            splitContainer1.Panel1MinSize = 200;
             // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(tcPage);
             splitContainer1.Panel2MinSize = 400;
             splitContainer1.Size = new Size(784, 561);
-            splitContainer1.SplitterDistance = 205;
+            splitContainer1.SplitterDistance = 200;
             splitContainer1.TabIndex = 0;
             // 
             // tvMenuPanel
@@ -783,49 +787,93 @@
             tvMenuPanel.FullRowSelect = true;
             tvMenuPanel.HideSelection = false;
             tvMenuPanel.HotTracking = true;
+            tvMenuPanel.ImageIndex = 0;
+            tvMenuPanel.ImageList = imageList1;
             tvMenuPanel.Location = new Point(5, 5);
             tvMenuPanel.Name = "tvMenuPanel";
+            treeNode1.ImageIndex = 5;
             treeNode1.Name = "tnStart";
+            treeNode1.SelectedImageIndex = 5;
             treeNode1.Tag = "0";
-            treeNode1.Text = "Стартовая (Start)";
+            treeNode1.Text = "Главная";
+            treeNode2.ImageIndex = 9;
             treeNode2.Name = "tnAccounts";
+            treeNode2.SelectedImageIndex = 9;
             treeNode2.Tag = "1";
-            treeNode2.Text = "Счета (Accounts)";
+            treeNode2.Text = "Счета";
+            treeNode3.ImageIndex = 8;
             treeNode3.Name = "tnExpenses";
+            treeNode3.SelectedImageIndex = 8;
             treeNode3.Tag = "2";
-            treeNode3.Text = "Расходы (Expenses)";
+            treeNode3.Text = "Расходы";
+            treeNode4.ImageIndex = 7;
             treeNode4.Name = "tnIncome";
+            treeNode4.SelectedImageIndex = 7;
             treeNode4.Tag = "3";
-            treeNode4.Text = "Доходы (Income)";
+            treeNode4.Text = "Доходы";
+            treeNode5.ImageIndex = 2;
             treeNode5.Name = "tnCategory";
+            treeNode5.SelectedImageIndex = 2;
             treeNode5.Tag = "4";
             treeNode5.Text = "Категории (Category)";
+            treeNode6.ImageIndex = 1;
             treeNode6.Name = "tnSource";
+            treeNode6.SelectedImageIndex = 1;
             treeNode6.Tag = "5";
             treeNode6.Text = "Источники (Source)";
+            treeNode7.ImageIndex = 10;
             treeNode7.Name = "tnAdditionally";
+            treeNode7.SelectedImageIndex = 10;
             treeNode7.Tag = "6";
             treeNode7.Text = "Дополнительно (Additionally)";
+            treeNode8.ImageIndex = 3;
             treeNode8.Name = "tnCurrencies";
+            treeNode8.SelectedImageIndex = 3;
             treeNode8.Tag = "7";
             treeNode8.Text = "Валюты (Currencies)";
+            treeNode9.ImageIndex = 2;
             treeNode9.Name = "tnDirectory";
+            treeNode9.SelectedImageIndex = 2;
             treeNode9.Tag = "4";
-            treeNode9.Text = "Справочники (Directory)";
+            treeNode9.Text = "Справочники";
+            treeNode10.ImageIndex = 6;
             treeNode10.Name = "tnReports";
+            treeNode10.SelectedImageIndex = 6;
             treeNode10.Tag = "8";
-            treeNode10.Text = "Отчеты (Reports)";
+            treeNode10.Text = "Отчеты";
+            treeNode11.ImageIndex = 4;
             treeNode11.Name = "tnSettings";
+            treeNode11.SelectedImageIndex = 4;
             treeNode11.Tag = "9";
-            treeNode11.Text = "Настройки (Settings)";
+            treeNode11.Text = "Настройки";
+            treeNode12.ImageIndex = 0;
             treeNode12.Name = "tnAbout";
+            treeNode12.SelectedImageIndex = 0;
             treeNode12.Tag = "10";
             treeNode12.Text = "О программе";
             tvMenuPanel.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3, treeNode4, treeNode9, treeNode10, treeNode11, treeNode12 });
+            tvMenuPanel.SelectedImageIndex = 0;
             tvMenuPanel.ShowLines = false;
-            tvMenuPanel.Size = new Size(195, 551);
+            tvMenuPanel.Size = new Size(190, 551);
             tvMenuPanel.TabIndex = 0;
             tvMenuPanel.AfterSelect += tvMenuPanel_AfterSelect;
+            // 
+            // imageList1
+            // 
+            imageList1.ColorDepth = ColorDepth.Depth32Bit;
+            imageList1.ImageStream = (ImageListStreamer)resources.GetObject("imageList1.ImageStream");
+            imageList1.TransparentColor = Color.Transparent;
+            imageList1.Images.SetKeyName(0, "about.png");
+            imageList1.Images.SetKeyName(1, "source.png");
+            imageList1.Images.SetKeyName(2, "category.png");
+            imageList1.Images.SetKeyName(3, "currency.png");
+            imageList1.Images.SetKeyName(4, "settings.png");
+            imageList1.Images.SetKeyName(5, "start.png");
+            imageList1.Images.SetKeyName(6, "report.png");
+            imageList1.Images.SetKeyName(7, "income.png");
+            imageList1.Images.SetKeyName(8, "expence.png");
+            imageList1.Images.SetKeyName(9, "Account.png");
+            imageList1.Images.SetKeyName(10, "additional.png");
             // 
             // tcPage
             // 
@@ -844,7 +892,7 @@
             tcPage.Location = new Point(0, 0);
             tcPage.Name = "tcPage";
             tcPage.SelectedIndex = 0;
-            tcPage.Size = new Size(575, 561);
+            tcPage.Size = new Size(580, 561);
             tcPage.TabIndex = 0;
             tcPage.SelectedIndexChanged += tcPage_SelectedIndexChanged;
             // 
@@ -854,7 +902,7 @@
             tpStart.Location = new Point(4, 24);
             tpStart.Name = "tpStart";
             tpStart.Padding = new Padding(3);
-            tpStart.Size = new Size(567, 533);
+            tpStart.Size = new Size(572, 533);
             tpStart.TabIndex = 0;
             tpStart.Text = "Стартовая";
             tpStart.UseVisualStyleBackColor = true;
@@ -873,7 +921,7 @@
             tableLayoutPanel30.RowStyles.Add(new RowStyle());
             tableLayoutPanel30.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel30.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel30.Size = new Size(561, 527);
+            tableLayoutPanel30.Size = new Size(566, 527);
             tableLayoutPanel30.TabIndex = 7;
             // 
             // label12
@@ -884,7 +932,7 @@
             label12.ForeColor = Color.Maroon;
             label12.Location = new Point(8, 5);
             label12.Name = "label12";
-            label12.Size = new Size(545, 26);
+            label12.Size = new Size(550, 26);
             label12.TabIndex = 0;
             label12.Text = "День недели и дата";
             // 
@@ -894,7 +942,7 @@
             tpAccounts.Controls.Add(tableLayoutPanel2);
             tpAccounts.Location = new Point(4, 24);
             tpAccounts.Name = "tpAccounts";
-            tpAccounts.Size = new Size(567, 533);
+            tpAccounts.Size = new Size(572, 533);
             tpAccounts.TabIndex = 1;
             tpAccounts.Text = "Счета";
             tpAccounts.UseVisualStyleBackColor = true;
@@ -914,7 +962,7 @@
             tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel18.RowStyles.Add(new RowStyle());
-            tableLayoutPanel18.Size = new Size(567, 433);
+            tableLayoutPanel18.Size = new Size(572, 433);
             tableLayoutPanel18.TabIndex = 2;
             // 
             // label9
@@ -925,7 +973,7 @@
             label9.ForeColor = Color.Maroon;
             label9.Location = new Point(8, 5);
             label9.Name = "label9";
-            label9.Size = new Size(551, 26);
+            label9.Size = new Size(556, 26);
             label9.TabIndex = 0;
             label9.Text = "Счета";
             // 
@@ -940,12 +988,12 @@
             flowLayoutPanel3.Location = new Point(8, 34);
             flowLayoutPanel3.Name = "flowLayoutPanel3";
             flowLayoutPanel3.Padding = new Padding(5);
-            flowLayoutPanel3.Size = new Size(551, 40);
+            flowLayoutPanel3.Size = new Size(556, 40);
             flowLayoutPanel3.TabIndex = 1;
             // 
             // btnAddAccounts
             // 
-            btnAddAccounts.Image = Properties.Resources.icons8_plus_16;
+            btnAddAccounts.Image = Properties.Resources.PlusIcon;
             btnAddAccounts.Location = new Point(8, 8);
             btnAddAccounts.Name = "btnAddAccounts";
             btnAddAccounts.Size = new Size(104, 23);
@@ -957,7 +1005,7 @@
             // 
             // btnTransferAccount
             // 
-            btnTransferAccount.Image = Properties.Resources.icons8_card_exchange_16;
+            btnTransferAccount.Image = Properties.Resources.TransferIcon;
             btnTransferAccount.Location = new Point(118, 8);
             btnTransferAccount.Name = "btnTransferAccount";
             btnTransferAccount.Size = new Size(104, 23);
@@ -969,7 +1017,7 @@
             // 
             // btnEditAccount
             // 
-            btnEditAccount.Image = Properties.Resources.icons8_edit_16;
+            btnEditAccount.Image = Properties.Resources.EditIcon;
             btnEditAccount.Location = new Point(228, 8);
             btnEditAccount.Name = "btnEditAccount";
             btnEditAccount.Size = new Size(23, 23);
@@ -979,7 +1027,7 @@
             // 
             // btnDeleteAccount
             // 
-            btnDeleteAccount.Image = Properties.Resources.icons8_minus_sign_16;
+            btnDeleteAccount.Image = Properties.Resources.MinusIcon;
             btnDeleteAccount.Location = new Point(257, 8);
             btnDeleteAccount.Name = "btnDeleteAccount";
             btnDeleteAccount.Size = new Size(23, 23);
@@ -989,7 +1037,7 @@
             // 
             // btnPrintAccounts
             // 
-            btnPrintAccounts.Image = Properties.Resources.icons8_print_16_2;
+            btnPrintAccounts.Image = Properties.Resources.PrintIcon;
             btnPrintAccounts.Location = new Point(286, 8);
             btnPrintAccounts.Name = "btnPrintAccounts";
             btnPrintAccounts.Size = new Size(23, 23);
@@ -1010,7 +1058,7 @@
             dgwAccounts.RowHeadersVisible = false;
             dgwAccounts.RowHeadersWidth = 51;
             dgwAccounts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwAccounts.Size = new Size(551, 345);
+            dgwAccounts.Size = new Size(556, 345);
             dgwAccounts.TabIndex = 2;
             dgwAccounts.CellFormatting += dataGridViewAccounts_CellFormatting;
             dgwAccounts.SelectionChanged += dataGridViewAccounts_SelectionChanged;
@@ -1028,7 +1076,7 @@
             tableLayoutPanel2.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(567, 100);
+            tableLayoutPanel2.Size = new Size(572, 100);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // label2
@@ -1047,7 +1095,7 @@
             tbDetailsAccount.Multiline = true;
             tbDetailsAccount.Name = "tbDetailsAccount";
             tbDetailsAccount.ReadOnly = true;
-            tbDetailsAccount.Size = new Size(451, 92);
+            tbDetailsAccount.Size = new Size(456, 92);
             tbDetailsAccount.TabIndex = 1;
             // 
             // tpExpenses
@@ -1056,7 +1104,7 @@
             tpExpenses.Controls.Add(tableLayoutPanel3);
             tpExpenses.Location = new Point(4, 24);
             tpExpenses.Name = "tpExpenses";
-            tpExpenses.Size = new Size(567, 533);
+            tpExpenses.Size = new Size(572, 533);
             tpExpenses.TabIndex = 2;
             tpExpenses.Text = "Расходы";
             tpExpenses.UseVisualStyleBackColor = true;
@@ -1076,7 +1124,7 @@
             tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel19.RowStyles.Add(new RowStyle());
-            tableLayoutPanel19.Size = new Size(567, 433);
+            tableLayoutPanel19.Size = new Size(572, 433);
             tableLayoutPanel19.TabIndex = 3;
             // 
             // dgwExpenses
@@ -1093,7 +1141,7 @@
             dgwExpenses.RowHeadersVisible = false;
             dgwExpenses.RowHeadersWidth = 51;
             dgwExpenses.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwExpenses.Size = new Size(551, 345);
+            dgwExpenses.Size = new Size(556, 345);
             dgwExpenses.TabIndex = 3;
             dgwExpenses.CellFormatting += dataGridView3_CellFormatting;
             dgwExpenses.SelectionChanged += dataGridViewExpenses_SelectionChanged;
@@ -1106,7 +1154,7 @@
             label17.ForeColor = Color.Maroon;
             label17.Location = new Point(8, 5);
             label17.Name = "label17";
-            label17.Size = new Size(551, 26);
+            label17.Size = new Size(556, 26);
             label17.TabIndex = 0;
             label17.Text = "Расходы";
             // 
@@ -1123,12 +1171,12 @@
             flowLayoutPanel6.Location = new Point(8, 34);
             flowLayoutPanel6.Name = "flowLayoutPanel6";
             flowLayoutPanel6.Padding = new Padding(5);
-            flowLayoutPanel6.Size = new Size(551, 40);
+            flowLayoutPanel6.Size = new Size(556, 40);
             flowLayoutPanel6.TabIndex = 1;
             // 
             // btnAddExpenses
             // 
-            btnAddExpenses.Image = Properties.Resources.icons8_plus_16;
+            btnAddExpenses.Image = Properties.Resources.PlusIcon;
             btnAddExpenses.Location = new Point(8, 8);
             btnAddExpenses.Name = "btnAddExpenses";
             btnAddExpenses.Size = new Size(104, 23);
@@ -1140,7 +1188,7 @@
             // 
             // btnEditExpenses1
             // 
-            btnEditExpenses1.Image = Properties.Resources.icons8_star_16;
+            btnEditExpenses1.Image = Properties.Resources.StarIcon;
             btnEditExpenses1.Location = new Point(118, 8);
             btnEditExpenses1.Name = "btnEditExpenses1";
             btnEditExpenses1.Size = new Size(104, 23);
@@ -1168,7 +1216,7 @@
             // 
             // btnEditExpenses
             // 
-            btnEditExpenses.Image = Properties.Resources.icons8_edit_16;
+            btnEditExpenses.Image = Properties.Resources.EditIcon;
             btnEditExpenses.Location = new Point(420, 8);
             btnEditExpenses.Name = "btnEditExpenses";
             btnEditExpenses.Size = new Size(23, 23);
@@ -1178,7 +1226,7 @@
             // 
             // btnDeleteExpenses
             // 
-            btnDeleteExpenses.Image = Properties.Resources.icons8_minus_sign_16;
+            btnDeleteExpenses.Image = Properties.Resources.MinusIcon;
             btnDeleteExpenses.Location = new Point(449, 8);
             btnDeleteExpenses.Name = "btnDeleteExpenses";
             btnDeleteExpenses.Size = new Size(23, 23);
@@ -1188,7 +1236,7 @@
             // 
             // btnPrintExpenses
             // 
-            btnPrintExpenses.Image = Properties.Resources.icons8_print_16_2;
+            btnPrintExpenses.Image = Properties.Resources.PrintIcon;
             btnPrintExpenses.Location = new Point(478, 8);
             btnPrintExpenses.Name = "btnPrintExpenses";
             btnPrintExpenses.Size = new Size(23, 23);
@@ -1208,7 +1256,7 @@
             tableLayoutPanel3.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.Size = new Size(567, 100);
+            tableLayoutPanel3.Size = new Size(572, 100);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // label3
@@ -1227,7 +1275,7 @@
             tbDetailsExpenses.Multiline = true;
             tbDetailsExpenses.Name = "tbDetailsExpenses";
             tbDetailsExpenses.ReadOnly = true;
-            tbDetailsExpenses.Size = new Size(451, 89);
+            tbDetailsExpenses.Size = new Size(456, 89);
             tbDetailsExpenses.TabIndex = 1;
             // 
             // tpIncome
@@ -1236,7 +1284,7 @@
             tpIncome.Controls.Add(tableLayoutPanel6);
             tpIncome.Location = new Point(4, 24);
             tpIncome.Name = "tpIncome";
-            tpIncome.Size = new Size(567, 533);
+            tpIncome.Size = new Size(572, 533);
             tpIncome.TabIndex = 3;
             tpIncome.Text = "Доходы";
             tpIncome.UseVisualStyleBackColor = true;
@@ -1256,7 +1304,7 @@
             tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel20.RowStyles.Add(new RowStyle());
-            tableLayoutPanel20.Size = new Size(567, 433);
+            tableLayoutPanel20.Size = new Size(572, 433);
             tableLayoutPanel20.TabIndex = 3;
             // 
             // dgwIncomes
@@ -1273,7 +1321,7 @@
             dgwIncomes.RowHeadersVisible = false;
             dgwIncomes.RowHeadersWidth = 51;
             dgwIncomes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwIncomes.Size = new Size(551, 345);
+            dgwIncomes.Size = new Size(556, 345);
             dgwIncomes.TabIndex = 3;
             dgwIncomes.CellFormatting += dgwIncomes_CellFormatting;
             dgwIncomes.SelectionChanged += dataGridViewIncomes_SelectionChanged;
@@ -1286,7 +1334,7 @@
             label20.ForeColor = Color.Maroon;
             label20.Location = new Point(8, 5);
             label20.Name = "label20";
-            label20.Size = new Size(551, 26);
+            label20.Size = new Size(556, 26);
             label20.TabIndex = 0;
             label20.Text = "Доходы";
             // 
@@ -1302,12 +1350,12 @@
             flowLayoutPanel8.Location = new Point(8, 34);
             flowLayoutPanel8.Name = "flowLayoutPanel8";
             flowLayoutPanel8.Padding = new Padding(5);
-            flowLayoutPanel8.Size = new Size(551, 40);
+            flowLayoutPanel8.Size = new Size(556, 40);
             flowLayoutPanel8.TabIndex = 1;
             // 
             // btnAddIncomes
             // 
-            btnAddIncomes.Image = Properties.Resources.icons8_plus_16;
+            btnAddIncomes.Image = Properties.Resources.PlusIcon;
             btnAddIncomes.Location = new Point(8, 8);
             btnAddIncomes.Name = "btnAddIncomes";
             btnAddIncomes.Size = new Size(104, 23);
@@ -1335,7 +1383,7 @@
             // 
             // btnEditIncomes
             // 
-            btnEditIncomes.Image = Properties.Resources.icons8_edit_16;
+            btnEditIncomes.Image = Properties.Resources.EditIcon;
             btnEditIncomes.Location = new Point(310, 8);
             btnEditIncomes.Name = "btnEditIncomes";
             btnEditIncomes.Size = new Size(23, 23);
@@ -1345,7 +1393,7 @@
             // 
             // btnDeleteIncomes
             // 
-            btnDeleteIncomes.Image = Properties.Resources.icons8_minus_sign_16;
+            btnDeleteIncomes.Image = Properties.Resources.MinusIcon;
             btnDeleteIncomes.Location = new Point(339, 8);
             btnDeleteIncomes.Name = "btnDeleteIncomes";
             btnDeleteIncomes.Size = new Size(23, 23);
@@ -1355,7 +1403,7 @@
             // 
             // btnPrintIncomes
             // 
-            btnPrintIncomes.Image = Properties.Resources.icons8_print_16_2;
+            btnPrintIncomes.Image = Properties.Resources.PrintIcon;
             btnPrintIncomes.Location = new Point(368, 8);
             btnPrintIncomes.Name = "btnPrintIncomes";
             btnPrintIncomes.Size = new Size(23, 23);
@@ -1375,7 +1423,7 @@
             tableLayoutPanel6.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle());
-            tableLayoutPanel6.Size = new Size(567, 100);
+            tableLayoutPanel6.Size = new Size(572, 100);
             tableLayoutPanel6.TabIndex = 1;
             // 
             // label4
@@ -1394,7 +1442,7 @@
             tbDetailsIncome.Multiline = true;
             tbDetailsIncome.Name = "tbDetailsIncome";
             tbDetailsIncome.ReadOnly = true;
-            tbDetailsIncome.Size = new Size(451, 89);
+            tbDetailsIncome.Size = new Size(456, 89);
             tbDetailsIncome.TabIndex = 1;
             // 
             // tpCategory
@@ -1402,7 +1450,7 @@
             tpCategory.Controls.Add(tableLayoutPanel1);
             tpCategory.Location = new Point(4, 24);
             tpCategory.Name = "tpCategory";
-            tpCategory.Size = new Size(567, 533);
+            tpCategory.Size = new Size(572, 533);
             tpCategory.TabIndex = 4;
             tpCategory.Text = "Категории";
             tpCategory.UseVisualStyleBackColor = true;
@@ -1423,7 +1471,7 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 106F));
-            tableLayoutPanel1.Size = new Size(567, 533);
+            tableLayoutPanel1.Size = new Size(572, 533);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel25
@@ -1434,7 +1482,7 @@
             tableLayoutPanel25.Controls.Add(label33, 0, 0);
             tableLayoutPanel25.Controls.Add(flowLayoutPanel13, 0, 1);
             tableLayoutPanel25.Dock = DockStyle.Fill;
-            tableLayoutPanel25.Location = new Point(283, 0);
+            tableLayoutPanel25.Location = new Point(286, 0);
             tableLayoutPanel25.Margin = new Padding(0);
             tableLayoutPanel25.Name = "tableLayoutPanel25";
             tableLayoutPanel25.Padding = new Padding(5);
@@ -1442,7 +1490,7 @@
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle());
-            tableLayoutPanel25.Size = new Size(284, 427);
+            tableLayoutPanel25.Size = new Size(286, 427);
             tableLayoutPanel25.TabIndex = 4;
             // 
             // dgwSubCategories
@@ -1459,7 +1507,7 @@
             dgwSubCategories.RowHeadersVisible = false;
             dgwSubCategories.RowHeadersWidth = 51;
             dgwSubCategories.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwSubCategories.Size = new Size(268, 339);
+            dgwSubCategories.Size = new Size(270, 339);
             dgwSubCategories.TabIndex = 3;
             dgwSubCategories.CellFormatting += dataGridViewSubCategories_CellFormatting;
             dgwSubCategories.SelectionChanged += dataGridViewSubCategories_SelectionChanged;
@@ -1472,7 +1520,7 @@
             label33.ForeColor = Color.Maroon;
             label33.Location = new Point(8, 5);
             label33.Name = "label33";
-            label33.Size = new Size(268, 26);
+            label33.Size = new Size(270, 26);
             label33.TabIndex = 0;
             label33.Text = "Подкатегории";
             // 
@@ -1485,12 +1533,12 @@
             flowLayoutPanel13.Location = new Point(8, 34);
             flowLayoutPanel13.Name = "flowLayoutPanel13";
             flowLayoutPanel13.Padding = new Padding(5);
-            flowLayoutPanel13.Size = new Size(268, 40);
+            flowLayoutPanel13.Size = new Size(270, 40);
             flowLayoutPanel13.TabIndex = 1;
             // 
             // btnAddSubCategories
             // 
-            btnAddSubCategories.Image = Properties.Resources.icons8_plus_16;
+            btnAddSubCategories.Image = Properties.Resources.PlusIcon;
             btnAddSubCategories.Location = new Point(8, 8);
             btnAddSubCategories.Name = "btnAddSubCategories";
             btnAddSubCategories.Size = new Size(104, 23);
@@ -1502,7 +1550,7 @@
             // 
             // btnEditSubCategories
             // 
-            btnEditSubCategories.Image = Properties.Resources.icons8_edit_16;
+            btnEditSubCategories.Image = Properties.Resources.EditIcon;
             btnEditSubCategories.Location = new Point(118, 8);
             btnEditSubCategories.Name = "btnEditSubCategories";
             btnEditSubCategories.Size = new Size(23, 23);
@@ -1512,7 +1560,7 @@
             // 
             // btnDeleteSubCategories
             // 
-            btnDeleteSubCategories.Image = Properties.Resources.icons8_minus_sign_16;
+            btnDeleteSubCategories.Image = Properties.Resources.MinusIcon;
             btnDeleteSubCategories.Location = new Point(147, 8);
             btnDeleteSubCategories.Name = "btnDeleteSubCategories";
             btnDeleteSubCategories.Size = new Size(23, 23);
@@ -1536,7 +1584,7 @@
             tableLayoutPanel24.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel24.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel24.RowStyles.Add(new RowStyle());
-            tableLayoutPanel24.Size = new Size(283, 427);
+            tableLayoutPanel24.Size = new Size(286, 427);
             tableLayoutPanel24.TabIndex = 3;
             // 
             // dgwCategorie
@@ -1553,7 +1601,7 @@
             dgwCategorie.RowHeadersVisible = false;
             dgwCategorie.RowHeadersWidth = 51;
             dgwCategorie.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwCategorie.Size = new Size(267, 339);
+            dgwCategorie.Size = new Size(270, 339);
             dgwCategorie.TabIndex = 3;
             dgwCategorie.SelectionChanged += dataGridViewCategories_SelectionChanged;
             // 
@@ -1565,7 +1613,7 @@
             label32.ForeColor = Color.Maroon;
             label32.Location = new Point(8, 5);
             label32.Name = "label32";
-            label32.Size = new Size(267, 26);
+            label32.Size = new Size(270, 26);
             label32.TabIndex = 0;
             label32.Text = "Категории";
             // 
@@ -1578,12 +1626,12 @@
             flowLayoutPanel12.Location = new Point(8, 34);
             flowLayoutPanel12.Name = "flowLayoutPanel12";
             flowLayoutPanel12.Padding = new Padding(5);
-            flowLayoutPanel12.Size = new Size(267, 40);
+            flowLayoutPanel12.Size = new Size(270, 40);
             flowLayoutPanel12.TabIndex = 1;
             // 
             // btnAddCategories
             // 
-            btnAddCategories.Image = Properties.Resources.icons8_plus_16;
+            btnAddCategories.Image = Properties.Resources.PlusIcon;
             btnAddCategories.Location = new Point(8, 8);
             btnAddCategories.Name = "btnAddCategories";
             btnAddCategories.Size = new Size(104, 23);
@@ -1595,7 +1643,7 @@
             // 
             // btnEditCategories
             // 
-            btnEditCategories.Image = Properties.Resources.icons8_edit_16;
+            btnEditCategories.Image = Properties.Resources.EditIcon;
             btnEditCategories.Location = new Point(118, 8);
             btnEditCategories.Name = "btnEditCategories";
             btnEditCategories.Size = new Size(23, 23);
@@ -1605,7 +1653,7 @@
             // 
             // btnDeleteCategories
             // 
-            btnDeleteCategories.Image = Properties.Resources.icons8_minus_sign_16;
+            btnDeleteCategories.Image = Properties.Resources.MinusIcon;
             btnDeleteCategories.Location = new Point(147, 8);
             btnDeleteCategories.Name = "btnDeleteCategories";
             btnDeleteCategories.Size = new Size(23, 23);
@@ -1621,12 +1669,12 @@
             tableLayoutPanel17.Controls.Add(label8, 0, 0);
             tableLayoutPanel17.Controls.Add(tbDetailsSubCategory, 1, 0);
             tableLayoutPanel17.Dock = DockStyle.Fill;
-            tableLayoutPanel17.Location = new Point(286, 430);
+            tableLayoutPanel17.Location = new Point(289, 430);
             tableLayoutPanel17.Name = "tableLayoutPanel17";
             tableLayoutPanel17.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel17.RowCount = 1;
             tableLayoutPanel17.RowStyles.Add(new RowStyle());
-            tableLayoutPanel17.Size = new Size(278, 100);
+            tableLayoutPanel17.Size = new Size(280, 100);
             tableLayoutPanel17.TabIndex = 2;
             // 
             // label8
@@ -1646,7 +1694,7 @@
             tbDetailsSubCategory.Multiline = true;
             tbDetailsSubCategory.Name = "tbDetailsSubCategory";
             tbDetailsSubCategory.ReadOnly = true;
-            tbDetailsSubCategory.Size = new Size(162, 92);
+            tbDetailsSubCategory.Size = new Size(164, 92);
             tbDetailsSubCategory.TabIndex = 1;
             // 
             // tableLayoutPanel16
@@ -1662,7 +1710,7 @@
             tableLayoutPanel16.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel16.RowCount = 1;
             tableLayoutPanel16.RowStyles.Add(new RowStyle());
-            tableLayoutPanel16.Size = new Size(277, 100);
+            tableLayoutPanel16.Size = new Size(280, 100);
             tableLayoutPanel16.TabIndex = 1;
             // 
             // label1
@@ -1682,7 +1730,7 @@
             tbDetailsCategory.Multiline = true;
             tbDetailsCategory.Name = "tbDetailsCategory";
             tbDetailsCategory.ReadOnly = true;
-            tbDetailsCategory.Size = new Size(161, 92);
+            tbDetailsCategory.Size = new Size(164, 92);
             tbDetailsCategory.TabIndex = 1;
             // 
             // tpSource
@@ -1691,7 +1739,7 @@
             tpSource.Controls.Add(tableLayoutPanel9);
             tpSource.Location = new Point(4, 24);
             tpSource.Name = "tpSource";
-            tpSource.Size = new Size(567, 533);
+            tpSource.Size = new Size(572, 533);
             tpSource.TabIndex = 5;
             tpSource.Text = "Источники";
             tpSource.UseVisualStyleBackColor = true;
@@ -1711,7 +1759,7 @@
             tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel21.RowStyles.Add(new RowStyle());
-            tableLayoutPanel21.Size = new Size(567, 433);
+            tableLayoutPanel21.Size = new Size(572, 433);
             tableLayoutPanel21.TabIndex = 3;
             // 
             // dgwSource
@@ -1728,7 +1776,7 @@
             dgwSource.RowHeadersVisible = false;
             dgwSource.RowHeadersWidth = 51;
             dgwSource.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwSource.Size = new Size(551, 345);
+            dgwSource.Size = new Size(556, 345);
             dgwSource.TabIndex = 3;
             dgwSource.SelectionChanged += dataGridViewSources_SelectionChanged;
             // 
@@ -1740,7 +1788,7 @@
             label22.ForeColor = Color.Maroon;
             label22.Location = new Point(8, 5);
             label22.Name = "label22";
-            label22.Size = new Size(551, 26);
+            label22.Size = new Size(556, 26);
             label22.TabIndex = 0;
             label22.Text = "Источники";
             // 
@@ -1753,12 +1801,12 @@
             flowLayoutPanel9.Location = new Point(8, 34);
             flowLayoutPanel9.Name = "flowLayoutPanel9";
             flowLayoutPanel9.Padding = new Padding(5);
-            flowLayoutPanel9.Size = new Size(551, 40);
+            flowLayoutPanel9.Size = new Size(556, 40);
             flowLayoutPanel9.TabIndex = 1;
             // 
             // btnAddSources
             // 
-            btnAddSources.Image = Properties.Resources.icons8_plus_16;
+            btnAddSources.Image = Properties.Resources.PlusIcon;
             btnAddSources.Location = new Point(8, 8);
             btnAddSources.Name = "btnAddSources";
             btnAddSources.Size = new Size(104, 23);
@@ -1770,7 +1818,7 @@
             // 
             // btnEditSources
             // 
-            btnEditSources.Image = Properties.Resources.icons8_edit_16;
+            btnEditSources.Image = Properties.Resources.EditIcon;
             btnEditSources.Location = new Point(118, 8);
             btnEditSources.Name = "btnEditSources";
             btnEditSources.Size = new Size(23, 23);
@@ -1780,7 +1828,7 @@
             // 
             // btnDeleteSources
             // 
-            btnDeleteSources.Image = Properties.Resources.icons8_minus_sign_16;
+            btnDeleteSources.Image = Properties.Resources.MinusIcon;
             btnDeleteSources.Location = new Point(147, 8);
             btnDeleteSources.Name = "btnDeleteSources";
             btnDeleteSources.Size = new Size(23, 23);
@@ -1801,7 +1849,7 @@
             tableLayoutPanel9.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel9.RowCount = 1;
             tableLayoutPanel9.RowStyles.Add(new RowStyle());
-            tableLayoutPanel9.Size = new Size(567, 100);
+            tableLayoutPanel9.Size = new Size(572, 100);
             tableLayoutPanel9.TabIndex = 1;
             // 
             // label5
@@ -1820,7 +1868,7 @@
             tbDetailsSource.Multiline = true;
             tbDetailsSource.Name = "tbDetailsSource";
             tbDetailsSource.ReadOnly = true;
-            tbDetailsSource.Size = new Size(451, 89);
+            tbDetailsSource.Size = new Size(456, 89);
             tbDetailsSource.TabIndex = 1;
             // 
             // tpAdditionally
@@ -1829,7 +1877,7 @@
             tpAdditionally.Controls.Add(tableLayoutPanel11);
             tpAdditionally.Location = new Point(4, 24);
             tpAdditionally.Name = "tpAdditionally";
-            tpAdditionally.Size = new Size(567, 533);
+            tpAdditionally.Size = new Size(572, 533);
             tpAdditionally.TabIndex = 6;
             tpAdditionally.Text = "Дополнительно";
             tpAdditionally.UseVisualStyleBackColor = true;
@@ -1849,7 +1897,7 @@
             tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel22.RowStyles.Add(new RowStyle());
-            tableLayoutPanel22.Size = new Size(567, 433);
+            tableLayoutPanel22.Size = new Size(572, 433);
             tableLayoutPanel22.TabIndex = 3;
             // 
             // dgwAdditionals
@@ -1866,7 +1914,7 @@
             dgwAdditionals.RowHeadersVisible = false;
             dgwAdditionals.RowHeadersWidth = 51;
             dgwAdditionals.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwAdditionals.Size = new Size(551, 345);
+            dgwAdditionals.Size = new Size(556, 345);
             dgwAdditionals.TabIndex = 3;
             dgwAdditionals.SelectionChanged += dataGridViewAdditionals_SelectionChanged;
             // 
@@ -1878,7 +1926,7 @@
             label29.ForeColor = Color.Maroon;
             label29.Location = new Point(8, 5);
             label29.Name = "label29";
-            label29.Size = new Size(551, 26);
+            label29.Size = new Size(556, 26);
             label29.TabIndex = 0;
             label29.Text = "Дополнительно";
             // 
@@ -1891,12 +1939,12 @@
             flowLayoutPanel10.Location = new Point(8, 34);
             flowLayoutPanel10.Name = "flowLayoutPanel10";
             flowLayoutPanel10.Padding = new Padding(5);
-            flowLayoutPanel10.Size = new Size(551, 40);
+            flowLayoutPanel10.Size = new Size(556, 40);
             flowLayoutPanel10.TabIndex = 1;
             // 
             // btnAddAdditionals
             // 
-            btnAddAdditionals.Image = Properties.Resources.icons8_plus_16;
+            btnAddAdditionals.Image = Properties.Resources.PlusIcon;
             btnAddAdditionals.Location = new Point(8, 8);
             btnAddAdditionals.Name = "btnAddAdditionals";
             btnAddAdditionals.Size = new Size(104, 23);
@@ -1908,7 +1956,7 @@
             // 
             // btnEditAdditionals
             // 
-            btnEditAdditionals.Image = Properties.Resources.icons8_edit_16;
+            btnEditAdditionals.Image = Properties.Resources.EditIcon;
             btnEditAdditionals.Location = new Point(118, 8);
             btnEditAdditionals.Name = "btnEditAdditionals";
             btnEditAdditionals.Size = new Size(23, 23);
@@ -1918,7 +1966,7 @@
             // 
             // btnDeleteAdditional
             // 
-            btnDeleteAdditional.Image = Properties.Resources.icons8_minus_sign_16;
+            btnDeleteAdditional.Image = Properties.Resources.MinusIcon;
             btnDeleteAdditional.Location = new Point(147, 8);
             btnDeleteAdditional.Name = "btnDeleteAdditional";
             btnDeleteAdditional.Size = new Size(23, 23);
@@ -1939,7 +1987,7 @@
             tableLayoutPanel11.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel11.RowCount = 1;
             tableLayoutPanel11.RowStyles.Add(new RowStyle());
-            tableLayoutPanel11.Size = new Size(567, 100);
+            tableLayoutPanel11.Size = new Size(572, 100);
             tableLayoutPanel11.TabIndex = 1;
             // 
             // label6
@@ -1958,7 +2006,7 @@
             tbDetailsAdditional.Multiline = true;
             tbDetailsAdditional.Name = "tbDetailsAdditional";
             tbDetailsAdditional.ReadOnly = true;
-            tbDetailsAdditional.Size = new Size(451, 89);
+            tbDetailsAdditional.Size = new Size(456, 89);
             tbDetailsAdditional.TabIndex = 1;
             // 
             // tpCurrencies
@@ -1967,7 +2015,7 @@
             tpCurrencies.Controls.Add(tableLayoutPanel14);
             tpCurrencies.Location = new Point(4, 24);
             tpCurrencies.Name = "tpCurrencies";
-            tpCurrencies.Size = new Size(567, 533);
+            tpCurrencies.Size = new Size(572, 533);
             tpCurrencies.TabIndex = 7;
             tpCurrencies.Text = "Валюты";
             tpCurrencies.UseVisualStyleBackColor = true;
@@ -1987,7 +2035,7 @@
             tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel23.RowStyles.Add(new RowStyle());
-            tableLayoutPanel23.Size = new Size(567, 433);
+            tableLayoutPanel23.Size = new Size(572, 433);
             tableLayoutPanel23.TabIndex = 3;
             // 
             // dgwCurrencies
@@ -2004,7 +2052,7 @@
             dgwCurrencies.RowHeadersVisible = false;
             dgwCurrencies.RowHeadersWidth = 51;
             dgwCurrencies.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwCurrencies.Size = new Size(551, 345);
+            dgwCurrencies.Size = new Size(556, 345);
             dgwCurrencies.TabIndex = 3;
             dgwCurrencies.SelectionChanged += dataGridViewCurrencies_SelectionChanged;
             // 
@@ -2016,7 +2064,7 @@
             label31.ForeColor = Color.Maroon;
             label31.Location = new Point(8, 5);
             label31.Name = "label31";
-            label31.Size = new Size(551, 26);
+            label31.Size = new Size(556, 26);
             label31.TabIndex = 0;
             label31.Text = "Валюты";
             // 
@@ -2029,12 +2077,12 @@
             flowLayoutPanel11.Location = new Point(8, 34);
             flowLayoutPanel11.Name = "flowLayoutPanel11";
             flowLayoutPanel11.Padding = new Padding(5);
-            flowLayoutPanel11.Size = new Size(551, 40);
+            flowLayoutPanel11.Size = new Size(556, 40);
             flowLayoutPanel11.TabIndex = 1;
             // 
             // btnAddCurrency
             // 
-            btnAddCurrency.Image = Properties.Resources.icons8_plus_16;
+            btnAddCurrency.Image = Properties.Resources.PlusIcon;
             btnAddCurrency.Location = new Point(8, 8);
             btnAddCurrency.Name = "btnAddCurrency";
             btnAddCurrency.Size = new Size(104, 23);
@@ -2046,7 +2094,7 @@
             // 
             // btnEditCurrency
             // 
-            btnEditCurrency.Image = Properties.Resources.icons8_edit_16;
+            btnEditCurrency.Image = Properties.Resources.EditIcon;
             btnEditCurrency.Location = new Point(118, 8);
             btnEditCurrency.Name = "btnEditCurrency";
             btnEditCurrency.Size = new Size(23, 23);
@@ -2056,7 +2104,7 @@
             // 
             // btnDeleteCurrency
             // 
-            btnDeleteCurrency.Image = Properties.Resources.icons8_minus_sign_16;
+            btnDeleteCurrency.Image = Properties.Resources.MinusIcon;
             btnDeleteCurrency.Location = new Point(147, 8);
             btnDeleteCurrency.Name = "btnDeleteCurrency";
             btnDeleteCurrency.Size = new Size(23, 23);
@@ -2077,7 +2125,7 @@
             tableLayoutPanel14.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel14.RowCount = 1;
             tableLayoutPanel14.RowStyles.Add(new RowStyle());
-            tableLayoutPanel14.Size = new Size(567, 100);
+            tableLayoutPanel14.Size = new Size(572, 100);
             tableLayoutPanel14.TabIndex = 1;
             // 
             // label7
@@ -2096,7 +2144,7 @@
             tbDetailsCurrency.Multiline = true;
             tbDetailsCurrency.Name = "tbDetailsCurrency";
             tbDetailsCurrency.ReadOnly = true;
-            tbDetailsCurrency.Size = new Size(451, 89);
+            tbDetailsCurrency.Size = new Size(456, 89);
             tbDetailsCurrency.TabIndex = 1;
             // 
             // tpReport
@@ -2105,7 +2153,7 @@
             tpReport.Controls.Add(tableLayoutPanel26);
             tpReport.Location = new Point(4, 24);
             tpReport.Name = "tpReport";
-            tpReport.Size = new Size(567, 533);
+            tpReport.Size = new Size(572, 533);
             tpReport.TabIndex = 8;
             tpReport.Text = "Отчеты";
             tpReport.UseVisualStyleBackColor = true;
@@ -2122,7 +2170,7 @@
             tableLayoutPanel31.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel31.RowCount = 1;
             tableLayoutPanel31.RowStyles.Add(new RowStyle());
-            tableLayoutPanel31.Size = new Size(567, 100);
+            tableLayoutPanel31.Size = new Size(572, 100);
             tableLayoutPanel31.TabIndex = 5;
             // 
             // tbDetailsReport
@@ -2132,7 +2180,7 @@
             tbDetailsReport.Multiline = true;
             tbDetailsReport.Name = "tbDetailsReport";
             tbDetailsReport.ReadOnly = true;
-            tbDetailsReport.Size = new Size(551, 89);
+            tbDetailsReport.Size = new Size(556, 89);
             tbDetailsReport.TabIndex = 1;
             // 
             // tableLayoutPanel26
@@ -2161,7 +2209,7 @@
             tableLayoutPanel26.RowStyles.Add(new RowStyle());
             tableLayoutPanel26.RowStyles.Add(new RowStyle());
             tableLayoutPanel26.RowStyles.Add(new RowStyle());
-            tableLayoutPanel26.Size = new Size(567, 533);
+            tableLayoutPanel26.Size = new Size(572, 533);
             tableLayoutPanel26.TabIndex = 4;
             // 
             // label34
@@ -2172,7 +2220,7 @@
             label34.ForeColor = Color.Maroon;
             label34.Location = new Point(8, 5);
             label34.Name = "label34";
-            label34.Size = new Size(551, 26);
+            label34.Size = new Size(556, 26);
             label34.TabIndex = 0;
             label34.Text = "Отчеты";
             // 
@@ -2181,7 +2229,7 @@
             flPanel1.Dock = DockStyle.Fill;
             flPanel1.Location = new Point(8, 69);
             flPanel1.Name = "flPanel1";
-            flPanel1.Size = new Size(551, 27);
+            flPanel1.Size = new Size(556, 27);
             flPanel1.TabIndex = 9;
             // 
             // flPanel2
@@ -2189,7 +2237,7 @@
             flPanel2.Dock = DockStyle.Fill;
             flPanel2.Location = new Point(8, 102);
             flPanel2.Name = "flPanel2";
-            flPanel2.Size = new Size(551, 27);
+            flPanel2.Size = new Size(556, 27);
             flPanel2.TabIndex = 10;
             // 
             // flPanel3
@@ -2197,7 +2245,7 @@
             flPanel3.Dock = DockStyle.Fill;
             flPanel3.Location = new Point(8, 135);
             flPanel3.Name = "flPanel3";
-            flPanel3.Size = new Size(551, 27);
+            flPanel3.Size = new Size(556, 27);
             flPanel3.TabIndex = 11;
             // 
             // flPanel4
@@ -2205,7 +2253,7 @@
             flPanel4.Dock = DockStyle.Fill;
             flPanel4.Location = new Point(8, 168);
             flPanel4.Name = "flPanel4";
-            flPanel4.Size = new Size(551, 27);
+            flPanel4.Size = new Size(556, 27);
             flPanel4.TabIndex = 12;
             // 
             // flPanel5
@@ -2213,7 +2261,7 @@
             flPanel5.Dock = DockStyle.Fill;
             flPanel5.Location = new Point(8, 201);
             flPanel5.Name = "flPanel5";
-            flPanel5.Size = new Size(551, 27);
+            flPanel5.Size = new Size(556, 27);
             flPanel5.TabIndex = 13;
             // 
             // flPanel6
@@ -2221,7 +2269,7 @@
             flPanel6.Dock = DockStyle.Fill;
             flPanel6.Location = new Point(8, 234);
             flPanel6.Name = "flPanel6";
-            flPanel6.Size = new Size(551, 27);
+            flPanel6.Size = new Size(556, 27);
             flPanel6.TabIndex = 14;
             // 
             // flowLayoutPanel14
@@ -2233,7 +2281,7 @@
             flowLayoutPanel14.Dock = DockStyle.Fill;
             flowLayoutPanel14.Location = new Point(8, 34);
             flowLayoutPanel14.Name = "flowLayoutPanel14";
-            flowLayoutPanel14.Size = new Size(551, 29);
+            flowLayoutPanel14.Size = new Size(556, 29);
             flowLayoutPanel14.TabIndex = 15;
             // 
             // cmbReportTipe
@@ -2248,7 +2296,7 @@
             // 
             // button2
             // 
-            button2.Image = Properties.Resources.icons8_refresh_16;
+            button2.Image = Properties.Resources.RefreshIcon;
             button2.Location = new Point(387, 3);
             button2.Name = "button2";
             button2.Size = new Size(23, 23);
@@ -2257,7 +2305,7 @@
             // 
             // button3
             // 
-            button3.Image = Properties.Resources.icons8_print_16_2;
+            button3.Image = Properties.Resources.PrintIcon;
             button3.Location = new Point(416, 3);
             button3.Name = "button3";
             button3.Size = new Size(23, 23);
@@ -2269,7 +2317,7 @@
             tpSettings.Controls.Add(tableLayoutPanel29);
             tpSettings.Location = new Point(4, 24);
             tpSettings.Name = "tpSettings";
-            tpSettings.Size = new Size(567, 533);
+            tpSettings.Size = new Size(572, 533);
             tpSettings.TabIndex = 9;
             tpSettings.Text = "Настройки";
             tpSettings.UseVisualStyleBackColor = true;
@@ -2288,7 +2336,7 @@
             tableLayoutPanel29.RowStyles.Add(new RowStyle());
             tableLayoutPanel29.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel29.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel29.Size = new Size(567, 533);
+            tableLayoutPanel29.Size = new Size(572, 533);
             tableLayoutPanel29.TabIndex = 6;
             // 
             // label11
@@ -2299,7 +2347,7 @@
             label11.ForeColor = Color.Maroon;
             label11.Location = new Point(8, 5);
             label11.Name = "label11";
-            label11.Size = new Size(551, 26);
+            label11.Size = new Size(556, 26);
             label11.TabIndex = 0;
             label11.Text = "Настройки";
             // 
@@ -2308,7 +2356,7 @@
             tpAbout.Controls.Add(tableLayoutPanel27);
             tpAbout.Location = new Point(4, 24);
             tpAbout.Name = "tpAbout";
-            tpAbout.Size = new Size(567, 533);
+            tpAbout.Size = new Size(572, 533);
             tpAbout.TabIndex = 10;
             tpAbout.Text = "О программе";
             tpAbout.UseVisualStyleBackColor = true;
@@ -2317,21 +2365,37 @@
             // 
             tableLayoutPanel27.ColumnCount = 1;
             tableLayoutPanel27.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel27.Controls.Add(tbVersionHistory, 0, 3);
             tableLayoutPanel27.Controls.Add(flowLayoutPanel1, 0, 3);
             tableLayoutPanel27.Controls.Add(label10, 0, 0);
-            tableLayoutPanel27.Controls.Add(tbDedication, 0, 1);
-            tableLayoutPanel27.Controls.Add(tableLayoutPanel28, 0, 2);
+            tableLayoutPanel27.Controls.Add(tbDedication, 0, 2);
+            tableLayoutPanel27.Controls.Add(tableLayoutPanel28, 0, 1);
             tableLayoutPanel27.Dock = DockStyle.Fill;
             tableLayoutPanel27.Location = new Point(0, 0);
             tableLayoutPanel27.Name = "tableLayoutPanel27";
             tableLayoutPanel27.Padding = new Padding(5);
-            tableLayoutPanel27.RowCount = 4;
+            tableLayoutPanel27.RowCount = 5;
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-            tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 185F));
+            tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
+            tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
-            tableLayoutPanel27.Size = new Size(567, 533);
+            tableLayoutPanel27.Size = new Size(572, 533);
             tableLayoutPanel27.TabIndex = 5;
+            // 
+            // tbVersionHistory
+            // 
+            tbVersionHistory.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tbVersionHistory.BackColor = SystemColors.Window;
+            tbVersionHistory.Location = new Point(10, 336);
+            tbVersionHistory.Margin = new Padding(5);
+            tbVersionHistory.Multiline = true;
+            tbVersionHistory.Name = "tbVersionHistory";
+            tbVersionHistory.ReadOnly = true;
+            tbVersionHistory.ScrollBars = ScrollBars.Both;
+            tbVersionHistory.Size = new Size(552, 141);
+            tbVersionHistory.TabIndex = 6;
+            tbVersionHistory.Text = resources.GetString("tbVersionHistory.Text");
             // 
             // flowLayoutPanel1
             // 
@@ -2341,13 +2405,13 @@
             flowLayoutPanel1.Location = new Point(8, 485);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(5);
-            flowLayoutPanel1.Size = new Size(551, 40);
+            flowLayoutPanel1.Size = new Size(556, 40);
             flowLayoutPanel1.TabIndex = 3;
             // 
             // btnCheckUpdate
             // 
-            btnCheckUpdate.Image = Properties.Resources.icons8_refresh_16;
-            btnCheckUpdate.Location = new Point(414, 8);
+            btnCheckUpdate.Image = Properties.Resources.RefreshIcon;
+            btnCheckUpdate.Location = new Point(419, 8);
             btnCheckUpdate.Name = "btnCheckUpdate";
             btnCheckUpdate.Size = new Size(124, 23);
             btnCheckUpdate.TabIndex = 6;
@@ -2364,7 +2428,7 @@
             label10.ForeColor = Color.Maroon;
             label10.Location = new Point(8, 5);
             label10.Name = "label10";
-            label10.Size = new Size(551, 26);
+            label10.Size = new Size(556, 26);
             label10.TabIndex = 0;
             label10.Text = "О программе";
             // 
@@ -2372,59 +2436,56 @@
             // 
             tbDedication.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tbDedication.BackColor = SystemColors.Window;
-            tbDedication.Location = new Point(10, 36);
+            tbDedication.Location = new Point(10, 136);
             tbDedication.Margin = new Padding(5);
             tbDedication.Multiline = true;
             tbDedication.Name = "tbDedication";
             tbDedication.ReadOnly = true;
             tbDedication.ScrollBars = ScrollBars.Both;
-            tbDedication.Size = new Size(547, 175);
+            tbDedication.Size = new Size(552, 190);
             tbDedication.TabIndex = 1;
             tbDedication.Text = resources.GetString("tbDedication.Text");
             // 
             // tableLayoutPanel28
             // 
             tableLayoutPanel28.ColumnCount = 2;
-            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel28.Controls.Add(tbVersionHistory, 1, 0);
-            tableLayoutPanel28.Controls.Add(tbAbout, 0, 0);
+            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 94F));
+            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel28.Controls.Add(tbAbout, 1, 0);
+            tableLayoutPanel28.Controls.Add(pictureBox1, 0, 0);
             tableLayoutPanel28.Dock = DockStyle.Fill;
-            tableLayoutPanel28.Location = new Point(5, 216);
+            tableLayoutPanel28.Location = new Point(5, 31);
             tableLayoutPanel28.Margin = new Padding(0);
             tableLayoutPanel28.Name = "tableLayoutPanel28";
             tableLayoutPanel28.RowCount = 1;
-            tableLayoutPanel28.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel28.Size = new Size(557, 266);
+            tableLayoutPanel28.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel28.Size = new Size(562, 100);
             tableLayoutPanel28.TabIndex = 4;
-            // 
-            // tbVersionHistory
-            // 
-            tbVersionHistory.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tbVersionHistory.BackColor = SystemColors.Window;
-            tbVersionHistory.Location = new Point(283, 5);
-            tbVersionHistory.Margin = new Padding(5);
-            tbVersionHistory.Multiline = true;
-            tbVersionHistory.Name = "tbVersionHistory";
-            tbVersionHistory.ReadOnly = true;
-            tbVersionHistory.ScrollBars = ScrollBars.Both;
-            tbVersionHistory.Size = new Size(269, 256);
-            tbVersionHistory.TabIndex = 5;
-            tbVersionHistory.Text = "История версий:\r\n\r\n07.03.2025 (v1.0.0) - Первый релиз";
             // 
             // tbAbout
             // 
             tbAbout.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tbAbout.BackColor = SystemColors.Window;
-            tbAbout.Location = new Point(5, 5);
+            tbAbout.Location = new Point(99, 5);
             tbAbout.Margin = new Padding(5);
             tbAbout.Multiline = true;
             tbAbout.Name = "tbAbout";
             tbAbout.ReadOnly = true;
             tbAbout.ScrollBars = ScrollBars.Both;
-            tbAbout.Size = new Size(268, 256);
-            tbAbout.TabIndex = 4;
-            tbAbout.Text = resources.GetString("tbAbout.Text");
+            tbAbout.Size = new Size(458, 90);
+            tbAbout.TabIndex = 6;
+            tbAbout.Text = "Домашняя Бухгалтерия v.{AppVersion} ({DBVersion})  \r\nАвтор: {Author}  - {Copyright}\r\nKeldish@mail.ru (github.com/home_accounting) \r\n\r\n.NET 8, Windows Forms, SQLite & Entity Framework, OxyPlot";
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.Image = Properties.Resources.logo;
+            pictureBox1.Location = new Point(3, 3);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(88, 94);
+            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox1.TabIndex = 0;
+            pictureBox1.TabStop = false;
             // 
             // MainForm
             // 
@@ -2432,11 +2493,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(784, 561);
             Controls.Add(splitContainer1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(3, 2, 3, 2);
             MinimumSize = new Size(800, 600);
             Name = "MainForm";
-            Text = "Form1";
+            Text = "Мои финансы";
             FormClosing += MainForm_FormClosing;
+            Load += MainForm_Load;
             tableLayoutPanel5.ResumeLayout(false);
             tableLayoutPanel5.PerformLayout();
             flowLayoutPanel2.ResumeLayout(false);
@@ -2539,6 +2602,7 @@
             flowLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel28.ResumeLayout(false);
             tableLayoutPanel28.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
@@ -2696,8 +2760,6 @@
         private FlowLayoutPanel flowLayoutPanel1;
         private Button btnCheckUpdate;
         private TableLayoutPanel tableLayoutPanel28;
-        private TextBox tbVersionHistory;
-        private TextBox tbAbout;
         private TableLayoutPanel tableLayoutPanel30;
         private Label label12;
         private TableLayoutPanel tableLayoutPanel29;
@@ -2714,5 +2776,9 @@
         private ComboBox cmbReportTipe;
         private Button button2;
         private Button button3;
+        private ImageList imageList1;
+        private TextBox tbVersionHistory;
+        private TextBox tbAbout;
+        private PictureBox pictureBox1;
     }
 }

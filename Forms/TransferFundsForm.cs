@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.EntityFrameworkCore;
 using K_Accounting.Data;
 using K_Accounting.Models;
-using System.Security.Principal;
+using Microsoft.EntityFrameworkCore;
 
 namespace K_Accounting.Forms
 {
@@ -38,7 +30,7 @@ namespace K_Accounting.Forms
                 .Include(a => a.Currency)
                 .Where(a => !a.IsDeleted)
                 .OrderBy(a => a.Name)
-                .AsNoTracking()
+                // .AsNoTracking()
                 .ToList();
 
             _accounts = new BindingList<Account>(accounts);
@@ -58,9 +50,6 @@ namespace K_Accounting.Forms
             cmbToAccount.AutoCompleteSource = AutoCompleteSource.ListItems;
             cmbToAccount.DropDownStyle = ComboBoxStyle.DropDown;
 
-            // Обновление форматирования
-            cmbFromAccount.Format += cmbFormat;
-            cmbToAccount.Format += cmbFormat;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -89,8 +78,8 @@ namespace K_Accounting.Forms
                         toAccount.Currency);
 
                     // Обновление балансов
-                    fromAccount.Balance -= amount;
-                    toAccount.Balance += convertedAmount;
+                    fromAccount.Balance = fromAccount.Balance - amount;
+                    toAccount.Balance = toAccount.Balance + convertedAmount;
 
                     _context.SaveChanges();
                     transaction.Commit();
@@ -129,18 +118,6 @@ namespace K_Accounting.Forms
                 cmbToAccount.SelectedItem == null)
             {
                 MessageBox.Show("Выберите исходный и целевой счета");
-                return false;
-            }
-
-            if (cmbFromAccount.SelectedItem == cmbToAccount.SelectedItem)
-            {
-                MessageBox.Show("Нельзя переводить на тот же счет");
-                return false;
-            }
-
-            if (numAmount.Value <= 0)
-            {
-                MessageBox.Show("Сумма должна быть больше нуля");
                 return false;
             }
 
@@ -231,25 +208,6 @@ namespace K_Accounting.Forms
             {
                 e.Handled = true;
             }
-        }
-
-        private void cmbFromAccount_TextUpdate(object sender, EventArgs e)
-        {
-            var combo = sender as ComboBox;
-            var searchText = combo.Text.ToLower();
-            combo.SelectedItem = _accounts.FirstOrDefault(a =>
-                a.Name.ToLower().Contains(searchText)
-            );
-        }
-
-        private void cmbToAccount_TextUpdate(object sender, EventArgs e)
-        {
-            var combo = sender as ComboBox;
-            var searchText = combo.Text.ToLower();
-            var accounts = combo.DataSource as BindingList<Account>;
-            combo.SelectedItem = accounts?.FirstOrDefault(a =>
-                a.Name.ToLower().Contains(searchText)
-            );
         }
     }
 }

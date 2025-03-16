@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using K_Accounting.Extensions;
 using K_Accounting.Models;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
-using System.ComponentModel;
-using K_Accounting.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 // Основной класс для работы с базой данных
 namespace K_Accounting.Data
 {
     public class AppDbContext : DbContext
     {
+        public const int CurrentDbVersion = 1; // Увеличивать при изменениях
+
         // Таблицы в базе данных
+        public DbSet<DbVersion> DbVersions { get; set; }
         public DbSet<Account> Accounts { get; set; }  // Счета (кошельки, карты)
         public DbSet<Expense> Expenses { get; set; }  // Записи о расходах
         public DbSet<Income> Incomes { get; set; }    // Записи о доходах
@@ -25,8 +21,14 @@ namespace K_Accounting.Data
         public DbSet<Additional> Additionals { get; set; }
 
         // Настройка подключения к базе SQLite
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=budget.db");
+        {
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var dbPath = Path.Combine(appDataPath, "K_Accounting", "budget.db");
+            options.UseSqlite($"Data Source={dbPath}");
+        }
+
 
         // Настройка отношений между таблицами
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,6 +58,13 @@ namespace K_Accounting.Data
             // Индексы
             modelBuilder.Entity<Account>().HasIndex(a => a.Name);
             modelBuilder.Entity<Income>().HasIndex(i => i.Date);
+
+            modelBuilder.Entity<DbVersion>(entity =>
+            {
+                entity.HasIndex(v => v.Version).IsUnique();
+                entity.Property(v => v.MigrationId).HasMaxLength(100);
+            });
+
         }
 
         // Автоматическое "мягкое удаление" - пометка IsDeleted вместо реального удаления

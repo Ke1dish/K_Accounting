@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -62,6 +61,25 @@ namespace K_Accounting.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Currencies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DbVersions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Version = table.Column<int>(type: "INTEGER", nullable: false),
+                    ScriptName = table.Column<string>(type: "TEXT", nullable: false),
+                    AppliedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    MigrationId = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DbVersions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,6 +238,12 @@ namespace K_Accounting.Migrations
                 column: "Name");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DbVersions_Version",
+                table: "DbVersions",
+                column: "Version",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Expenses_AccountId",
                 table: "Expenses",
                 column: "AccountId");
@@ -268,6 +292,9 @@ namespace K_Accounting.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "DbVersions");
+
             migrationBuilder.DropTable(
                 name: "Expenses");
 

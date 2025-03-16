@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 using K_Accounting.Data;
 using K_Accounting.Models;
 using Microsoft.EntityFrameworkCore;
@@ -227,14 +219,5 @@ namespace K_Accounting.Forms
             Close();
         }
 
-        private void cmbCategory_TextChanged(object sender, EventArgs e)
-        {
-            var searchText = cmbCategory.Text.ToLower();
-            var filtered = _categories
-                .Where(c => c.Name.ToLower().Contains(searchText))
-                .ToList();
-
-            cmbCategory.DataSource = filtered;
-        }
     }
 }

@@ -168,7 +168,6 @@
             cmbToAccount.Size = new Size(193, 23);
             cmbToAccount.TabIndex = 1;
             cmbToAccount.SelectedIndexChanged += cmb_SelectedIndexChanged;
-            cmbToAccount.TextUpdate += cmbToAccount_TextUpdate;
             cmbToAccount.Format += cmbFormat;
             // 
             // label3
@@ -190,7 +189,6 @@
             cmbFromAccount.Size = new Size(226, 23);
             cmbFromAccount.TabIndex = 0;
             cmbFromAccount.SelectedIndexChanged += cmb_SelectedIndexChanged;
-            cmbFromAccount.TextUpdate += cmbFromAccount_TextUpdate;
             cmbFromAccount.Format += cmbFormat;
             // 
             // label4

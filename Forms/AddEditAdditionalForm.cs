@@ -1,7 +1,5 @@
-﻿using K_Accounting.Models;
-using K_Accounting.Data;
-using System;
-using System.Windows.Forms;
+﻿using K_Accounting.Data;
+using K_Accounting.Models;
 
 namespace K_Accounting.Forms
 {
@@ -29,9 +27,6 @@ namespace K_Accounting.Forms
 
         public AddEditAdditionalForm(AppDbContext context)
         {
-            //InitializeComponent();
-            //_context = context;
-
             InitializeComponent();
             _context = context;
             txtName.Focus();

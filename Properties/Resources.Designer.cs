@@ -63,9 +63,9 @@ namespace K_Accounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap EDITLISTITEMS {
+        internal static System.Drawing.Bitmap EditIcon {
             get {
-                object obj = ResourceManager.GetObject("EDITLISTITEMS", resourceCulture);
+                object obj = ResourceManager.GetObject("EditIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace K_Accounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap GROUPPRINTPREVIEWPREVIEW {
+        internal static System.Drawing.Bitmap logo {
             get {
-                object obj = ResourceManager.GetObject("GROUPPRINTPREVIEWPREVIEW", resourceCulture);
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace K_Accounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_card_exchange_16 {
+        internal static System.Drawing.Bitmap MinusIcon {
             get {
-                object obj = ResourceManager.GetObject("icons8-card-exchange-16", resourceCulture);
+                object obj = ResourceManager.GetObject("MinusIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace K_Accounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_edit_16 {
+        internal static System.Drawing.Bitmap PlusIcon {
             get {
-                object obj = ResourceManager.GetObject("icons8-edit-16", resourceCulture);
+                object obj = ResourceManager.GetObject("PlusIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace K_Accounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_minus_sign_16 {
+        internal static System.Drawing.Bitmap PrintIcon {
             get {
-                object obj = ResourceManager.GetObject("icons8-minus-sign-16", resourceCulture);
+                object obj = ResourceManager.GetObject("PrintIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace K_Accounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_plus_16 {
+        internal static System.Drawing.Bitmap RefreshIcon {
             get {
-                object obj = ResourceManager.GetObject("icons8-plus-16", resourceCulture);
+                object obj = ResourceManager.GetObject("RefreshIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace K_Accounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_print_16_2 {
+        internal static System.Drawing.Bitmap StarIcon {
             get {
-                object obj = ResourceManager.GetObject("icons8-print-16-2", resourceCulture);
+                object obj = ResourceManager.GetObject("StarIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,29 +133,9 @@ namespace K_Accounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_refresh_16 {
+        internal static System.Drawing.Bitmap TransferIcon {
             get {
-                object obj = ResourceManager.GetObject("icons8-refresh-16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icons8_star_16 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-star-16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap PRINTDIALOGACCESS {
-            get {
-                object obj = ResourceManager.GetObject("PRINTDIALOGACCESS", resourceCulture);
+                object obj = ResourceManager.GetObject("TransferIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

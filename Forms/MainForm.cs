@@ -2,9 +2,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using K_Accounting.Data;
 using K_Accounting.Forms;
+using K_Accounting.Migrations;
 using K_Accounting.Models;
+using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace K_Accounting
@@ -25,21 +28,31 @@ namespace K_Accounting
         private Expense _selectedExpense;
         private Income _selectedIncome;
 
+        private AppSettings _settings;
+
+        // шаманская фигня для изменения внешнего вида тривью
+        [DllImport("uxtheme.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
+        private static extern int SetWindowTheme(IntPtr hwnd, string pszSubAppName, string pszSubIdList);
+
+        string appFolder, dbPath;
+
+
         public MainForm()
         {
+            appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "K_Accounting");
+            Directory.CreateDirectory(appFolder);  // Создаем папку, если её нет
+            dbPath = Path.Combine(appFolder, "budget.db");
+
             InitializeComponent();
+
+            // скрываем панели инструментов да странице Отчетов
             HideReportBars();
 
+            // инициализируем базу данных
             InitializeDatabase();
-
             _context = new AppDbContext();
 
-            InitializeDateFilters();
-            cmbExpenseMonths.SelectedIndexChanged += (s, e) => LoadExpenses();
-            cmbExpenseYears.SelectedIndexChanged += (s, e) => LoadExpenses();
-            cmbIncomeMonths.SelectedIndexChanged += (s, e) => LoadIncomes();
-            cmbIncomeYears.SelectedIndexChanged += (s, e) => LoadIncomes();
-
+            // проверка наличия файла базы данных
             if (!CheckDatabaseVersion())
             {
                 MessageBox.Show("База данных повреждена. Будет создана новая.",
@@ -48,8 +61,10 @@ namespace K_Accounting
                                MessageBoxIcon.Warning);
             }
 
+            // создаем резервную копию базы данных
             CreateBackup();
 
+            // загружаем данные из базы
             LoadAccounts();
             LoadAdditionals();
             LoadCategories();
@@ -59,16 +74,118 @@ namespace K_Accounting
             LoadSubCategories();
             LoadIncomes();
 
+            // визуально убираем ярлыки закладок на пейджконтрол
             tcPage.Appearance = TabAppearance.FlatButtons;
             tcPage.ItemSize = new Size(0, 1); // Ширина = 0, Высота = 1
             tcPage.SizeMode = TabSizeMode.Fixed;
             tcPage.SelectedIndex = 18;
 
+            // заполняем комбобоксы выбора месяцев и лет
+            InitializeDateFilters();
+            cmbExpenseMonths.SelectedIndexChanged += (s, e) => LoadExpenses();
+            cmbExpenseYears.SelectedIndexChanged += (s, e) => LoadExpenses();
+            cmbIncomeMonths.SelectedIndexChanged += (s, e) => LoadIncomes();
+            cmbIncomeYears.SelectedIndexChanged += (s, e) => LoadIncomes();
             cmbExpenseMonths.SelectedIndex = DateTime.Now.Month;
             cmbIncomeMonths.SelectedIndex = DateTime.Now.Month;
+
+            // меняем внешний вид тривью
+            SetWindowTheme(tvMenuPanel.Handle, "explorer", null);
         }
 
         #region MainFom
+        // заполение комбобоксов месяцев и лет
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            // Загрузка настроек
+            _settings = SettingsManager.LoadSettings();
+
+            // Восстановление положения и размера
+            RestoreWindowPosition();
+
+            // Восстановление других настроек
+            ApplyApplicationSettings();
+        }
+
+        private void RestoreWindowPosition()
+        {
+            // Проверка валидности сохраненной позиции
+            if (IsVisibleOnAnyScreen(_settings.WindowLocation, _settings.WindowSize))
+            {
+                StartPosition = FormStartPosition.Manual;
+                Location = _settings.WindowLocation;
+                Size = _settings.WindowSize;
+                WindowState = _settings.WindowState;
+            }
+            else
+            {
+                StartPosition = FormStartPosition.CenterScreen;
+                Size = new Size(800, 600); // Размер по умолчанию
+            }
+
+            // Гарантия минимального размера
+            MinimumSize = new Size(400, 300);
+        }
+
+        private bool IsVisibleOnAnyScreen(Point location, Size size)
+        {
+            var formRect = new Rectangle(location, size);
+            foreach (var screen in Screen.AllScreens)
+            {
+                if (screen.WorkingArea.IntersectsWith(formRect))
+                    return true;
+            }
+            return false;
+        }
+
+        private void ApplyApplicationSettings()
+        {
+            // Пример применения других настроек
+            //BackColor = _settings.Theme == "Dark" ? Color.DimGray : Color.White;
+            //Font = new Font(Font.FontFamily, _settings.FontSize);
+
+            // ЕЩЕ ПРИМЕР ИСПОЛЬЗОВАНИЯ НАСТРОЕК
+            //timerAutoSave.Interval = (int)_settings.AutoSaveInterval.TotalMilliseconds;
+            //timerAutoSave.Enabled = _settings.AutoSaveEnabled;
+
+            // Примените здесь другие ваши настройки...
+        }
+
+        // Пример кнопки для изменения темы ИСПОЛЬЗОВАНИЕ НАСТРОЕК
+        private void btnToggleTheme_Click(object sender, EventArgs e)
+        {
+            _settings.Theme = _settings.Theme == "Light" ? "Dark" : "Light";
+            ApplyApplicationSettings();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Сохранение состояния окна
+            if (WindowState == FormWindowState.Maximized)
+            {
+                _settings.WindowLocation = RestoreBounds.Location;
+                _settings.WindowSize = RestoreBounds.Size;
+                _settings.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                _settings.WindowLocation = Location;
+                _settings.WindowSize = Size;
+                _settings.WindowState = WindowState;
+            }
+
+            // Сохранение других настроек
+            //_settings.FontSize = (int)Font.Size;
+            // пример сохранения настроек
+            //_settings.AutoSaveEnabled = chkAutoSave.Checked;
+            //_settings.AutoSaveInterval = TimeSpan.FromMinutes((int)nudInterval.Value);
+
+            SettingsManager.SaveSettings(_settings);
+
+            // отключаемся от базы данных
+            _context?.Dispose();
+        }
+
         private void InitializeDateFilters()
         {
             // Заполнение месяцев
@@ -89,45 +206,7 @@ namespace K_Accounting
             RefreshYearFilters();
         }
 
-        private void btnCheckUpdate_Click(object sender, EventArgs e)
-        {
-            const string url = "https://github.com/Ke1dish/K_Accounting";
-
-            try
-            {
-                // Проверяем валидность URL
-                if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                {
-                    MessageBox.Show("Некорректная ссылка", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Современный способ для .NET Core/.NET 5+
-                var psi = new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true // Важно для работы с URL
-                };
-                Process.Start(psi);
-            }
-            catch (Win32Exception ex) when ((uint)ex.ErrorCode == 0x80004005)
-            {
-                // Ошибка "No application is associated with the specified file"
-                MessageBox.Show("Не найдено приложение для открытия ссылок",
-                              "Ошибка",
-                              MessageBoxButtons.OK,
-                              MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                // Общая ошибка
-                MessageBox.Show($"Не удалось открыть ссылку: {ex.Message}",
-                              "Ошибка",
-                              MessageBoxButtons.OK,
-                              MessageBoxIcon.Error);
-            }
-        }
-
+        // обновление вильтра годов
         private void RefreshYearFilters()
         {
             var expenseYears = _context.Expenses
@@ -161,10 +240,91 @@ namespace K_Accounting
                 cmbIncomeYears.SelectedIndex = 0;
             }
         }
+        #endregion
 
+        #region База Данных
+        // инициализация базы данных
+        private void InitializeDatabase()
+        {
+            //var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "finance.db");
+
+            try
+            {
+                using var db = new AppDbContext();
+
+                // Создать БД и применить миграции если не существует
+                if (!db.Database.CanConnect())
+                {
+                    db.Database.Migrate();
+                    SeedInitialData(db);
+                    CreateBackup();
+                    LogDbVersion(db); // Добавляем запись о версии
+                }
+                else
+                {
+                    // Проверка и применение миграций
+                    var pendingMigrations = db.Database.GetPendingMigrations();
+                    if (pendingMigrations.Any())
+                    {
+                        CreateBackup();
+                        db.Database.Migrate();
+                        UpdateDbVersions(db, pendingMigrations); // Обновляем версии
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка инициализации БД: {ex.Message}");
+                throw;
+            }
+        }
+
+        // Логирование версии БД
+        private void LogDbVersion(AppDbContext db)
+        {
+
+            var lastMigration = db.Database.GetAppliedMigrations().LastOrDefault();
+
+            db.DbVersions.Add(new DbVersion
+            {
+                Version = AppDbContext.CurrentDbVersion,
+                ScriptName = lastMigration ?? "Initial",
+                AppliedAt = DateTime.UtcNow,
+                MigrationId = lastMigration ?? Guid.NewGuid().ToString()
+            });
+            db.SaveChanges();
+        }
+
+        // Обновление записей о версиях
+        private void UpdateDbVersions(AppDbContext db, IEnumerable<string> migrations)
+        {
+            foreach (var migration in migrations)
+            {
+                db.DbVersions.Add(new DbVersion
+                {
+                    Version = ExtractVersionFromMigration(migration),                                                     //-----
+                    ScriptName = migration,
+                    AppliedAt = DateTime.UtcNow
+                });
+            }
+            db.SaveChanges();
+        }
+
+        // Парсинг номера версии из имени миграции
+        private int ExtractVersionFromMigration(string migrationName)
+        {
+            var versionPart = migrationName.Split('_').FirstOrDefault();
+            if (int.TryParse(versionPart?.Substring(0, 8), out int version))
+            {
+                return version;
+            }
+            return AppDbContext.CurrentDbVersion;
+        }
+
+        // проверка наличия файла базы данных
         private bool CheckDatabaseVersion()
         {
-            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "finance.db");
+//            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "budget.db");
             if (!File.Exists(dbPath)) return true;
 
             try
@@ -178,11 +338,11 @@ namespace K_Accounting
             }
         }
 
+        // создаем резервную копию базы данных
         private void CreateBackup()
         {
-            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "finance.db");
-            var backupPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                         $"backup_{DateTime.Now:yyyyMMdd_HHmmss}.db");
+            //var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "budget.db");
+            var backupPath = Path.Combine(appFolder, $"backup_{DateTime.Now:yyyyMMdd_HHmmss}.db");
 
             if (File.Exists(dbPath))
             {
@@ -197,28 +357,7 @@ namespace K_Accounting
             }
         }
 
-        private void InitializeDatabase()
-        {
-            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "finance.db");
-
-            // Если базы нет - создаем
-            if (!File.Exists(dbPath))
-            {
-                try
-                {
-                    using (var db = new AppDbContext())
-                    {
-                        db.Database.EnsureCreated();
-                        SeedInitialData(db);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка создания базы данных: {ex.Message}");
-                }
-            }
-        }
-
+        // пока не придумал для чего пусть будет
         private void SeedInitialData(AppDbContext db)
         {
             //// Добавляем системные записи
@@ -234,12 +373,6 @@ namespace K_Accounting
 
             db.SaveChanges();
         }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            _context?.Dispose();
-        }
-
         #endregion
 
         #region Навигация
@@ -298,9 +431,12 @@ namespace K_Accounting
                 case 10: // О программе
                     var assembly = Assembly.GetEntryAssembly();
 
+                    var qw = _context.DbVersions.Max(v => (int?)v.Version).ToString();                //-----
+
                     var replacements = new Dictionary<string, string>
                     {
-                        { "{Version}", assembly?.GetName().Version?.ToString() ?? "1.0.0" },
+                        { "{AppVersion}", assembly?.GetName().Version?.ToString() ?? "1.0.0" },
+                        { "{DBVersion}", qw ?? "Что-то пошло не так" },         //-----
                         { "{Author}", assembly?.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company ?? "Что-то пошло не так" },
                         { "{Copyright}", assembly?.GetCustomAttribute<AssemblyCopyrightAttribute>()?.Copyright ?? "Что-то пошло не так" }
                     };
@@ -567,8 +703,6 @@ namespace K_Accounting
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     LoadAccounts();
-                    LoadExpenses();
-                    LoadIncomes();
                 }
             }
         }
@@ -634,8 +768,11 @@ namespace K_Accounting
 
             try
             {
-                var selectedMonth = (int)cmbExpenseMonths.SelectedValue;
-                var selectedYear = (int)cmbExpenseYears.SelectedItem;
+                var selectedMonth = cmbExpenseMonths.SelectedValue is int month ? month : 0;
+                var selectedYear = cmbExpenseYears.SelectedItem is int year ? year : 0;
+
+                //var selectedMonth = (int)cmbExpenseMonths.SelectedValue;
+                //var selectedYear = (int)cmbExpenseYears.SelectedItem;
 
                 var query = _context.Expenses
                     .Include(e => e.Account)
@@ -655,6 +792,7 @@ namespace K_Accounting
                     .ToList();
 
                 dgwExpenses.DataSource = expenses;
+                dgwExpenses.Refresh();
             }
             catch (Exception ex)
             {
@@ -869,8 +1007,11 @@ namespace K_Accounting
 
             try
             {
-                var selectedMonth = (int)cmbIncomeMonths.SelectedValue;
-                var selectedYear = (int)cmbIncomeYears.SelectedItem;
+                var selectedMonth = cmbIncomeMonths.SelectedValue is int month ? month : 0;
+                var selectedYear = cmbIncomeYears.SelectedItem is int year ? year : 0;
+
+                //var selectedMonth = (int)cmbIncomeMonths.SelectedValue;
+                //var selectedYear = (int)cmbIncomeYears.SelectedItem;
 
                 var query = _context.Incomes
                     .Include(i => i.Account)
@@ -1231,6 +1372,7 @@ namespace K_Accounting
 
                 if (form.ShowDialog() == DialogResult.OK)
                 {
+                    LoadCategories();
                     LoadSubCategories(selectedCategoryId);
                 }
             }
@@ -1529,18 +1671,6 @@ namespace K_Accounting
                     },
                     new DataGridViewTextBoxColumn
                     {
-                        Name = "colCode",
-                        DataPropertyName = "Code",
-                        HeaderText = "Код"
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colSymbol",
-                        DataPropertyName = "Symbol",
-                        HeaderText = "Символ"
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
                         Name = "colRate",
                         DataPropertyName = "Rate",
                         HeaderText = "Курс",
@@ -1548,6 +1678,12 @@ namespace K_Accounting
                         {
                             Format = "N6"
                         }
+                    },
+                    new DataGridViewTextBoxColumn
+                    {
+                        Name = "colSymbol",
+                        DataPropertyName = "Symbol",
+                        HeaderText = "Символ"
                     }
                 );
             }
@@ -1645,6 +1781,52 @@ namespace K_Accounting
             }
         }
 
+        #endregion
+
+        #region Отчеты
+
+        #endregion
+
+        #region О программе
+        // проверка наличия обновлений программы
+        private void btnCheckUpdate_Click(object sender, EventArgs e)
+        {
+            const string url = "https://github.com/Ke1dish/K_Accounting";
+
+            try
+            {
+                // Проверяем валидность URL
+                if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                {
+                    MessageBox.Show("Некорректная ссылка", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Современный способ для .NET Core/.NET 5+
+                var psi = new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true // Важно для работы с URL
+                };
+                Process.Start(psi);
+            }
+            catch (Win32Exception ex) when ((uint)ex.ErrorCode == 0x80004005)
+            {
+                // Ошибка "No application is associated with the specified file"
+                MessageBox.Show("Не найдено приложение для открытия ссылок",
+                              "Ошибка",
+                              MessageBoxButtons.OK,
+                              MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                // Общая ошибка
+                MessageBox.Show($"Не удалось открыть ссылку: {ex.Message}",
+                              "Ошибка",
+                              MessageBoxButtons.OK,
+                              MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
     }

@@ -39,17 +39,17 @@ namespace K_Accounting.Forms
 
         public AddEditExpenseForm(AppDbContext context, Expense template) : this(context)
         {
-            _expense = new Expense
+            _expense = context.Expenses
+                .Include(e => e.Account)
+                .Include(e => e.Category)
+                .FirstOrDefault(e => e.Id == template.Id);
+
+            if (_expense == null)
             {
-                Date = DateTime.Now,
-                Amount = template.Amount,
-                AccountId = template.AccountId,
-                CategoryId = template.CategoryId,
-                SubCategoryId = template.SubCategoryId,
-                AdditionalId = template.AdditionalId,
-                Comment = template.Comment,
-                IsTemplate = false // Новые расходы по умолчанию не шаблоны
-            };
+                MessageBox.Show("Расход не найден в базе данных");
+                this.Close();
+                return;
+            }
 
             // Загрузка данных с учетом возможных удаленных связей
             try
@@ -200,9 +200,15 @@ namespace K_Accounting.Forms
                     }
 
                     _context.SaveChanges();
+
+
+                    ////////var test = _context.Expenses.Find(_expense.Id);
+                    ////////Debug.WriteLine($"Проверка значения: {test.Amount}"); // Совпадает ли с ожидаемым?
+
+
+                    transaction.Commit();
                     _context.Entry(_expense).Reload(); // Важно!
                     DataUpdated?.Invoke(this, EventArgs.Empty);
-                    transaction.Commit();
 
                     DialogResult = DialogResult.OK;
                     Close();
@@ -407,6 +413,9 @@ namespace K_Accounting.Forms
 
                 _context.Expenses.Add(expense);
                 _context.SaveChanges();
+                _context.Entry(_expense).Reload(); // Важно!                                //****
+                DataUpdated?.Invoke(this, EventArgs.Empty);                                 //**** возможно лишнее
+
                 _context.ChangeTracker.Entries().Where(e => e.Entity != null).ToList().ForEach(e => e.Reload());
                 return true;
             }
@@ -429,37 +438,6 @@ namespace K_Accounting.Forms
         {
             cmbAccount.DataSource = _context.Accounts
                 .Include(a => a.Currency)
-                .Where(a => !a.IsDeleted)
-                .ToList();
-        }
-
-        private void LoadCategories()
-        {
-            cmbCategory.DataSource = _context.Categories
-                .Where(c => !c.IsDeleted)
-                .ToList();
-        }
-
-        private void LoadSubCategories()
-        {
-            cmbSubCategory.DataSource = _context.SubCategories
-                .Include(s => s.Category)
-                .Where(s => !s.IsDeleted)
-                .ToList();
-
-            // Обновление автодополнения
-            cmbSubCategory.AutoCompleteCustomSource.Clear();
-            cmbSubCategory.AutoCompleteCustomSource.AddRange(
-                _context.SubCategories
-                    .Where(s => !s.IsDeleted)
-                    .Select(c => c.Name)
-                    .ToArray()
-            );
-        }
-
-        private void LoadAdditionals()
-        {
-            cmbAdditional.DataSource = _context.Additionals
                 .Where(a => !a.IsDeleted)
                 .ToList();
         }

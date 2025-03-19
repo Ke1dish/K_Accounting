@@ -32,6 +32,7 @@
             btnCancel = new Button();
             btnOk = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
+            label4 = new Label();
             txtSymbol = new TextBox();
             label5 = new Label();
             txtComment = new TextBox();
@@ -83,10 +84,11 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 32F));
-            tableLayoutPanel1.Controls.Add(txtSymbol, 1, 2);
-            tableLayoutPanel1.Controls.Add(label5, 0, 2);
-            tableLayoutPanel1.Controls.Add(txtComment, 1, 3);
-            tableLayoutPanel1.Controls.Add(label2, 0, 3);
+            tableLayoutPanel1.Controls.Add(label4, 0, 2);
+            tableLayoutPanel1.Controls.Add(txtSymbol, 1, 3);
+            tableLayoutPanel1.Controls.Add(label5, 0, 3);
+            tableLayoutPanel1.Controls.Add(txtComment, 1, 4);
+            tableLayoutPanel1.Controls.Add(label2, 0, 4);
             tableLayoutPanel1.Controls.Add(numRate, 1, 1);
             tableLayoutPanel1.Controls.Add(label3, 0, 1);
             tableLayoutPanel1.Controls.Add(txtName, 1, 0);
@@ -95,20 +97,33 @@
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.Padding = new Padding(10);
-            tableLayoutPanel1.RowCount = 4;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowCount = 5;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.Size = new Size(384, 190);
             tableLayoutPanel1.TabIndex = 0;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            tableLayoutPanel1.SetColumnSpan(label4, 3);
+            label4.Dock = DockStyle.Fill;
+            label4.ImageAlign = ContentAlignment.MiddleLeft;
+            label4.Location = new Point(13, 68);
+            label4.Name = "label4";
+            label4.Size = new Size(358, 20);
+            label4.TabIndex = 20;
+            label4.Text = "Для основной валюты курс = 1,00";
+            label4.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtSymbol
             // 
             tableLayoutPanel1.SetColumnSpan(txtSymbol, 2);
             txtSymbol.Dock = DockStyle.Fill;
-            txtSymbol.Location = new Point(145, 71);
+            txtSymbol.Location = new Point(145, 91);
             txtSymbol.Name = "txtSymbol";
             txtSymbol.Size = new Size(226, 23);
             txtSymbol.TabIndex = 3;
@@ -116,7 +131,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(13, 68);
+            label5.Location = new Point(13, 88);
             label5.Name = "label5";
             label5.Size = new Size(51, 15);
             label5.TabIndex = 19;
@@ -126,16 +141,16 @@
             // 
             tableLayoutPanel1.SetColumnSpan(txtComment, 2);
             txtComment.Dock = DockStyle.Fill;
-            txtComment.Location = new Point(145, 100);
+            txtComment.Location = new Point(145, 120);
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
-            txtComment.Size = new Size(226, 77);
+            txtComment.Size = new Size(226, 70);
             txtComment.TabIndex = 4;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(13, 97);
+            label2.Location = new Point(13, 117);
             label2.Name = "label2";
             label2.Size = new Size(84, 15);
             label2.TabIndex = 16;
@@ -212,5 +227,6 @@
         private Label label2;
         private TextBox txtSymbol;
         private Label label5;
+        private Label label4;
     }
 }

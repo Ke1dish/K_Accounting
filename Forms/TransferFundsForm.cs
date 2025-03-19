@@ -18,6 +18,7 @@ namespace K_Accounting.Forms
         public TransferFundsForm(AppDbContext context)
         {
             InitializeComponent();
+            numAmount.Value = 1;
             numAmount.Controls[0].Visible = false;
             _context = context;
             LoadAccounts();

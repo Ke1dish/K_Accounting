@@ -197,9 +197,9 @@
             label100.AutoSize = true;
             label100.Location = new Point(13, 155);
             label100.Name = "label100";
-            label100.Size = new Size(95, 15);
+            label100.Size = new Size(77, 15);
             label100.TabIndex = 54;
-            label100.Text = "Дополнительно";
+            label100.Text = "Упоминание";
             // 
             // cmbSubCategory
             // 

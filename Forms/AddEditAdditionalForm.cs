@@ -17,7 +17,7 @@ namespace K_Accounting.Forms
             set
             {
                 _isEditMode = value;
-                Text = value ? "Редактирование дополнительного" : "Добавление дополнительного";
+                Text = value ? "Редактирование упоминания" : "Добавление упоминания";
                 btnOk.Text = value ? "Сохранить" : "Создать";
             }
         }

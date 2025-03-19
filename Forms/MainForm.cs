@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using K_Accounting.Data;
+using K_Accounting.Extensions;
 using K_Accounting.Forms;
-using K_Accounting.Migrations;
 using K_Accounting.Models;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +15,24 @@ namespace K_Accounting
     // Создать и применить миграцию
     // EntityFrameworkCore\Add-Migration InitialCreate
     // EntityFrameworkCore\Update-Database
+
+
+    // известные проблеммы в коде
+    // при запуске приложения таблица подкатегорий выводит все имеющиеся подкатегорий без фильтрации по выбранной категории
+    // при добавлении подкатегорий обновляется список категорий и слетает выделенная строка, после чего срабатывает фильтрация подкатегорий
+    // по выбранной категории и в обейх таблицах выводятся первые пункты (первая категория и первая подкатегория в ней)
+
+
+    // -Планы на ближайшее будущее
+    // сортировка по заголовку вверх и вниз с ее отключением
+
+
+    // -добавление параметра "количество" в расходы это позволит оценивать количество неких расходов за период например кол-во картошки в кг за месяц
+    // и спланировать бюджет
+    // -Итоговоя строка последняя строка под таблицами приходов и расходов
+    // -- по приходам сумма всех приходов выведенных в таблице при действующей фильтрации
+    // -- по расходам сумма всех расходов выведенных в таблице при действующей фильтрации
+    // добавить больше фильтраций в расходы и быстрый поиск по тексту в категориях, подкатегориях, упоминаниях (дополнительному), комментариях и счету
 
     public partial class MainForm : Form
     {
@@ -36,6 +54,7 @@ namespace K_Accounting
 
         string appFolder, dbPath;
 
+        private ToolStripItem _lastClickedItem; // Поле для хранения последнего кликнутого пункта
 
         public MainForm()
         {
@@ -45,8 +64,8 @@ namespace K_Accounting
 
             InitializeComponent();
 
-            // скрываем панели инструментов да странице Отчетов
-            HideReportBars();
+            //// <<<<<<<<<<<<<<<<<<<< начиная здесь
+            InitializeDataGridViews();
 
             // инициализируем базу данных
             InitializeDatabase();
@@ -64,6 +83,8 @@ namespace K_Accounting
             // создаем резервную копию базы данных
             CreateBackup();
 
+            //// <<<<<<<<<<<<<<<<<<<< заканчивая здесь нежнго пересмотреть порядок вызова, по моему все напутано
+
             // загружаем данные из базы
             LoadAccounts();
             LoadAdditionals();
@@ -73,6 +94,9 @@ namespace K_Accounting
             LoadSources();
             LoadSubCategories();
             LoadIncomes();
+
+            // скрываем панели инструментов да странице Отчетов
+            HideReportBars();
 
             // визуально убираем ярлыки закладок на пейджконтрол
             tcPage.Appearance = TabAppearance.FlatButtons;
@@ -105,6 +129,12 @@ namespace K_Accounting
 
             // Восстановление других настроек
             ApplyApplicationSettings();
+        }
+
+        private IEnumerable<Control> GetAllControls(Control control)
+        {
+            var controls = control.Controls.Cast<Control>();
+            return controls.SelectMany(ctrl => GetAllControls(ctrl)).Concat(controls);
         }
 
         private void RestoreWindowPosition()
@@ -174,13 +204,19 @@ namespace K_Accounting
                 _settings.WindowState = WindowState;
             }
 
+            SettingsManager.SaveSettings(_settings);
+
+            // Сохраняем настройки всех гридов
+            foreach (var grid in GetAllControls(this).OfType<DataGridView>())
+            {
+                SettingsManager.SaveGridSettings(grid);
+            }
+
             // Сохранение других настроек
             //_settings.FontSize = (int)Font.Size;
             // пример сохранения настроек
             //_settings.AutoSaveEnabled = chkAutoSave.Checked;
             //_settings.AutoSaveInterval = TimeSpan.FromMinutes((int)nudInterval.Value);
-
-            SettingsManager.SaveSettings(_settings);
 
             // отключаемся от базы данных
             _context?.Dispose();
@@ -239,6 +275,125 @@ namespace K_Accounting
                 cmbExpenseYears.SelectedIndex = 0;
                 cmbIncomeYears.SelectedIndex = 0;
             }
+        }
+
+        private void InitializeDataGridViews()
+        {
+            InitializeGrid(dgwAccounts, "Accounts", new List<DataGridViewColumn>
+            {
+                CreateColumn("colName", "Название", "Name", "dd.MM.yyyy HH:mm"),
+                CreateColumn("colBalance", "Баланс", "Balance", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colCurrency", "Валюта", "Currency.Name"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
+
+            InitializeGrid(dgwExpenses, "Expenses", new List<DataGridViewColumn>
+            {
+                CreateColumn("colDate", "Дата", "Date", "dd.MM.yyyy HH:mm"),
+                CreateColumn("colAmount", "Сумма", "Amount", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colAccount", "Счет", "Account.Name"),
+                CreateColumn("colCategory", "Категория", "Category.Name"),
+                CreateColumn("colSubCategory", "Подкатегория", "SubCategory.Name"),
+                CreateColumn("colAdditional", "Упоминания", "Additional.Name"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
+
+            InitializeGrid(dgwIncomes, "Incomes", new List<DataGridViewColumn>
+            {
+                CreateColumn("colDate", "Дата", "Date", "dd.MM.yyyy HH:mm"),
+                CreateColumn("colAmount", "Сумма", "Amount", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colAccount", "Счет", "Account.Name"),
+                CreateColumn("colSource", "Источник", "Source.Name"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
+
+            InitializeGrid(dgwCategorie, "Categories", new List<DataGridViewColumn>
+            {
+                CreateColumn("colName", "Название", "Name"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
+
+            InitializeGrid(dgwSubCategories, "SubCategories", new List<DataGridViewColumn>
+            {
+                CreateColumn("colName", "Название", "Name"),
+                CreateColumn("colCategory", "Категория", "Category.Name"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
+
+            InitializeGrid(dgwAdditionals, "Additionals", new List<DataGridViewColumn>
+            {
+                CreateColumn("colName", "Название", "Name"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
+
+            InitializeGrid(dgwSource, "Source", new List<DataGridViewColumn>
+            {
+                CreateColumn("colName", "Название", "Name"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
+
+            InitializeGrid(dgwCurrencies, "Currencies", new List<DataGridViewColumn>
+            {
+                CreateColumn("colName", "Название", "Name"),
+                CreateColumn("colRate", "Курс", "Rate", "N6", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colSymbol", "Символ", "Symbol"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
+        }
+
+        private DataGridViewColumn CreateColumn(string name, string header, string dataProperty, string format = null,
+                                        DataGridViewContentAlignment alignment = DataGridViewContentAlignment.MiddleLeft)
+        {
+            var column = new DataGridViewTextBoxColumn
+            {
+                Name = name,
+                HeaderText = header,
+                DataPropertyName = dataProperty,
+                DefaultCellStyle = new DataGridViewCellStyle()
+            };
+
+            if (!string.IsNullOrEmpty(format))
+            {
+                column.DefaultCellStyle.Format = format;
+            }
+
+            column.DefaultCellStyle.Alignment = alignment;
+
+            return column;
+        }
+
+        private void InitializeGrid(DataGridView grid, string gridName, IEnumerable<DataGridViewColumn> columns)
+        {
+            grid.Name = gridName;
+            grid.AutoGenerateColumns = false;
+
+            if (grid.Columns.Count == 0)
+            {
+                grid.Columns.AddRange(columns.ToArray());
+            }
+
+            // Настройка последнего столбца
+            var lastColumn = grid.Columns[grid.Columns.Count - 1];
+            lastColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            // Загрузка настроек
+            SettingsManager.LoadGridSettings(grid);
+
+            // Настройка обработчиков событий
+            grid.ColumnDisplayIndexChanged += (s, e) => SettingsManager.SaveGridSettings(grid);
+            grid.ColumnWidthChanged += (s, e) => SettingsManager.SaveGridSettings(grid);
+            grid.ColumnHeaderMouseClick += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                    SettingsManager.SaveGridSettings(grid);
+            };
+            grid.Sorted += (s, e) =>
+            {
+                SettingsManager.SaveGridSettings(grid);
+            };
+
+            // Принудительное применение стилей после загрузки
+            grid.Refresh();
         }
         #endregion
 
@@ -324,7 +479,7 @@ namespace K_Accounting
         // проверка наличия файла базы данных
         private bool CheckDatabaseVersion()
         {
-//            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "budget.db");
+            //            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "budget.db");
             if (!File.Exists(dbPath)) return true;
 
             try
@@ -339,37 +494,64 @@ namespace K_Accounting
         }
 
         // создаем резервную копию базы данных
-        private void CreateBackup()
+        private void CreateBackup(int maxBackups = 3)
         {
-            //var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "budget.db");
-            var backupPath = Path.Combine(appFolder, $"backup_{DateTime.Now:yyyyMMdd_HHmmss}.db");
+            var backupDir = appFolder;
+            var backupName = $"backup_{DateTime.Now:yyyyMMdd_HHmmss}.db";
+            var backupPath = Path.Combine(backupDir, backupName);
 
+            //// Создаем папку для бэкапов, если её нет
+            //Directory.CreateDirectory(backupDir);
+
+            // 1. Создаем новую резервную копию
             if (File.Exists(dbPath))
             {
                 try
                 {
                     File.Copy(dbPath, backupPath);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // Логирование ошибки
+                    Console.WriteLine($"Ошибка создания бэкапа: {ex.Message}");
+                    return;
+                }
+            }
+
+            // 2. Получаем список всех резервных копий
+            var backups = Directory.GetFiles(backupDir, "backup_*.db")
+                .Select(f => new FileInfo(f))
+                .OrderBy(f => f.CreationTime) // Сортируем от старых к новым
+                .ToList();
+
+            // 3. Удаляем старые копии, если превышен лимит
+            while (backups.Count > maxBackups)
+            {
+                var oldestBackup = backups.First();
+                try
+                {
+                    File.Delete(oldestBackup.FullName);
+                    Console.WriteLine($"Удален старый бэкап: {oldestBackup.Name}");
+                    backups.Remove(oldestBackup);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка удаления {oldestBackup.Name}: {ex.Message}");
+                    break; // Прерываем цикл при ошибке
                 }
             }
         }
 
-        // пока не придумал для чего пусть будет
+        // предзаполнение базы данных при первом запуске
         private void SeedInitialData(AppDbContext db)
         {
-            //// Добавляем системные записи
-            //if (!db.Currencies.Any())
-            //{
-            //    db.Currencies.Add(new Currency
-            //    {
-            //        Name = "Рубль",
-            //        Rate = 1.0m,
-            //        Comment = "рубль"
-            //    });
-            //}
+            // Вызов метода для предзаполнения категорий и подкатегорий
+            DataSeeder.SeedCategoriesAndSubCategories(db);
+
+            // Вызов метода для предзаполнения упоминаний
+            DataSeeder.SeedAdditionals(db);
+
+            // Вызов метода для предзаполнения валют
+            DataSeeder.SeedCurrency(db);
 
             db.SaveChanges();
         }
@@ -532,41 +714,381 @@ namespace K_Accounting
             flPanel5.Visible = false;
             flPanel6.Visible = false;
         }
+
+        private void expenseFilterPanelVisible(object sender, EventArgs e)
+        {
+            expenseFilterPanel.Visible = !expenseFilterPanel.Visible;
+        }
+
+        private void expenseSearhPanelVisible(object sender, EventArgs e)
+        {
+            expenseSearhPanel.Visible = !expenseSearhPanel.Visible;
+        }
+
+        private void incomeFilterPanelVisible(object sender, EventArgs e)
+        {
+            incomeFilterPanel.Visible = !incomeFilterPanel.Visible;
+        }
+
+        private void incomeSearhPanelVisible(object sender, EventArgs e)
+        {
+            incomeSearhPanel.Visible = !incomeSearhPanel.Visible;
+        }
+        #endregion
+
+        #region Контекстное меню
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            var menu = sender as ContextMenuStrip;
+            if (menu == null) return;
+
+            var dgv = menu.SourceControl as DataGridView;
+            if (dgv == null) return;
+
+            menu.Items.Clear();
+
+            var hitTest = GetHitTestInfo(dgv);
+
+            if (hitTest.Type == DataGridViewHitTestType.ColumnHeader)
+            {
+                // Сохраняем индекс столбца при открытии меню
+                Point clientPoint = dgv.PointToClient(Cursor.Position);
+                var hitTest1 = dgv.HitTest(clientPoint.X, clientPoint.Y);
+                menu.Tag = hitTest1.ColumnIndex; // Сохраняем индекс в Tag меню
+
+                CreateColumnVisibilityMenu(menu, dgv);
+                AddShowAllColumnsItem(menu, dgv);
+                menu.Closing += Menu_Closing;
+            }
+            else
+            {
+                CreateMainContextMenu(menu, dgv);
+                menu.Closing -= Menu_Closing;
+            }
+        }
+
+        private DataGridView.HitTestInfo GetHitTestInfo(DataGridView dgv)
+        {
+            Point clientPoint = dgv.PointToClient(Cursor.Position);
+            return dgv.HitTest(clientPoint.X, clientPoint.Y);
+        }
+
+        private void CreateColumnVisibilityMenu(ContextMenuStrip menu, DataGridView dgv)
+        {
+            foreach (DataGridViewColumn column in dgv.Columns)
+            {
+                var menuItem = CreateColumnMenuItem(column);
+                menu.Items.Add(menuItem);
+            }
+        }
+
+        private ToolStripMenuItem CreateColumnMenuItem(DataGridViewColumn column)
+        {
+            var menuItem = new ToolStripMenuItem(column.HeaderText)
+            {
+                Checked = column.Visible,
+                Tag = column
+            };
+
+            menuItem.Click += (s, args) =>
+            {
+                _lastClickedItem = (ToolStripMenuItem)s; // Сохраняем кликнутый пункт
+                var clickedColumn = (s as ToolStripMenuItem)?.Tag as DataGridViewColumn;
+                if (clickedColumn == null) return;
+
+                clickedColumn.Visible = !clickedColumn.Visible;
+                ((ToolStripMenuItem)s).Checked = clickedColumn.Visible;
+                EnsureAtLeastOneColumnVisible(clickedColumn.DataGridView);
+                SettingsManager.SaveGridSettings(clickedColumn.DataGridView);
+            };
+
+            return menuItem;
+        }
+
+        private void AddShowAllColumnsItem(ContextMenuStrip menu, DataGridView dgv)
+        {
+            if (menu.Items.Count > 0)
+            {
+                menu.Items.Add(new ToolStripSeparator());
+            }
+
+            var showAllItem = new ToolStripMenuItem("Показать все столбцы");
+            showAllItem.Click += (s, e) =>
+            {
+                foreach (DataGridViewColumn col in dgv.Columns)
+                {
+                    col.Visible = true;
+                }
+                SettingsManager.SaveGridSettings(dgv);
+                menu.Close();
+            };
+
+            menu.Items.Add(showAllItem);
+
+            if (menu.Items.Count > 0)
+            {
+                menu.Items.Add(new ToolStripSeparator());
+            }
+
+            // Автоподбор ширины столбца
+            var autoSizeItem = new ToolStripMenuItem("Автоподбор ширины");
+            autoSizeItem.Click += (s, e) =>
+            {
+                if (menu.Tag is int columnIndex && columnIndex >= 0)
+                {
+                    if (columnIndex < 0 || columnIndex >= dgv.Columns.Count) return;
+
+                    var column = dgv.Columns[columnIndex];
+                    column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    int width = column.Width;
+                    column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                    column.Width = Math.Min(width, 400); // Не шире 400px
+
+                    SettingsManager.SaveGridSettings(dgv);
+                    menu.Close();
+                }
+            };
+            menu.Items.Add(autoSizeItem);
+
+            // Сброс настроек
+            var resetItem = new ToolStripMenuItem("Сбросить настройки");
+            resetItem.Click += (s, e) =>
+            {
+                foreach (DataGridViewColumn column in dgv.Columns)
+                {
+                    column.Visible = true;
+                    column.Width = GetDefaultWidth(dgv.Name + "_" + column.Name); // Индивидуальные настройки
+                    column.DisplayIndex = GetOriginalIndex(dgv.Name + "_" + column.Name);
+                }
+
+                // Восстановление "резинового" столбца
+                dgv.Columns[dgv.Columns.Count - 1].AutoSizeMode
+                    = DataGridViewAutoSizeColumnMode.Fill;
+
+                SettingsManager.SaveGridSettings(dgv); // Фиксируем сброс
+                menu.Close();
+            };
+            menu.Items.Add(resetItem);
+        }
+
+        private int GetDefaultWidth(string columnName)
+        {
+            return columnName switch
+            {
+                "Accounts_colBalance" => 120,
+                "Accounts_colCurrency" => 120,
+                "Accounts_colComment" => 120,
+                "Expenses_colDate" => 120,
+                "Expenses_colAmount" => 120,
+                "Expenses_colAccount" => 120,
+                "Expenses_colCategory" => 120,
+                "Expenses_colSubCategory" => 120,
+                "Expenses_colAdditional" => 120,
+                "Expenses_colComment" => 120,
+                "Incomes_colDate" => 120,
+                "Incomes_colAmount" => 120,
+                "Incomes_colAccount" => 120,
+                "Incomes_colSource" => 120,
+                "Incomes_colComment" => 120,
+                "Categories_colName" => 120,
+                "Categories_colComment" => 120,
+                "SubCategories_colName" => 120,
+                "SubCategories_colCategory" => 120,
+                "SubCategories_colComment" => 120,
+                "Additionals_colName" => 120,
+                "Additionals_colComment" => 120,
+                "Source_colName" => 120,
+                "Source_colComment" => 120,
+                "Currencies_colName" => 120,
+                "Currencies_colRate" => 120,
+                "Currencies_colSymbol" => 120,
+                "Currencies_colComment" => 120,
+                _ => 200
+            };
+        }
+
+        private int GetOriginalIndex(string columnName)
+        {
+            return columnName switch
+            {
+                "Accounts_colName" => 0,
+                "Accounts_colBalance" => 1,
+                "Accounts_colCurrency" => 2,
+                "Accounts_colComment" => 3,
+                "Expenses_colDate" => 0,
+                "Expenses_colAmount" => 1,
+                "Expenses_colAccount" => 2,
+                "Expenses_colCategory" => 3,
+                "Expenses_colSubCategory" => 4,
+                "Expenses_colAdditional" => 5,
+                "Expenses_colComment" => 6,
+                "Incomes_colDate" => 0,
+                "Incomes_colAmount" => 1,
+                "Incomes_colAccount" => 2,
+                "Incomes_colSource" => 3,
+                "Incomes_colComment" => 4,
+                "Categories_colName" => 0,
+                "Categories_colComment" => 1,
+                "SubCategories_colName" => 0,
+                "SubCategories_colCategory" => 1,
+                "SubCategories_colComment" => 2,
+                "Additionals_colName" => 0,
+                "Additionals_colComment" => 1,
+                "Source_colName" => 0,
+                "Source_colComment" => 1,
+                "Currencies_colName" => 0,
+                "Currencies_colRate" => 1,
+                "Currencies_colSymbol" => 2,
+                "Currencies_colComment" => 3
+            };
+        }
+
+        private void CreateMainContextMenu(ContextMenuStrip menu, DataGridView dgv)
+        {
+            AddDefaultMenuItems(menu, dgv);
+            AddSpecialMenuItems(menu, dgv);
+            AddPrintMenuItems(menu, dgv);
+        }
+
+        private void Menu_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            var menu = sender as ContextMenuStrip;
+            var dgv = menu?.SourceControl as DataGridView;
+
+            // Запрещаем закрытие только при клике на пункт меню
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+            {
+                // Проверяем последний кликнутый пункт
+                if (_lastClickedItem?.Text != "Показать все столбцы")
+                {
+                    e.Cancel = true; // Блокируем закрытие
+                    return;
+                }
+            }
+
+            _lastClickedItem = null; // Сбрасываем значение
+        }
+
+        private void EnsureAtLeastOneColumnVisible(DataGridView dgv)
+        {
+            if (dgv?.Columns == null || dgv.Columns.Count == 0) return;
+
+            // Проверяем, есть ли хотя бы один видимый столбец
+            bool anyVisible = dgv.Columns.Cast<DataGridViewColumn>().Any(c => c.Visible);
+
+            if (!anyVisible)
+            {
+                // Делаем первый столбец видимым
+                dgv.Columns[0].Visible = true;
+                SettingsManager.SaveGridSettings(dgv); // Сохраняем изменение
+                MessageBox.Show("Должен быть виден хотя бы один столбец!");
+            }
+        }
+
+        private void AddDefaultMenuItems(ContextMenuStrip menu, DataGridView dgv)
+        {
+            var items = new Dictionary<string, Action>
+    {
+        { "Добавить", GetAddHandler(dgv.Name) },
+        { "Изменить", GetEditHandler(dgv.Name) },
+        { "Удалить", GetDeleteHandler(dgv.Name) }
+    };
+
+            foreach (var item in items)
+            {
+                if (item.Value == null) continue;
+
+                var menuItem = new ToolStripMenuItem(item.Key);
+                menuItem.Click += (s, e) => item.Value();
+                menu.Items.Add(menuItem);
+            }
+        }
+
+        private Action GetAddHandler(string gridName) => gridName switch
+        {
+            "Accounts" => () => btnAddAccounts_Click(null, EventArgs.Empty),
+            "Expenses" => () => btnAddExpenses_Click(null, EventArgs.Empty),
+            "Incomes" => () => btnAddIncomes_Click(null, EventArgs.Empty),
+            "Categories" => () => btnAddCategories_Click(null, EventArgs.Empty),
+            "SubCategories" => () => btnAddSubCategories_Click(null, EventArgs.Empty),
+            "Source" => () => btnAddSources_Click(null, EventArgs.Empty),
+            "Additionals" => () => btnAddAdditionals_Click(null, EventArgs.Empty),
+            "Currencies" => () => btnAddCurrencie_Click(null, EventArgs.Empty),
+            _ => null
+        };
+
+        private Action GetEditHandler(string gridName) => gridName switch
+        {
+            "Accounts" => () => btnEditAccounts_Click(null, EventArgs.Empty),
+            "Expenses" => () => btnEditExpenses_Click(null, EventArgs.Empty),
+            "Incomes" => () => btnEditIncomes_Click(null, EventArgs.Empty),
+            "Categories" => () => btnEditCategories_Click(null, EventArgs.Empty),
+            "SubCategories" => () => btnEditSubCategories_Click(null, EventArgs.Empty),
+            "Source" => () => btnEditSources_Click(null, EventArgs.Empty),
+            "Additionals" => () => btnEditAdditionals_Click(null, EventArgs.Empty),
+            "Currencies" => () => btnEditCurrencie_Click(null, EventArgs.Empty),
+            _ => null
+        };
+
+        private Action GetDeleteHandler(string gridName) => gridName switch
+        {
+            "Accounts" => () => btnDeleteAccounts_Click(null, EventArgs.Empty),
+            "Expenses" => () => btnDeleteExpenses_Click(null, EventArgs.Empty),
+            "Incomes" => () => btnDeleteIncomes_Click(null, EventArgs.Empty),
+            "Categories" => () => btnDeleteCategories_Click(null, EventArgs.Empty),
+            "SubCategories" => () => btnDeleteSubCategories_Click(null, EventArgs.Empty),
+            "Source" => () => btnDeleteSources_Click(null, EventArgs.Empty),
+            "Additionals" => () => btnDeleteAdditionals_Click(null, EventArgs.Empty),
+            "Currencies" => () => btnDeleteCurrencie_Click(null, EventArgs.Empty),
+            _ => null
+        };
+
+        private void AddSpecialMenuItems(ContextMenuStrip menu, DataGridView dgv)
+        {
+            if (new[] { "Accounts", "Expenses" }.Contains(dgv.Name))
+            {
+                menu.Items.Add(new ToolStripSeparator());
+            }
+
+            var items = new Dictionary<string, (string Name, Action Handler)>
+            {
+                {
+                    "Accounts",
+                    ("Перевести", () => btnTransfer_Click(null, EventArgs.Empty))
+                },
+                {
+                    "Expenses",
+                    ("Шаблоны", () => btnEditExpenses1_Click(null, EventArgs.Empty))
+                }
+            };
+
+            if (items.TryGetValue(dgv.Name, out var menuItem))
+            {
+                var item = new ToolStripMenuItem(menuItem.Name);
+                item.Click += (s, e) => menuItem.Handler();
+                menu.Items.Add(item);
+            }
+        }
+
+        private void AddPrintMenuItems(ContextMenuStrip menu, DataGridView dgv)
+        {
+            if (new[] { "Accounts", "Expenses", "Incomes" }.Contains(dgv.Name))
+            {
+                menu.Items.Add(new ToolStripSeparator());
+
+                var printItem = new ToolStripMenuItem("Печать")
+                {
+                    Enabled = false
+                };
+
+                menu.Items.Add(printItem);
+            }
+        }
         #endregion
 
         #region Счета (Account)
         private void LoadAccounts()
         {
-            if (dgwAccounts == null) return;
-
-            if (dgwAccounts.Columns.Count == 0)
-            {
-                dgwAccounts.AutoGenerateColumns = false;
-                dgwAccounts.Columns.AddRange(
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colName",
-                        DataPropertyName = "Name",
-                        HeaderText = "Название",
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colBalance",
-                        DataPropertyName = "Balance",
-                        HeaderText = "Баланс",
-                        DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colCurrency",
-                        DataPropertyName = "Currency.Name",
-                        HeaderText = "Валюта",
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-                    }
-                );
-            }
-
             try
             {
                 var accounts = _context.Accounts
@@ -601,6 +1123,19 @@ namespace K_Accounting
             {
                 var account = dgwAccounts.Rows[e.RowIndex].DataBoundItem as Account;
                 e.Value = account?.Currency?.Name ?? "Валюта не указана";
+            }
+        }
+
+        private void dgwAccounts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Проверяем, что кликнули по строке, а не по заголовку
+            if (e.RowIndex >= 0)
+            {
+                // Убеждаемся, что строка выбрана
+                dgwAccounts.CurrentCell = dgwAccounts.Rows[e.RowIndex].Cells[0];
+
+                // Вызываем метод кнопки "Изменить"
+                btnEditAccount.PerformClick();
             }
         }
 
@@ -713,59 +1248,6 @@ namespace K_Accounting
         #region Расходы (Expense)
         private void LoadExpenses()
         {
-            if (dgwExpenses == null) return;
-
-            if (dgwExpenses.Columns.Count == 0)
-            {
-                dgwExpenses.AutoGenerateColumns = false;
-                dgwExpenses.Columns.AddRange(
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colDate",
-                        DataPropertyName = "Date",
-                        HeaderText = "Дата",
-                        DefaultCellStyle = new DataGridViewCellStyle
-                        {
-                            Format = "dd.MM.yyyy HH:mm"
-                        }
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colAmount",
-                        DataPropertyName = "Amount",
-                        HeaderText = "Сумма",
-                        DefaultCellStyle = new DataGridViewCellStyle
-                        {
-                            Format = "N2"
-                        }
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colAccount",
-                        HeaderText = "Счет",
-                        DataPropertyName = "Account.Name"
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colCategory",
-                        HeaderText = "Категория",
-                        DataPropertyName = "Category.Name"
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colSubCategory",
-                        HeaderText = "Подкатегория",
-                        DataPropertyName = "SubCategory.Name"
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colAdditional",
-                        HeaderText = "Дополнительно",
-                        DataPropertyName = "Additional.Name"
-                    }
-                );
-            }
-
             try
             {
                 var selectedMonth = cmbExpenseMonths.SelectedValue is int month ? month : 0;
@@ -848,6 +1330,19 @@ namespace K_Accounting
                 e.Value = _context.Additionals
                     .Find(expense?.AdditionalId)?
                     .Name ?? "Дополнение удалено";
+            }
+        }
+
+        private void dgwExpenses_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Проверяем, что кликнули по строке, а не по заголовку
+            if (e.RowIndex >= 0)
+            {
+                // Убеждаемся, что строка выбрана
+                dgwExpenses.CurrentCell = dgwExpenses.Rows[e.RowIndex].Cells[0];
+
+                // Вызываем метод кнопки "Изменить"
+                btnEditExpenses.PerformClick();
             }
         }
 
@@ -964,54 +1459,10 @@ namespace K_Accounting
         #region Доходы (Income)
         private void LoadIncomes()
         {
-            if (dgwIncomes == null) return;
-
-            if (dgwIncomes.Columns.Count == 0)
-            {
-                dgwIncomes.AutoGenerateColumns = false;
-                dgwIncomes.Columns.AddRange(
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colDate",
-                        DataPropertyName = "Date",
-                        HeaderText = "Дата",
-                        DefaultCellStyle = new DataGridViewCellStyle
-                        {
-                            Format = "dd.MM.yyyy HH:mm"
-                        }
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colAmount",
-                        DataPropertyName = "Amount",
-                        HeaderText = "Сумма",
-                        DefaultCellStyle = new DataGridViewCellStyle
-                        {
-                            Format = "N2"
-                        }
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colAccount",
-                        HeaderText = "Счет",
-                        DataPropertyName = "Account.Name"
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colSource",
-                        HeaderText = "Источник",
-                        DataPropertyName = "Source.Name"
-                    }
-                );
-            }
-
             try
             {
                 var selectedMonth = cmbIncomeMonths.SelectedValue is int month ? month : 0;
                 var selectedYear = cmbIncomeYears.SelectedItem is int year ? year : 0;
-
-                //var selectedMonth = (int)cmbIncomeMonths.SelectedValue;
-                //var selectedYear = (int)cmbIncomeYears.SelectedItem;
 
                 var query = _context.Incomes
                     .Include(i => i.Account)
@@ -1066,6 +1517,19 @@ namespace K_Accounting
                 e.Value = _context.Sources
                     .Find(income?.SourceId)?
                     .Name ?? "Источник удален";
+            }
+        }
+
+        private void dgwIncomes_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Проверяем, что кликнули по строке, а не по заголовку
+            if (e.RowIndex >= 0)
+            {
+                // Убеждаемся, что строка выбрана
+                dgwIncomes.CurrentCell = dgwIncomes.Rows[e.RowIndex].Cells[0];
+
+                // Вызываем метод кнопки "Изменить"
+                btnEditIncomes.PerformClick();
             }
         }
 
@@ -1149,22 +1613,6 @@ namespace K_Accounting
         #region Категории (Category)
         private void LoadCategories()
         {
-            if (dgwCategorie == null) return;
-
-            if (dgwCategorie.Columns.Count == 0)
-            {
-                dgwCategorie.AutoGenerateColumns = false;
-                dgwCategorie.Columns.AddRange(
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colName",
-                        DataPropertyName = "Name",
-                        HeaderText = "Название",
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-                    }
-                );
-            }
-
             try
             {
                 var categories = _context.Categories
@@ -1192,6 +1640,19 @@ namespace K_Accounting
                 tbDetailsCategory.Text = _selectedCategory.Comment;
 
             LoadSubCategories(_selectedCategory?.Id);
+        }
+
+        private void dgwCategorie_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Проверяем, что кликнули по строке, а не по заголовку
+            if (e.RowIndex >= 0)
+            {
+                // Убеждаемся, что строка выбрана
+                dgwCategorie.CurrentCell = dgwCategorie.Rows[e.RowIndex].Cells[0];
+
+                // Вызываем метод кнопки "Изменить"
+                btnEditCategories.PerformClick();
+            }
         }
 
         private void btnAddCategories_Click(object sender, EventArgs e)
@@ -1271,29 +1732,6 @@ namespace K_Accounting
         #region Подкатегории (SubCategory)
         private void LoadSubCategories()
         {
-            if (dgwSubCategories == null) return;
-
-            if (dgwSubCategories.Columns.Count == 0)
-            {
-                dgwSubCategories.AutoGenerateColumns = false;
-                dgwSubCategories.Columns.AddRange(
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colName",
-                        DataPropertyName = "Name",
-                        HeaderText = "Название",
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colCategory",
-                        HeaderText = "Категория",
-                        DataPropertyName = "Category.Name", // Важное изменение
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-                    }
-                );
-            }
-
             try
             {
                 // Явная загрузка связанных данных
@@ -1354,6 +1792,19 @@ namespace K_Accounting
             {
                 var subCat = dgwSubCategories.Rows[e.RowIndex].DataBoundItem as SubCategory;
                 e.Value = subCat?.Category?.Name ?? "Без категории";
+            }
+        }
+
+        private void dgwSubCategories_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Проверяем, что кликнули по строке, а не по заголовку
+            if (e.RowIndex >= 0)
+            {
+                // Убеждаемся, что строка выбрана
+                dgwSubCategories.CurrentCell = dgwSubCategories.Rows[e.RowIndex].Cells[0];
+
+                // Вызываем метод кнопки "Изменить"
+                btnEditSubCategories.PerformClick();
             }
         }
 
@@ -1435,22 +1886,6 @@ namespace K_Accounting
         #region Дополнительно (Additionaly)
         private void LoadAdditionals()
         {
-            if (dgwAdditionals == null) return;
-
-            if (dgwAdditionals.Columns.Count == 0)
-            {
-                dgwAdditionals.AutoGenerateColumns = false;
-                dgwAdditionals.Columns.AddRange(
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colName",
-                        DataPropertyName = "Name",
-                        HeaderText = "Название",
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-                    }
-                );
-            }
-
             try
             {
                 var additionals = _context.Additionals
@@ -1476,6 +1911,19 @@ namespace K_Accounting
                 tbDetailsAdditional.Text = "";
             else
                 tbDetailsAdditional.Text = _selectedAdditional.Comment;
+        }
+
+        private void dgwAdditionals_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Проверяем, что кликнули по строке, а не по заголовку
+            if (e.RowIndex >= 0)
+            {
+                // Убеждаемся, что строка выбрана
+                dgwAdditionals.CurrentCell = dgwAdditionals.Rows[e.RowIndex].Cells[0];
+
+                // Вызываем метод кнопки "Изменить"
+                btnEditAdditionals.PerformClick();
+            }
         }
 
         private void btnAddAdditionals_Click(object sender, EventArgs e)
@@ -1546,22 +1994,6 @@ namespace K_Accounting
         #region Источники (Source)
         private void LoadSources()
         {
-            if (dgwSource == null) return;
-
-            if (dgwSource.Columns.Count == 0)
-            {
-                dgwSource.AutoGenerateColumns = false;
-                dgwSource.Columns.AddRange(
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colName",
-                        DataPropertyName = "Name",
-                        HeaderText = "Название",
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-                    }
-                );
-            }
-
             try
             {
                 var sources = _context.Sources
@@ -1587,6 +2019,19 @@ namespace K_Accounting
                 tbDetailsSource.Text = "";
             else
                 tbDetailsSource.Text = _selectedSource.Comment;
+        }
+
+        private void dgwSource_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Проверяем, что кликнули по строке, а не по заголовку
+            if (e.RowIndex >= 0)
+            {
+                // Убеждаемся, что строка выбрана
+                dgwSource.CurrentCell = dgwSource.Rows[e.RowIndex].Cells[0];
+
+                // Вызываем метод кнопки "Изменить"
+                btnEditSource.PerformClick();
+            }
         }
 
         private void btnAddSources_Click(object sender, EventArgs e)
@@ -1657,37 +2102,6 @@ namespace K_Accounting
         #region Валюты (Currency)
         private void LoadCurrencies()
         {
-            if (dgwCurrencies == null) return;
-
-            if (dgwCurrencies.Columns.Count == 0)
-            {
-                dgwCurrencies.AutoGenerateColumns = false;
-                dgwCurrencies.Columns.AddRange(
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colName",
-                        DataPropertyName = "Name",
-                        HeaderText = "Название"
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colRate",
-                        DataPropertyName = "Rate",
-                        HeaderText = "Курс",
-                        DefaultCellStyle = new DataGridViewCellStyle
-                        {
-                            Format = "N6"
-                        }
-                    },
-                    new DataGridViewTextBoxColumn
-                    {
-                        Name = "colSymbol",
-                        DataPropertyName = "Symbol",
-                        HeaderText = "Символ"
-                    }
-                );
-            }
-
             try
             {
                 var currencies = _context.Currencies
@@ -1713,6 +2127,19 @@ namespace K_Accounting
                 tbDetailsCurrency.Text = "";
             else
                 tbDetailsCurrency.Text = _selectedCurrency.Comment;
+        }
+
+        private void dgwCurrencies_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Проверяем, что кликнули по строке, а не по заголовку
+            if (e.RowIndex >= 0)
+            {
+                // Убеждаемся, что строка выбрана
+                dgwCurrencies.CurrentCell = dgwCurrencies.Rows[e.RowIndex].Cells[0];
+
+                // Вызываем метод кнопки "Изменить"
+                btnEditCurrency.PerformClick();
+            }
         }
 
         private void btnAddCurrencie_Click(object sender, EventArgs e)

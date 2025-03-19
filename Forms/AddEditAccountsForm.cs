@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Windows.Forms;
 using K_Accounting.Data;
 using K_Accounting.Models;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ namespace K_Accounting.Forms
         public AddEditAccountsForm(AppDbContext context) // Новый конструктор
         {
             InitializeComponent();
+            numBalance.Value = 0;
             numBalance.Controls[0].Visible = false;
             _context = context;
             LoadCurrencies();

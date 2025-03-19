@@ -105,7 +105,7 @@
             tpExpenses = new TabPage();
             tableLayoutPanel19 = new TableLayoutPanel();
             dgwExpenses = new DataGridView();
-            label17 = new Label();
+            lblPageExpensesCaption = new Label();
             flowLayoutPanel6 = new FlowLayoutPanel();
             btnAddExpenses = new Button();
             btnEditExpenses1 = new Button();
@@ -148,7 +148,7 @@
             label25 = new Label();
             textBox4 = new TextBox();
             dgwIncomes = new DataGridView();
-            label20 = new Label();
+            lblPageIncomesCaption = new Label();
             flowLayoutPanel8 = new FlowLayoutPanel();
             btnAddIncomes = new Button();
             btnEditIncomes = new Button();
@@ -222,11 +222,17 @@
             tableLayoutPanel26 = new TableLayoutPanel();
             label34 = new Label();
             flPanel1 = new FlowLayoutPanel();
+            label35 = new Label();
             flPanel2 = new FlowLayoutPanel();
+            label36 = new Label();
             flPanel3 = new FlowLayoutPanel();
+            label37 = new Label();
             flPanel4 = new FlowLayoutPanel();
+            label38 = new Label();
             flPanel5 = new FlowLayoutPanel();
+            label39 = new Label();
             flPanel6 = new FlowLayoutPanel();
+            label40 = new Label();
             flowLayoutPanel14 = new FlowLayoutPanel();
             cmbReportTipe = new ComboBox();
             button2 = new Button();
@@ -321,6 +327,12 @@
             tpReport.SuspendLayout();
             tableLayoutPanel31.SuspendLayout();
             tableLayoutPanel26.SuspendLayout();
+            flPanel1.SuspendLayout();
+            flPanel2.SuspendLayout();
+            flPanel3.SuspendLayout();
+            flPanel4.SuspendLayout();
+            flPanel5.SuspendLayout();
+            flPanel6.SuspendLayout();
             flowLayoutPanel14.SuspendLayout();
             tpSettings.SuspendLayout();
             tableLayoutPanel29.SuspendLayout();
@@ -1167,7 +1179,7 @@
             tableLayoutPanel19.ColumnCount = 1;
             tableLayoutPanel19.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel19.Controls.Add(dgwExpenses, 0, 4);
-            tableLayoutPanel19.Controls.Add(label17, 0, 0);
+            tableLayoutPanel19.Controls.Add(lblPageExpensesCaption, 0, 0);
             tableLayoutPanel19.Controls.Add(flowLayoutPanel6, 0, 1);
             tableLayoutPanel19.Controls.Add(expenseFilterPanel, 0, 2);
             tableLayoutPanel19.Controls.Add(expenseSearhPanel, 0, 3);
@@ -1206,17 +1218,17 @@
             dgwExpenses.CellFormatting += dataGridView3_CellFormatting;
             dgwExpenses.SelectionChanged += dataGridViewExpenses_SelectionChanged;
             // 
-            // label17
+            // lblPageExpensesCaption
             // 
-            label17.AutoSize = true;
-            label17.Dock = DockStyle.Fill;
-            label17.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label17.ForeColor = Color.Maroon;
-            label17.Location = new Point(8, 5);
-            label17.Name = "label17";
-            label17.Size = new Size(556, 26);
-            label17.TabIndex = 0;
-            label17.Text = "Расходы";
+            lblPageExpensesCaption.AutoSize = true;
+            lblPageExpensesCaption.Dock = DockStyle.Fill;
+            lblPageExpensesCaption.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            lblPageExpensesCaption.ForeColor = Color.Maroon;
+            lblPageExpensesCaption.Location = new Point(8, 5);
+            lblPageExpensesCaption.Name = "lblPageExpensesCaption";
+            lblPageExpensesCaption.Size = new Size(556, 26);
+            lblPageExpensesCaption.TabIndex = 0;
+            lblPageExpensesCaption.Text = "Расходы";
             // 
             // flowLayoutPanel6
             // 
@@ -1422,7 +1434,7 @@
             label15.Name = "label15";
             label15.Size = new Size(100, 23);
             label15.TabIndex = 1;
-            label15.Text = "Поик:";
+            label15.Text = "Поиск:";
             label15.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // textBox3
@@ -1504,7 +1516,7 @@
             tableLayoutPanel20.Controls.Add(incomeSearhPanel, 0, 3);
             tableLayoutPanel20.Controls.Add(incomeFilterPanel, 0, 2);
             tableLayoutPanel20.Controls.Add(dgwIncomes, 0, 4);
-            tableLayoutPanel20.Controls.Add(label20, 0, 0);
+            tableLayoutPanel20.Controls.Add(lblPageIncomesCaption, 0, 0);
             tableLayoutPanel20.Controls.Add(flowLayoutPanel8, 0, 1);
             tableLayoutPanel20.Dock = DockStyle.Fill;
             tableLayoutPanel20.Location = new Point(0, 0);
@@ -1548,7 +1560,7 @@
             label27.Name = "label27";
             label27.Size = new Size(100, 23);
             label27.TabIndex = 1;
-            label27.Text = "Поик:";
+            label27.Text = "Поиск:";
             label27.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // textBox5
@@ -1667,17 +1679,17 @@
             dgwIncomes.CellFormatting += dgwIncomes_CellFormatting;
             dgwIncomes.SelectionChanged += dataGridViewIncomes_SelectionChanged;
             // 
-            // label20
+            // lblPageIncomesCaption
             // 
-            label20.AutoSize = true;
-            label20.Dock = DockStyle.Fill;
-            label20.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label20.ForeColor = Color.Maroon;
-            label20.Location = new Point(8, 5);
-            label20.Name = "label20";
-            label20.Size = new Size(556, 26);
-            label20.TabIndex = 0;
-            label20.Text = "Доходы";
+            lblPageIncomesCaption.AutoSize = true;
+            lblPageIncomesCaption.Dock = DockStyle.Fill;
+            lblPageIncomesCaption.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            lblPageIncomesCaption.ForeColor = Color.Maroon;
+            lblPageIncomesCaption.Location = new Point(8, 5);
+            lblPageIncomesCaption.Name = "lblPageIncomesCaption";
+            lblPageIncomesCaption.Size = new Size(556, 26);
+            lblPageIncomesCaption.TabIndex = 0;
+            lblPageIncomesCaption.Text = "Доходы";
             // 
             // flowLayoutPanel8
             // 
@@ -2604,51 +2616,111 @@
             // 
             // flPanel1
             // 
+            flPanel1.Controls.Add(label35);
             flPanel1.Dock = DockStyle.Fill;
             flPanel1.Location = new Point(8, 69);
             flPanel1.Name = "flPanel1";
             flPanel1.Size = new Size(556, 27);
             flPanel1.TabIndex = 9;
             // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Location = new Point(3, 0);
+            label35.Name = "label35";
+            label35.Size = new Size(44, 15);
+            label35.TabIndex = 0;
+            label35.Text = "label35";
+            // 
             // flPanel2
             // 
+            flPanel2.Controls.Add(label36);
             flPanel2.Dock = DockStyle.Fill;
             flPanel2.Location = new Point(8, 102);
             flPanel2.Name = "flPanel2";
             flPanel2.Size = new Size(556, 27);
             flPanel2.TabIndex = 10;
             // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Location = new Point(3, 0);
+            label36.Name = "label36";
+            label36.Size = new Size(44, 15);
+            label36.TabIndex = 0;
+            label36.Text = "label36";
+            // 
             // flPanel3
             // 
+            flPanel3.Controls.Add(label37);
             flPanel3.Dock = DockStyle.Fill;
             flPanel3.Location = new Point(8, 135);
             flPanel3.Name = "flPanel3";
             flPanel3.Size = new Size(556, 27);
             flPanel3.TabIndex = 11;
             // 
+            // label37
+            // 
+            label37.AutoSize = true;
+            label37.Location = new Point(3, 0);
+            label37.Name = "label37";
+            label37.Size = new Size(44, 15);
+            label37.TabIndex = 0;
+            label37.Text = "label37";
+            // 
             // flPanel4
             // 
+            flPanel4.Controls.Add(label38);
             flPanel4.Dock = DockStyle.Fill;
             flPanel4.Location = new Point(8, 168);
             flPanel4.Name = "flPanel4";
             flPanel4.Size = new Size(556, 27);
             flPanel4.TabIndex = 12;
             // 
+            // label38
+            // 
+            label38.AutoSize = true;
+            label38.Location = new Point(3, 0);
+            label38.Name = "label38";
+            label38.Size = new Size(44, 15);
+            label38.TabIndex = 0;
+            label38.Text = "label38";
+            // 
             // flPanel5
             // 
+            flPanel5.Controls.Add(label39);
             flPanel5.Dock = DockStyle.Fill;
             flPanel5.Location = new Point(8, 201);
             flPanel5.Name = "flPanel5";
             flPanel5.Size = new Size(556, 27);
             flPanel5.TabIndex = 13;
             // 
+            // label39
+            // 
+            label39.AutoSize = true;
+            label39.Location = new Point(3, 0);
+            label39.Name = "label39";
+            label39.Size = new Size(44, 15);
+            label39.TabIndex = 0;
+            label39.Text = "label39";
+            // 
             // flPanel6
             // 
+            flPanel6.Controls.Add(label40);
             flPanel6.Dock = DockStyle.Fill;
             flPanel6.Location = new Point(8, 234);
             flPanel6.Name = "flPanel6";
             flPanel6.Size = new Size(556, 27);
             flPanel6.TabIndex = 14;
+            // 
+            // label40
+            // 
+            label40.AutoSize = true;
+            label40.Location = new Point(3, 0);
+            label40.Name = "label40";
+            label40.Size = new Size(44, 15);
+            label40.TabIndex = 0;
+            label40.Text = "label40";
             // 
             // flowLayoutPanel14
             // 
@@ -3003,6 +3075,18 @@
             tableLayoutPanel31.PerformLayout();
             tableLayoutPanel26.ResumeLayout(false);
             tableLayoutPanel26.PerformLayout();
+            flPanel1.ResumeLayout(false);
+            flPanel1.PerformLayout();
+            flPanel2.ResumeLayout(false);
+            flPanel2.PerformLayout();
+            flPanel3.ResumeLayout(false);
+            flPanel3.PerformLayout();
+            flPanel4.ResumeLayout(false);
+            flPanel4.PerformLayout();
+            flPanel5.ResumeLayout(false);
+            flPanel5.PerformLayout();
+            flPanel6.ResumeLayout(false);
+            flPanel6.PerformLayout();
             flowLayoutPanel14.ResumeLayout(false);
             tpSettings.ResumeLayout(false);
             tableLayoutPanel29.ResumeLayout(false);
@@ -3108,13 +3192,13 @@
         private TableLayoutPanel tableLayoutPanel17;
         private TableLayoutPanel tableLayoutPanel19;
         private DataGridView dgwExpenses;
-        private Label label17;
+        private Label lblPageExpensesCaption;
         private FlowLayoutPanel flowLayoutPanel6;
         private Button btnAddExpenses;
         private Button btnEditExpenses1;
         private TableLayoutPanel tableLayoutPanel20;
         private DataGridView dgwIncomes;
-        private Label label20;
+        private Label lblPageIncomesCaption;
         private FlowLayoutPanel flowLayoutPanel8;
         private Button btnAddIncomes;
         private Button btnEditIncomes;
@@ -3226,5 +3310,11 @@
         private TextBox textBox4;
         private Button btnIncomeFilter;
         private Button btnIncomeSearh;
+        private Label label35;
+        private Label label36;
+        private Label label37;
+        private Label label38;
+        private Label label39;
+        private Label label40;
     }
 }

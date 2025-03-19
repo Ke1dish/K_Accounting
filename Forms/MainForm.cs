@@ -9,6 +9,7 @@ using K_Accounting.Forms;
 using K_Accounting.Models;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace K_Accounting
 {
@@ -554,6 +555,35 @@ namespace K_Accounting
             DataSeeder.SeedCurrency(db);
 
             db.SaveChanges();
+        }
+
+        // Метод для расчёта суммы
+        private decimal CalculateTotal(DataGridView grid, string columnName)
+        {
+            if (!grid.Columns.Contains(columnName)) return 0;
+
+            decimal total = 0;
+
+            foreach (DataGridViewRow row in grid.Rows)
+            {
+                // Пропускаем пустые строки и строки-заголовки
+                if (!row.IsNewRow && row.Visible)
+                {
+                    if (row.Cells[columnName].Value != null &&
+                        decimal.TryParse(row.Cells[columnName].Value.ToString(), out decimal value))
+                    {
+                        total += value;
+                    }
+                }
+            }
+
+            return total;
+        }
+
+        private bool ColumnExists(DataGridView grid, string columnName)
+        {
+            return grid.Columns.Cast<DataGridViewColumn>()
+                   .Any(c => c.Name == columnName);
         }
         #endregion
 
@@ -1275,6 +1305,21 @@ namespace K_Accounting
 
                 dgwExpenses.DataSource = expenses;
                 dgwExpenses.Refresh();
+
+                try
+                {
+                    if (ColumnExists(dgwExpenses, "colAmount"))
+                    {
+                        decimal total = CalculateTotal(dgwExpenses, "colAmount");
+//                        lblPageExpensesCaption.Text = $"Расходы: {total:N2}";
+                        lblPageExpensesCaption.Text = "Расходы: " + total.ToString("C2", CultureInfo.CurrentCulture);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lblPageExpensesCaption.Text = "Расходы";
+                    Debug.WriteLine($"Ошибка расчёта суммы расходов: {ex.Message}");
+                }
             }
             catch (Exception ex)
             {
@@ -1478,6 +1523,21 @@ namespace K_Accounting
                 dgwIncomes.DataSource = query
                     .OrderByDescending(i => i.Date)
                     .ToList();
+
+                try
+                {
+                    if (ColumnExists(dgwIncomes, "colAmount"))
+                    {
+                        decimal total = CalculateTotal(dgwIncomes, "colAmount");
+                        //                        lblPageExpensesCaption.Text = $"Расходы: {total:N2}";
+                        lblPageIncomesCaption.Text = "Расходы: " + total.ToString("C2", CultureInfo.CurrentCulture);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lblPageIncomesCaption.Text = "Расходы";
+                    Debug.WriteLine($"Ошибка расчёта суммы расходов: {ex.Message}");
+                }
             }
             catch (Exception ex)
             {

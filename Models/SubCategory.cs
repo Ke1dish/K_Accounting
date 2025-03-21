@@ -24,5 +24,10 @@ namespace K_Accounting.Models
             Name = name;
             CategoryId = categoryId;
         }
+
+        public bool RequireQuantity { get; set; } // вторая версия базы данных, добавление "Количества"
+
+        public bool InheritQuantityRequirement { get; set; } // вторая версия базы данных, добавление "Количества"
+
     }
 }

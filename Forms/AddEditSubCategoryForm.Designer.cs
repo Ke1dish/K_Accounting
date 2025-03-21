@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             flowLayoutPanel1 = new FlowLayoutPanel();
             btnCancel = new Button();
             btnOk = new Button();
@@ -39,8 +40,15 @@
             label1 = new Label();
             cmbCategory = new ComboBox();
             btnNewCategory = new Button();
+            txtQuantityRequirementInherited = new Label();
+            cbDemandQuantity = new CheckBox();
+            pbDemandQuantityInfo = new PictureBox();
+            pbQuantityRequirementInheritedInfo = new PictureBox();
+            toolTip1 = new ToolTip(components);
             flowLayoutPanel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbDemandQuantityInfo).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbQuantityRequirementInheritedInfo).BeginInit();
             SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -49,7 +57,7 @@
             flowLayoutPanel1.Controls.Add(btnOk);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new Point(0, 171);
+            flowLayoutPanel1.Location = new Point(0, 221);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(5);
             flowLayoutPanel1.Size = new Size(384, 40);
@@ -82,21 +90,27 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 32F));
             tableLayoutPanel1.Controls.Add(label3, 0, 1);
-            tableLayoutPanel1.Controls.Add(txtComment, 1, 2);
-            tableLayoutPanel1.Controls.Add(label2, 0, 2);
+            tableLayoutPanel1.Controls.Add(txtComment, 1, 4);
+            tableLayoutPanel1.Controls.Add(label2, 0, 4);
             tableLayoutPanel1.Controls.Add(txtName, 1, 0);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(cmbCategory, 1, 1);
             tableLayoutPanel1.Controls.Add(btnNewCategory, 2, 1);
+            tableLayoutPanel1.Controls.Add(txtQuantityRequirementInherited, 1, 3);
+            tableLayoutPanel1.Controls.Add(cbDemandQuantity, 1, 2);
+            tableLayoutPanel1.Controls.Add(pbDemandQuantityInfo, 2, 2);
+            tableLayoutPanel1.Controls.Add(pbQuantityRequirementInheritedInfo, 2, 3);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.Padding = new Padding(10);
-            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowCount = 5;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(384, 171);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.Size = new Size(384, 221);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // label3
@@ -112,16 +126,16 @@
             // 
             tableLayoutPanel1.SetColumnSpan(txtComment, 2);
             txtComment.Dock = DockStyle.Fill;
-            txtComment.Location = new Point(145, 69);
+            txtComment.Location = new Point(145, 128);
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
-            txtComment.Size = new Size(226, 97);
+            txtComment.Size = new Size(226, 91);
             txtComment.TabIndex = 3;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(13, 66);
+            label2.Location = new Point(13, 125);
             label2.Name = "label2";
             label2.Size = new Size(84, 15);
             label2.TabIndex = 10;
@@ -154,6 +168,7 @@
             cmbCategory.Name = "cmbCategory";
             cmbCategory.Size = new Size(193, 23);
             cmbCategory.TabIndex = 1;
+            cmbCategory.SelectedIndexChanged += cmbCategory_SelectedIndexChanged;
             // 
             // btnNewCategory
             // 
@@ -167,13 +182,62 @@
             btnNewCategory.UseVisualStyleBackColor = true;
             btnNewCategory.Click += btnNewCategory_Click;
             // 
+            // txtQuantityRequirementInherited
+            // 
+            txtQuantityRequirementInherited.AutoSize = true;
+            txtQuantityRequirementInherited.Dock = DockStyle.Fill;
+            txtQuantityRequirementInherited.Location = new Point(145, 95);
+            txtQuantityRequirementInherited.Name = "txtQuantityRequirementInherited";
+            txtQuantityRequirementInherited.Size = new Size(193, 30);
+            txtQuantityRequirementInherited.TabIndex = 13;
+            txtQuantityRequirementInherited.Text = "Требование количества унаследованно от категории";
+            // 
+            // cbDemandQuantity
+            // 
+            cbDemandQuantity.AutoSize = true;
+            cbDemandQuantity.Dock = DockStyle.Fill;
+            cbDemandQuantity.Location = new Point(145, 69);
+            cbDemandQuantity.Name = "cbDemandQuantity";
+            cbDemandQuantity.Size = new Size(193, 23);
+            cbDemandQuantity.TabIndex = 14;
+            cbDemandQuantity.Text = "Требовать количество";
+            cbDemandQuantity.UseVisualStyleBackColor = true;
+            // 
+            // pbDemandQuantityInfo
+            // 
+            pbDemandQuantityInfo.Image = Properties.Resources.icons8_info_16;
+            pbDemandQuantityInfo.Location = new Point(344, 69);
+            pbDemandQuantityInfo.Name = "pbDemandQuantityInfo";
+            pbDemandQuantityInfo.Size = new Size(27, 23);
+            pbDemandQuantityInfo.SizeMode = PictureBoxSizeMode.CenterImage;
+            pbDemandQuantityInfo.TabIndex = 15;
+            pbDemandQuantityInfo.TabStop = false;
+            // 
+            // pbQuantityRequirementInheritedInfo
+            // 
+            pbQuantityRequirementInheritedInfo.Image = Properties.Resources.icons8_info_16;
+            pbQuantityRequirementInheritedInfo.Location = new Point(344, 98);
+            pbQuantityRequirementInheritedInfo.Name = "pbQuantityRequirementInheritedInfo";
+            pbQuantityRequirementInheritedInfo.Size = new Size(27, 23);
+            pbQuantityRequirementInheritedInfo.SizeMode = PictureBoxSizeMode.CenterImage;
+            pbQuantityRequirementInheritedInfo.TabIndex = 16;
+            pbQuantityRequirementInheritedInfo.TabStop = false;
+            // 
+            // toolTip1
+            // 
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 500;
+            toolTip1.ReshowDelay = 500;
+            toolTip1.ToolTipIcon = ToolTipIcon.Info;
+            toolTip1.ToolTipTitle = "Информация";
+            // 
             // AddEditSubCategoryForm
             // 
             AcceptButton = btnOk;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new Size(384, 211);
+            ClientSize = new Size(384, 261);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(flowLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -181,9 +245,12 @@
             Name = "AddEditSubCategoryForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AddEditSubCategoryForm";
+            Load += AddEditSubCategoryForm_Load;
             flowLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbDemandQuantityInfo).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbQuantityRequirementInheritedInfo).EndInit();
             ResumeLayout(false);
         }
 
@@ -200,5 +267,10 @@
         private Label label1;
         private ComboBox cmbCategory;
         private Button btnNewCategory;
+        private Label txtQuantityRequirementInherited;
+        private CheckBox cbDemandQuantity;
+        private ToolTip toolTip1;
+        private PictureBox pbDemandQuantityInfo;
+        private PictureBox pbQuantityRequirementInheritedInfo;
     }
 }

@@ -1,13 +1,14 @@
 ﻿using K_Accounting.Extensions;
 using K_Accounting.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 // Основной класс для работы с базой данных
 namespace K_Accounting.Data
 {
     public class AppDbContext : DbContext
     {
-        public const int CurrentDbVersion = 1; // Увеличивать при изменениях
+        public const int CurrentDbVersion = 2; // Увеличивать при изменениях
 
         // Таблицы в базе данных
         public DbSet<DbVersion> DbVersions { get; set; }
@@ -27,6 +28,11 @@ namespace K_Accounting.Data
             var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var dbPath = Path.Combine(appDataPath, "K_Accounting", "budget.db");
             options.UseSqlite($"Data Source={dbPath}");
+
+
+//            options.UseSqlite($"Data Source={dbPath}")
+                //.ConfigureWarnings(warnings => warnings
+                //.Ignore(CoreEventId.PendingModelChangesWarning));
         }
 
 
@@ -47,6 +53,14 @@ namespace K_Accounting.Data
 
                 e.HasIndex(x => new { x.Date, x.Amount });
             });
+
+            modelBuilder.Entity<Expense>()
+                .Property(e => e.Quantity)
+                .HasDefaultValue(1m);
+
+            modelBuilder.Entity<Expense>()
+                .Property(e => e.IsAutoUnit)
+                .HasDefaultValue(true);
 
             modelBuilder.Entity<SubCategory>(s =>
             {

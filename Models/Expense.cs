@@ -41,5 +41,9 @@ namespace K_Accounting.Models
         public string Comment { get; set; }
 
         public bool IsTemplate { get; set; }
+
+        [Precision(9, 3)]
+        public decimal Quantity { get; set; } = 1;  // вторая версия базы данных, добавление "Количества"
+        public bool IsAutoUnit { get; set; } = true;  // вторая версия базы данных, добавление "Количества"
     }
 }

@@ -17,5 +17,7 @@ namespace K_Accounting.Models
         {
             Name = name;
         }
+
+        public bool RequireQuantity { get; set; } // вторая версия базы данных, добавление "Количества"
     }
 }

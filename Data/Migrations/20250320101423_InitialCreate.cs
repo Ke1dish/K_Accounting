@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace K_Accounting.Migrations
+namespace K_Accounting.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -35,6 +36,7 @@ namespace K_Accounting.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Comment = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    RequireQuantity = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
@@ -108,6 +110,8 @@ namespace K_Accounting.Migrations
                     Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: true),
                     Comment = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    RequireQuantity = table.Column<bool>(type: "INTEGER", nullable: false),
+                    InheritQuantityRequirement = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
@@ -162,6 +166,8 @@ namespace K_Accounting.Migrations
                     AdditionalId = table.Column<int>(type: "INTEGER", nullable: false),
                     Comment = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
                     IsTemplate = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<decimal>(type: "TEXT", precision: 9, scale: 3, nullable: false, defaultValue: 1m),
+                    IsAutoUnit = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)

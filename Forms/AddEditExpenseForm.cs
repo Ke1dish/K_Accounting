@@ -33,9 +33,16 @@ namespace K_Accounting.Forms
             InitializeComponent();
             numAmount.Value = 1;
             numAmount.Controls[0].Visible = false;
+            numQuantity.Controls[0].Visible = false;
             _context = context;
             InitializeData();
             dtpDate.Focus();
+
+            _expense = new Expense
+            {
+                Quantity = 1,
+                IsAutoUnit = true
+            };
         }
 
         public AddEditExpenseForm(AppDbContext context, Expense template) : this(context)
@@ -136,11 +143,37 @@ namespace K_Accounting.Forms
                 chkIsTemplate.Checked = _expense.IsTemplate;
                 _originalAmount = _expense.Amount;                     //////////////////
                 _originalAccountId = _expense.AccountId; // Важно!     //////////////////
+
+                // Новая: Загрузка количества
+                numQuantity.Value = _expense.Quantity;
+
+                // Новая: Проверка видимости
+                var subCategory = cmbSubCategory.SelectedItem as SubCategory;
+                bool showQuantity = (subCategory?.RequireQuantity == true) ||
+                                   (subCategory?.InheritQuantityRequirement == true &&
+                                    subCategory?.Category?.RequireQuantity == true);
+                ShowQuantity(showQuantity);
+
+                // Новая логика - загрузка количества
+                numQuantity.Value = _expense.Quantity;
+
+                // Принудительно вызываем проверку видимости
+                cmbSubCategory_SelectedIndexChanged(null, EventArgs.Empty);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка загрузки шаблона: {ex.Message}");
                 this.Close();
+            }
+
+            // Новая: Инициализация для новых записей
+            if (_expense == null)
+            {
+                _expense = new Expense
+                {
+                    Quantity = 1,
+                    IsAutoUnit = true
+                };
             }
         }
 
@@ -155,6 +188,12 @@ namespace K_Accounting.Forms
                     var account = (Account)cmbAccount.SelectedItem;
                     var newAmount = numAmount.Value;
                     var newAccountId = (int)cmbAccount.SelectedValue;
+
+                    // Новая: Получаем требования к количеству
+                    var subCategory = cmbSubCategory.SelectedItem as SubCategory;
+                    bool requireQuantity = (subCategory?.RequireQuantity == true) ||
+                                         (subCategory?.InheritQuantityRequirement == true &&
+                                          subCategory?.Category?.RequireQuantity == true);
 
                     if (_isEditMode)
                     {
@@ -171,6 +210,10 @@ namespace K_Accounting.Forms
                         _expense.AdditionalId = (int)cmbAdditional.SelectedValue;
                         _expense.Comment = txtComment.Text;
                         _expense.IsTemplate = chkIsTemplate.Checked;
+
+                        // Новая: Сохранение количества
+                        _expense.Quantity = requireQuantity ? numQuantity.Value : 1;
+                        _expense.IsAutoUnit = (numQuantity.Value == 1) || !requireQuantity;
                     }
                     else
                     {
@@ -184,7 +227,11 @@ namespace K_Accounting.Forms
                             SubCategoryId = (int)cmbSubCategory.SelectedValue,
                             AdditionalId = (int)cmbAdditional.SelectedValue,
                             Comment = txtComment.Text,
-                            IsTemplate = chkIsTemplate.Checked
+                            IsTemplate = chkIsTemplate.Checked,
+
+                            // Новая: Инициализация количества
+                            Quantity = requireQuantity ? numQuantity.Value : 1,
+                            IsAutoUnit = (numQuantity.Value == 1) || !requireQuantity
                         };
                         _context.Expenses.Add(_expense);
                     }
@@ -467,6 +514,110 @@ namespace K_Accounting.Forms
             {
                 // Если категория не выбрана, очищаем подкатегории
                 cmbSubCategory.DataSource = null;
+            }
+
+            // Новая: Проверка требований к количеству
+            var subCategory = cmbSubCategory.SelectedItem as SubCategory;
+            bool showQuantity = (subCategory?.RequireQuantity == true) ||
+                               (subCategory?.InheritQuantityRequirement == true &&
+                                subCategory?.Category?.RequireQuantity == true);
+            ShowQuantity(showQuantity);
+
+            // Новая: Установка значения по умолчанию
+            if (!showQuantity) numQuantity.Value = 1;
+        }
+
+        private void ShowQuantity(bool show)
+        {
+            lblQuantity.Visible = show;
+            numQuantity.Visible = show;
+
+        }
+
+        private void cmbSubCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //// Старая логика загрузки подкатегорий
+            //if (cmbCategory.SelectedItem is Category selectedCategory)
+            //{
+            //    cmbSubCategory.Text = "";
+            //    var subCategories = _context.SubCategories
+            //        .Where(s => s.CategoryId == selectedCategory.Id && !s.IsDeleted)
+            //        .ToList();
+
+            //    cmbSubCategory.DataSource = subCategories;
+            //    cmbSubCategory.DisplayMember = "Name";
+            //    cmbSubCategory.ValueMember = "Id";
+
+            //    cmbSubCategory.AutoCompleteCustomSource.Clear();
+            //    cmbSubCategory.AutoCompleteCustomSource.AddRange(
+            //        subCategories.Select(c => c.Name).ToArray()
+            //    );
+            //}
+            //else
+            //{
+            //    cmbSubCategory.DataSource = null;
+            //}
+
+            //// Новая логика управления количеством
+            //var subCategory = cmbSubCategory.SelectedItem as SubCategory;
+            //if (subCategory != null)
+            //{
+            //    // Проверяем требования к количеству
+            //    bool requireQuantity = subCategory.RequireQuantity;
+
+            //    // Если включено наследование - проверяем категорию
+            //    if (subCategory.InheritQuantityRequirement)
+            //    {
+            //        var category = _context.Categories
+            //            .FirstOrDefault(c => c.Id == subCategory.CategoryId);
+            //        requireQuantity = category?.RequireQuantity ?? false;
+            //    }
+
+            //    // Управляем видимостью элементов
+            //    numQuantity.Visible = requireQuantity;
+            //    lblQuantity.Visible = requireQuantity;
+
+            //    // Устанавливаем значение по умолчанию если не требуется
+            //    if (!requireQuantity)
+            //    {
+            //        numQuantity.Value = 1;
+            //        _expense.IsAutoUnit = true; // Если используется при редактировании
+            //    }
+            //}
+            //else
+            //{
+            //    // Скрываем если подкатегория не выбрана
+            //    numQuantity.Visible = false;
+            //    lblQuantity.Visible = false;
+            //}
+            // Обработка видимости поля количества
+            var subCategory = cmbSubCategory.SelectedItem as SubCategory;
+            bool requireQuantity = false;
+
+            if (subCategory != null)
+            {
+                // Проверяем требования подкатегории и категории
+                requireQuantity = subCategory.RequireQuantity ||
+                                 (subCategory.InheritQuantityRequirement &&
+                                  subCategory.Category?.RequireQuantity == true);
+            }
+
+            // Управляем видимостью
+            numQuantity.Visible = requireQuantity;
+            lblQuantity.Visible = requireQuantity;
+
+            // Устанавливаем значение по умолчанию только для новых записей
+            if (!_isEditMode)
+            {
+                numQuantity.Value = requireQuantity ? 1 : 1; // Всегда 1, но можно настроить
+
+                // Безопасная установка IsAutoUnit
+                if (_expense == null) return;
+                _expense.IsAutoUnit = !requireQuantity;
+            }
+            else if (_expense != null) // Для редактирования
+            {
+                _expense.IsAutoUnit = (numQuantity.Value == 1) && !requireQuantity;
             }
         }
     }

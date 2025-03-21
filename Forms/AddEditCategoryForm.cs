@@ -10,6 +10,11 @@ namespace K_Accounting.Forms
         public int SavedCategoryId { get; private set; }
 
         private Category _category;
+
+        private string toolTipText = "Здесь будет подсказка\n" +
+                "Здесь будет подсказка\n" +
+                "Здесь будет подсказка";
+
         private bool _isEditMode;
         public bool isEditMode
         {
@@ -29,6 +34,7 @@ namespace K_Accounting.Forms
         public AddEditCategoryForm(AppDbContext context)
         {
             InitializeComponent();
+            toolTip1.SetToolTip(pbRequireQuantityInfo, toolTipText);
             _context = context;
             txtName.Focus();
         }
@@ -36,6 +42,7 @@ namespace K_Accounting.Forms
         public AddEditCategoryForm()
         {
             InitializeComponent();
+            toolTip1.SetToolTip(pbRequireQuantityInfo, toolTipText);
             txtName.Focus();
         }
 
@@ -45,16 +52,11 @@ namespace K_Accounting.Forms
             LoadCategoryData();
         }
 
-        private void InitializeForm()
-        {
-            Text = _isEditMode ? "Редактирование категории" : "Добавление категории";
-            btnOk.Text = _isEditMode ? "Сохранить" : "Добавить";
-        }
-
         private void LoadCategoryData()
         {
             txtName.Text = _category.Name;
             txtComment.Text = _category.Comment;
+            cbRequireQuantity.Checked = _category.RequireQuantity;
         }
 
         private bool ValidateForm()
@@ -82,6 +84,7 @@ namespace K_Accounting.Forms
                         {
                             existing.Name = txtName.Text.Trim();
                             existing.Comment = txtComment.Text.Trim();
+                            existing.RequireQuantity = cbRequireQuantity.Checked;
                             context.SaveChanges();
                             SavedCategoryId = existing.Id;
                         }
@@ -90,7 +93,8 @@ namespace K_Accounting.Forms
                     {
                         var newCategory = new Category(txtName.Text.Trim())
                         {
-                            Comment = txtComment.Text.Trim()
+                            Comment = txtComment.Text.Trim(),
+                            RequireQuantity = cbRequireQuantity.Checked
                         };
                         context.Categories.Add(newCategory);
                         context.SaveChanges();

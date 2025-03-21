@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             flowLayoutPanel1 = new FlowLayoutPanel();
             btnCancel = new Button();
             btnOk = new Button();
@@ -36,8 +37,12 @@
             label2 = new Label();
             txtName = new TextBox();
             label1 = new Label();
+            cbRequireQuantity = new CheckBox();
+            toolTip1 = new ToolTip(components);
+            pbRequireQuantityInfo = new PictureBox();
             flowLayoutPanel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbRequireQuantityInfo).BeginInit();
             SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -78,17 +83,21 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 31F));
-            tableLayoutPanel1.Controls.Add(txtComment, 1, 1);
-            tableLayoutPanel1.Controls.Add(label2, 0, 1);
+            tableLayoutPanel1.Controls.Add(txtComment, 1, 2);
+            tableLayoutPanel1.Controls.Add(label2, 0, 2);
             tableLayoutPanel1.Controls.Add(txtName, 1, 0);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
+            tableLayoutPanel1.Controls.Add(cbRequireQuantity, 1, 1);
+            tableLayoutPanel1.Controls.Add(pbRequireQuantityInfo, 2, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.Padding = new Padding(10);
-            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(384, 171);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -96,16 +105,16 @@
             // 
             tableLayoutPanel1.SetColumnSpan(txtComment, 2);
             txtComment.Dock = DockStyle.Fill;
-            txtComment.Location = new Point(146, 42);
+            txtComment.Location = new Point(146, 71);
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
-            txtComment.Size = new Size(225, 116);
+            txtComment.Size = new Size(225, 98);
             txtComment.TabIndex = 1;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(13, 39);
+            label2.Location = new Point(13, 68);
             label2.Name = "label2";
             label2.Size = new Size(84, 15);
             label2.TabIndex = 10;
@@ -129,6 +138,36 @@
             label1.TabIndex = 7;
             label1.Text = "Название";
             // 
+            // cbRequireQuantity
+            // 
+            cbRequireQuantity.AutoSize = true;
+            cbRequireQuantity.Dock = DockStyle.Fill;
+            cbRequireQuantity.Location = new Point(146, 42);
+            cbRequireQuantity.Name = "cbRequireQuantity";
+            cbRequireQuantity.Size = new Size(193, 23);
+            cbRequireQuantity.TabIndex = 11;
+            cbRequireQuantity.Text = "Требовать количество";
+            cbRequireQuantity.UseVisualStyleBackColor = true;
+            // 
+            // toolTip1
+            // 
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 500;
+            toolTip1.IsBalloon = true;
+            toolTip1.ReshowDelay = 500;
+            toolTip1.ToolTipIcon = ToolTipIcon.Info;
+            toolTip1.ToolTipTitle = "Информация";
+            // 
+            // pbRequireQuantityInfo
+            // 
+            pbRequireQuantityInfo.Image = Properties.Resources.icons8_info_16;
+            pbRequireQuantityInfo.Location = new Point(345, 42);
+            pbRequireQuantityInfo.Name = "pbRequireQuantityInfo";
+            pbRequireQuantityInfo.Size = new Size(26, 23);
+            pbRequireQuantityInfo.SizeMode = PictureBoxSizeMode.CenterImage;
+            pbRequireQuantityInfo.TabIndex = 12;
+            pbRequireQuantityInfo.TabStop = false;
+            // 
             // AddEditCategoryForm
             // 
             AcceptButton = btnOk;
@@ -146,6 +185,7 @@
             flowLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbRequireQuantityInfo).EndInit();
             ResumeLayout(false);
         }
 
@@ -159,5 +199,8 @@
         private Label label2;
         private TextBox txtName;
         private Label label1;
+        private CheckBox cbRequireQuantity;
+        private ToolTip toolTip1;
+        private PictureBox pbRequireQuantityInfo;
     }
 }

@@ -83,6 +83,16 @@ namespace K_Accounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_info_16 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-info-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LeftIco {
             get {
                 object obj = ResourceManager.GetObject("LeftIco", resourceCulture);

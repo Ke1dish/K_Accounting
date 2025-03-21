@@ -9,7 +9,9 @@ using K_Accounting.Forms;
 using K_Accounting.Models;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace K_Accounting
 {
@@ -26,8 +28,6 @@ namespace K_Accounting
 
     // -Планы на ближайшее будущее
     // сортировка по заголовку вверх и вниз с ее отключением
-    // -добавление параметра "количество" в расходы это позволит оценивать количество неких расходов за период например кол-во картошки в кг за месяц
-    // и спланировать бюджет
     // добавить больше фильтраций в расходы и быстрый поиск по тексту в категориях, подкатегориях, упоминаниях (дополнительному), комментариях и счету
 
     public partial class MainForm : Form
@@ -394,88 +394,121 @@ namespace K_Accounting
         #endregion
 
         #region База Данных
-        // инициализация базы данных
+        //инициализация базы данных
         private void InitializeDatabase()
         {
-            //var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "finance.db");
-
             try
             {
                 using var db = new AppDbContext();
 
-                // Создать БД и применить миграции если не существует
-                if (!db.Database.CanConnect())
+                bool isNewDatabase = !db.Database.CanConnect();
+                var pendingMigrations = db.Database.GetPendingMigrations().ToList();
+
+                if (pendingMigrations.Any())
                 {
-                    db.Database.Migrate();
-                    SeedInitialData(db);
                     CreateBackup();
-                    LogDbVersion(db); // Добавляем запись о версии
+                    db.Database.Migrate();
                 }
-                else
+
+                if (isNewDatabase)
                 {
-                    // Проверка и применение миграций
-                    var pendingMigrations = db.Database.GetPendingMigrations();
-                    if (pendingMigrations.Any())
-                    {
-                        CreateBackup();
-                        db.Database.Migrate();
-                        UpdateDbVersions(db, pendingMigrations); // Обновляем версии
-                    }
+                    SeedInitialData(db);
+                    LogDbVersion(db);
                 }
+                else if (!db.Categories.Any() || !db.SubCategories.Any())
+                {
+                    SeedInitialData(db);
+                }
+
+                // Передаем примененные миграции
+                var appliedMigrations = db.Database.GetAppliedMigrations();
+                UpdateDbVersions(db, appliedMigrations);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка инициализации БД: {ex.Message}");
+                MessageBox.Show($"Ошибка инициализации: {ex.Message}\n{ex.InnerException?.Message}");
                 throw;
             }
         }
 
-        // Логирование версии БД
         private void LogDbVersion(AppDbContext db)
         {
-
-            var lastMigration = db.Database.GetAppliedMigrations().LastOrDefault();
+            // была строка var lastMigration = db.Database.GetAppliedMigrations().LastOrDefault();
 
             db.DbVersions.Add(new DbVersion
             {
                 Version = AppDbContext.CurrentDbVersion,
-                ScriptName = lastMigration ?? "Initial",
+                ScriptName = "InitialCreate",  // было так ScriptName = lastMigration ?? "Initial",
                 AppliedAt = DateTime.UtcNow,
-                MigrationId = lastMigration ?? Guid.NewGuid().ToString()
+                MigrationId = "initial_migration",  // было так MigrationId = lastMigration ?? Guid.NewGuid().ToString()
+                IsDeleted = false // Явное указание значения
             });
             db.SaveChanges();
         }
 
-        // Обновление записей о версиях
         private void UpdateDbVersions(AppDbContext db, IEnumerable<string> migrations)
         {
-            foreach (var migration in migrations)
+            IDbContextTransaction transaction = null;
+            try
             {
-                db.DbVersions.Add(new DbVersion
+                transaction = db.Database.BeginTransaction();
+
+                var existingMigrations = db.DbVersions
+                    .Select(v => v.MigrationId)
+                    .ToHashSet();
+
+                foreach (var migration in migrations)
                 {
-                    Version = ExtractVersionFromMigration(migration),                                                     //-----
-                    ScriptName = migration,
-                    AppliedAt = DateTime.UtcNow
-                });
+                    if (existingMigrations.Contains(migration)) continue;
+
+                    var version = ExtractVersionFromMigration(migration);
+                    var dbVersion = new DbVersion
+                    {
+                        Version = version,
+                        ScriptName = migration,
+                        AppliedAt = DateTime.UtcNow,
+                        MigrationId = migration,
+                        IsDeleted = false
+                    };
+
+                    if (string.IsNullOrEmpty(dbVersion.MigrationId))
+                        throw new InvalidOperationException("Invalid migration ID");
+
+                    db.DbVersions.Add(dbVersion);
+                }
+
+                db.SaveChanges();
+                transaction.Commit();
             }
-            db.SaveChanges();
+            catch (Exception ex)
+            {
+                transaction?.Rollback();
+                MessageBox.Show($"Ошибка обновления версий: {ex.Message}");
+                throw;
+            }
+            finally
+            {
+                transaction?.Dispose();
+            }
         }
 
-        // Парсинг номера версии из имени миграции
+        // Вспомогательный метод для извлечения версии
         private int ExtractVersionFromMigration(string migrationName)
         {
+            // Пример имени миграции: 20240602120000_AddNewFeatures
             var versionPart = migrationName.Split('_').FirstOrDefault();
-            if (int.TryParse(versionPart?.Substring(0, 8), out int version))
+
+            if (versionPart != null && int.TryParse(versionPart[..8], out int version))
             {
                 return version;
             }
-            return AppDbContext.CurrentDbVersion;
-        }
 
+            return AppDbContext.CurrentDbVersion; // Fallback
+        }
+        
         // проверка наличия файла базы данных
         private bool CheckDatabaseVersion()
         {
-            //            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "budget.db");
             if (!File.Exists(dbPath)) return true;
 
             try
@@ -495,9 +528,6 @@ namespace K_Accounting
             var backupDir = appFolder;
             var backupName = $"backup_{DateTime.Now:yyyyMMdd_HHmmss}.db";
             var backupPath = Path.Combine(backupDir, backupName);
-
-            //// Создаем папку для бэкапов, если её нет
-            //Directory.CreateDirectory(backupDir);
 
             // 1. Создаем новую резервную копию
             if (File.Exists(dbPath))

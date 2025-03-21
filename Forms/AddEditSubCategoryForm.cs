@@ -12,7 +12,9 @@ namespace K_Accounting.Forms
         public int SavedSubCategoryId { get; private set; }
 
         private SubCategory _subCategory;
+
         private List<Category> _categories;
+
         private bool _isEditMode;
         public bool isEditMode
         {
@@ -42,6 +44,12 @@ namespace K_Accounting.Forms
             _preselectedCategoryId = categoryId;
             LoadCategories();
             txtName.Focus();
+
+            toolTip1.SetToolTip(pbDemandQuantityInfo, 
+                "Включите, если для этой подкатегории\nтребуется указывать количество");
+            toolTip1.SetToolTip(pbQuantityRequirementInheritedInfo,
+                "Настройка унаследована от категории\n'Требовать количество'");
+
         }
 
         // Конструктор для редактирования существующей подкатегории
@@ -90,6 +98,38 @@ namespace K_Accounting.Forms
             cmbCategory.SelectedValue = _subCategory.CategoryId;
             txtComment.Text = _subCategory.Comment;
             cmbCategory.Text = ((Category)cmbCategory.SelectedItem)?.Name;
+            UpdateQuantityControls();
+        }
+
+        private void UpdateQuantityControls()
+        {
+            var category = cmbCategory.SelectedItem as Category;
+            if (category == null) return;
+
+            if (category.RequireQuantity)
+            {
+                txtQuantityRequirementInherited.Visible = true;
+                pbQuantityRequirementInheritedInfo.Visible = true;
+                cbDemandQuantity.Visible = false;
+                pbDemandQuantityInfo.Visible = false;
+                if (_subCategory != null)
+                {
+                    _subCategory.InheritQuantityRequirement = true;
+                    _subCategory.RequireQuantity = true;
+                }
+            }
+            else
+            {
+                txtQuantityRequirementInherited.Visible = false;
+                pbQuantityRequirementInheritedInfo.Visible = false;
+                pbDemandQuantityInfo.Visible = true;
+                cbDemandQuantity.Visible = true;
+                if (_subCategory != null)
+                {
+                    cbDemandQuantity.Checked = _subCategory?.RequireQuantity ?? false;
+                    _subCategory.InheritQuantityRequirement = false;
+                }
+            }
         }
 
         private bool ValidateForm()
@@ -127,8 +167,11 @@ namespace K_Accounting.Forms
         {
             if (!ValidateForm()) return;
 
+
             try
             {
+                var category = cmbCategory.SelectedItem as Category;
+
                 if (_isEditMode)
                 {
                     // Редактирование существующей записи
@@ -138,6 +181,19 @@ namespace K_Accounting.Forms
                         existing.Name = txtName.Text.Trim();
                         existing.CategoryId = (int)cmbCategory.SelectedValue;
                         existing.Comment = txtComment.Text.Trim();
+
+                        // Добавляем логику сохранения настроек количества
+                        if (category.RequireQuantity)
+                        {
+                            existing.InheritQuantityRequirement = true;
+                            existing.RequireQuantity = true;
+                        }
+                        else
+                        {
+                            existing.InheritQuantityRequirement = false;
+                            existing.RequireQuantity = cbDemandQuantity.Checked;
+                        }
+
                         _context.SaveChanges();
                         SavedSubCategoryId = existing.Id;
                     }
@@ -149,15 +205,18 @@ namespace K_Accounting.Forms
                         txtName.Text.Trim(),
                         (int)cmbCategory.SelectedValue)
                     {
-                        Comment = txtComment.Text.Trim()
+                        Comment = txtComment.Text.Trim(),
+
+                        // Добавляем логику инициализации настроек количества
+                        InheritQuantityRequirement = category.RequireQuantity,
+                        RequireQuantity = category.RequireQuantity ? true : cbDemandQuantity.Checked
                     };
 
                     _context.SubCategories.Add(newSubCategory);
-                    _context.SaveChanges(); // Сохраняем для генерации ID
-                    SavedSubCategoryId = newSubCategory.Id; // Сохраняем ID новой записи
+                    _context.SaveChanges();
+                    SavedSubCategoryId = newSubCategory.Id;
                 }
 
-                // Сохраняем изменения в переданном контексте
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 DialogResult = DialogResult.OK;
                 Close();
@@ -166,6 +225,69 @@ namespace K_Accounting.Forms
             {
                 MessageBox.Show($"Ошибка сохранения: {ex.Message}");
             }
+
+            //try
+            //{
+            //    var category = cmbCategory.SelectedItem as Category;
+
+            //    if (_isEditMode)
+            //    {
+            //        // Редактирование существующей записи
+            //        var existing = _context.SubCategories.Find(_subCategory.Id);
+            //        if (existing != null)
+            //        {
+            //            existing.Name = txtName.Text.Trim();
+            //            existing.CategoryId = (int)cmbCategory.SelectedValue;
+            //            existing.Comment = txtComment.Text.Trim();
+            //            if (category.RequireQuantity)
+            //            {
+            //                existing.InheritQuantityRequirement = true;
+            //                existing.RequireQuantity = true;
+            //            }
+            //            else
+            //            {
+            //                existing.InheritQuantityRequirement = false;
+            //                existing.RequireQuantity = cbDemandQuantity.Checked;
+            //            }
+            //            _context.SaveChanges();
+            //            SavedSubCategoryId = existing.Id;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        // Создание новой записи
+            //        var newSubCategory = new SubCategory(
+            //            txtName.Text.Trim(),
+            //            (int)cmbCategory.SelectedValue)
+            //        {
+            //            Comment = txtComment.Text.Trim()
+            //        };
+
+            //        if (category.RequireQuantity)
+            //        {
+            //            newSubCategory.InheritQuantityRequirement = true;
+            //            newSubCategory.RequireQuantity = true;
+            //        }
+            //        else
+            //        {
+            //            newSubCategory.InheritQuantityRequirement = false;
+            //            newSubCategory.RequireQuantity = cbDemandQuantity.Checked;
+            //        }
+
+            //        _context.SubCategories.Add(newSubCategory);
+            //        _context.SaveChanges(); // Сохраняем для генерации ID
+            //        SavedSubCategoryId = newSubCategory.Id; // Сохраняем ID новой записи
+            //    }
+
+            //    // Сохраняем изменения в переданном контексте
+            //    DataUpdated?.Invoke(this, EventArgs.Empty);
+            //    DialogResult = DialogResult.OK;
+            //    Close();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+            //}
         }
 
         private void btnNewCategory_Click(object sender, EventArgs e)
@@ -219,5 +341,14 @@ namespace K_Accounting.Forms
             Close();
         }
 
+        private void cmbCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateQuantityControls();
+        }
+
+        private void AddEditSubCategoryForm_Load(object sender, EventArgs e)
+        {
+            UpdateQuantityControls();
+        }
     }
 }

@@ -19,17 +19,6 @@ namespace K_Accounting
     // EntityFrameworkCore\Add-Migration InitialCreate
     // EntityFrameworkCore\Update-Database
 
-
-    // известные проблеммы в коде
-    // при запуске приложения таблица подкатегорий выводит все имеющиеся подкатегорий без фильтрации по выбранной категории
-    // при добавлении подкатегорий обновляется список категорий и слетает выделенная строка, после чего срабатывает фильтрация подкатегорий
-    // по выбранной категории и в обейх таблицах выводятся первые пункты (первая категория и первая подкатегория в ней)
-
-
-    // -Планы на ближайшее будущее
-    // сортировка по заголовку вверх и вниз с ее отключением
-    // добавить больше фильтраций в расходы и быстрый поиск по тексту в категориях, подкатегориях, упоминаниях (дополнительному), комментариях и счету
-
     public partial class MainForm : Form
     {
         private AppDbContext _context;
@@ -88,7 +77,7 @@ namespace K_Accounting
             LoadCurrencies();
             LoadExpenses();
             LoadSources();
-            LoadSubCategories();
+            //LoadSubCategories();
             LoadIncomes();
 
             // скрываем панели инструментов да странице Отчетов
@@ -650,7 +639,7 @@ namespace K_Accounting
                     break;
                 case 4: // Категории и Подкатегории
                     LoadCategories();
-                    LoadSubCategories();
+                    LoadSubCategories(_selectedCategory?.Id);
                     break;
                 case 5: // Источники
                     LoadSources();
@@ -1815,27 +1804,49 @@ namespace K_Accounting
         #endregion
 
         #region Подкатегории (SubCategory)
-        private void LoadSubCategories()
-        {
-            try
-            {
-                // Явная загрузка связанных данных
-                var subCategories = _context.SubCategories
-                    .Include(s => s.Category) // Важно: подключаем категории
-                    .Where(s => !s.IsDeleted)
-                    .OrderBy(s => s.Name)
-                    .ToList();
+        //private void LoadSubCategories()
+        //{
+        //    try
+        //    {
+        //        // Явная загрузка связанных данных
+        //        var subCategories = _context.SubCategories
+        //            .Include(s => s.Category) // Важно: подключаем категории
+        //            .Where(s => !s.IsDeleted)
+        //            .OrderBy(s => s.Name)
+        //            .ToList();
 
-                dgwSubCategories.DataSource = subCategories;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки подкатегорий: {ex.Message}");
-            }
-        }
+        //        dgwSubCategories.DataSource = subCategories;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Ошибка загрузки подкатегорий: {ex.Message}");
+        //    }
+        //}
 
         private void LoadSubCategories(int? categoryId = null)
         {
+            //if (dgwSubCategories == null) return;
+
+            //try
+            //{
+            //    var query = _context.SubCategories
+            //        .Include(s => s.Category)
+            //        .Where(s => !s.IsDeleted);
+
+            //    if (categoryId.HasValue)
+            //    {
+            //        query = query.Where(s => s.CategoryId == categoryId);
+            //    }
+
+            //    dgwSubCategories.DataSource = query
+            //        .OrderBy(s => s.Name)
+            //        .ToList();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Ошибка загрузки подкатегорий: {ex.Message}");
+            //}
+
             if (dgwSubCategories == null) return;
 
             try
@@ -1923,13 +1934,13 @@ namespace K_Accounting
                 form.isEditMode = true;
                 form.DataUpdated += (s, args) =>
                 {
-                    LoadSubCategories();
+                    //LoadSubCategories();
                     LoadSubCategories(_selectedCategory?.Id);
                 };
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     _context.Entry(_selectedSubCategory).Reload();  //было
-                    LoadSubCategories();  //было
+                    //LoadSubCategories();  //было
                     LoadSubCategories(_selectedCategory?.Id);   //было
                 }
             }

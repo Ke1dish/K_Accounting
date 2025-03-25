@@ -7,9 +7,10 @@ namespace K_Accounting.Forms
     {
         private readonly AppDbContext _context;
 
-        public int SavedSourceId { get; private set; } // Новое свойство
-
         private Source _source;
+
+        public int? SavedSourceId { get; private set; }
+
         private bool _isEditMode;
         public bool isEditMode
         {
@@ -32,13 +33,7 @@ namespace K_Accounting.Forms
             txtName.Focus();
         }
 
-        public AddEditSourceForm()
-        {
-            InitializeComponent();
-            txtName.Focus();
-        }
-
-        public AddEditSourceForm(Source source) : this()
+        public AddEditSourceForm(Source source, AppDbContext context) : this(context)
         {
             _source = source;
             LoadSourceData();
@@ -52,11 +47,33 @@ namespace K_Accounting.Forms
 
         private bool ValidateForm()
         {
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            string name = txtName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
                 MessageBox.Show("Название источника обязательно для заполнения");
                 return false;
             }
+
+            bool nameExists;
+
+            if (isEditMode)
+            {
+                // Проверяем существование имени, исключая текущий редактируемый источник
+                nameExists = _context.Sources.Any(s => s.Name == name && s.Id != _source.Id);
+            }
+            else
+            {
+                // Проверяем существование имени для нового источника
+                nameExists = _context.Sources.Any(s => s.Name == name);
+            }
+
+            if (nameExists)
+            {
+                MessageBox.Show("Источник с таким названием уже существует.");
+                return false;
+            }
+
             return true;
         }
 
@@ -64,39 +81,33 @@ namespace K_Accounting.Forms
         {
             if (!ValidateForm()) return;
 
-            using (var context = new AppDbContext())
+            try
             {
-                try
+                if (_isEditMode)
                 {
-                    if (_isEditMode)
+                    _source.Name = txtName.Text.Trim();
+                    _source.Comment = txtComment.Text.Trim();
+                }
+                else
+                {
+                    _source = new Source(txtName.Text.Trim())
                     {
-                        // Редактирование существующего источника
-                        var existing = context.Sources.Find(_source.Id);
-                        existing.Name = txtName.Text.Trim();
-                        existing.Comment = txtComment.Text.Trim();
-                        SavedSourceId = existing.Id;
-                    }
-                    else
-                    {
-                        // Создание нового источника
-                        var newSource = new Source(txtName.Text.Trim())
-                        {
-                            Comment = txtComment.Text.Trim()
-                        };
-                        context.Sources.Add(newSource);
-                        context.SaveChanges(); // Сохраняем чтобы получить ID
-                        SavedSourceId = newSource.Id; // Сохраняем ID нового источника
-                    }
+                        Comment = txtComment.Text.Trim()
+                    };
+                    _context.Sources.Add(_source);
+                }
 
-                    context.SaveChanges();
-                    DataUpdated?.Invoke(this, EventArgs.Empty);
-                    DialogResult = DialogResult.OK;
-                    Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка сохранения: {ex.Message}");
-                }
+                _context.SaveChanges();
+                SavedSourceId = _source.Id;
+
+                DataUpdated?.Invoke(this, EventArgs.Empty);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                SavedSourceId = null; // Сбрасываем ID при ошибке
             }
         }
 

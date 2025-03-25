@@ -7,9 +7,10 @@ namespace K_Accounting.Forms
     {
         private readonly AppDbContext _context;
 
-        public int SavedAdditionalId { get; private set; }
-
         private Additional _additional;
+
+        public int? SavedAdditionalId { get; private set; }
+
         private bool _isEditMode;
         public bool isEditMode
         {
@@ -32,13 +33,7 @@ namespace K_Accounting.Forms
             txtName.Focus();
         }
 
-        public AddEditAdditionalForm()
-        {
-            InitializeComponent();
-            txtName.Focus();
-        }
-
-        public AddEditAdditionalForm(Additional additional) : this()
+        public AddEditAdditionalForm(Additional additional, AppDbContext context) : this(context)
         {
             _additional = additional;
             LoadAdditionalData();
@@ -52,11 +47,33 @@ namespace K_Accounting.Forms
 
         private bool ValidateForm()
         {
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            string name = txtName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
                 MessageBox.Show("Название обязательно для заполнения");
                 return false;
             }
+
+            bool nameExists;
+
+            if (isEditMode)
+            {
+                // Проверяем существование имени, исключая текущий редактируемый источник
+                nameExists = _context.Additionals.Any(s => s.Name == name && s.Id != _additional.Id);
+            }
+            else
+            {
+                // Проверяем существование имени для нового источника
+                nameExists = _context.Additionals.Any(s => s.Name == name);
+            }
+
+            if (nameExists)
+            {
+                MessageBox.Show("Упоминание с таким именем уже существует.");
+                return false;
+            }
+
             return true;
         }
 
@@ -64,43 +81,33 @@ namespace K_Accounting.Forms
         {
             if (!ValidateForm()) return;
 
-            using (var context = new AppDbContext())
+            try
             {
-                try
+                if (_isEditMode)
                 {
-                    if (_isEditMode)
-                    {
-                        // Редактирование существующей записи
-                        var existing = context.Additionals.Find(_additional.Id);
-                        if (existing != null)
-                        {
-                            existing.Name = txtName.Text.Trim();
-                            existing.Comment = txtComment.Text.Trim();
-                            context.SaveChanges();
-                            SavedAdditionalId = existing.Id;
-                        }
-                    }
-                    else
-                    {
-                        // Создание новой записи
-                        var newAdditional = new Additional(txtName.Text.Trim())
-                        {
-                            Comment = txtComment.Text.Trim()
-                        };
-
-                        context.Additionals.Add(newAdditional);
-                        context.SaveChanges(); // Сохраняем для генерации ID
-                        SavedAdditionalId = newAdditional.Id; // Сохраняем ID новой записи
-                    }
-
-                    DataUpdated?.Invoke(this, EventArgs.Empty);
-                    DialogResult = DialogResult.OK;
-                    Close();
+                    _additional.Name = txtName.Text.Trim();
+                    _additional.Comment = txtComment.Text.Trim();
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                    _additional = new Additional(txtName.Text.Trim())
+                    {
+                        Comment = txtComment.Text.Trim()
+                    };
+                    _context.Additionals.Add(_additional);
                 }
+
+                _context.SaveChanges();
+                SavedAdditionalId = _additional.Id;
+
+                DataUpdated?.Invoke(this, EventArgs.Empty);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                SavedAdditionalId = null; // Сбрасываем ID при ошибке
             }
         }
 

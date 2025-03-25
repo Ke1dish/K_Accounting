@@ -7,13 +7,9 @@ namespace K_Accounting.Forms
     {
         private readonly AppDbContext _context;
 
-        public int SavedCategoryId { get; private set; }
-
         private Category _category;
 
-        private string toolTipText = "Здесь будет подсказка\n" +
-                "Здесь будет подсказка\n" +
-                "Здесь будет подсказка";
+        public int? SavedCategoryId { get; private set; }
 
         private bool _isEditMode;
         public bool isEditMode
@@ -30,23 +26,19 @@ namespace K_Accounting.Forms
         // Добавляем унифицированное событие
         public event EventHandler DataUpdated;
 
+        private string toolTipText = "Здесь будет подсказка\n" +
+                "Здесь будет подсказка\n" +
+                "Здесь будет подсказка";
 
         public AddEditCategoryForm(AppDbContext context)
         {
             InitializeComponent();
-            toolTip1.SetToolTip(pbRequireQuantityInfo, toolTipText);
             _context = context;
             txtName.Focus();
-        }
-
-        public AddEditCategoryForm()
-        {
-            InitializeComponent();
             toolTip1.SetToolTip(pbRequireQuantityInfo, toolTipText);
-            txtName.Focus();
         }
 
-        public AddEditCategoryForm(Category category) : this()
+        public AddEditCategoryForm(Category category, AppDbContext context) : this(context)
         {
             _category = category;
             LoadCategoryData();
@@ -61,11 +53,31 @@ namespace K_Accounting.Forms
 
         private bool ValidateForm()
         {
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            string name = txtName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
                 MessageBox.Show("Название категории обязательно для заполнения");
                 return false;
             }
+
+            bool nameExists;
+
+            if (isEditMode)
+            {
+                nameExists = _context.Categories.Any(s => s.Name == name && s.Id != _category.Id);
+            }
+            else
+            {
+                nameExists = _context.Categories.Any(s => s.Name == name);
+            }
+
+            if (nameExists)
+            {
+                MessageBox.Show("Категория с таким названием уже существует.");
+                return false;
+            }
+
             return true;
         }
 
@@ -73,41 +85,35 @@ namespace K_Accounting.Forms
         {
             if (!ValidateForm()) return;
 
-            using (var context = new AppDbContext())
+            try
             {
-                try
+                if (_isEditMode)
                 {
-                    if (_isEditMode)
-                    {
-                        var existing = context.Categories.Find(_category.Id);
-                        if (existing != null)
-                        {
-                            existing.Name = txtName.Text.Trim();
-                            existing.Comment = txtComment.Text.Trim();
-                            existing.RequireQuantity = cbRequireQuantity.Checked;
-                            context.SaveChanges();
-                            SavedCategoryId = existing.Id;
-                        }
-                    }
-                    else
-                    {
-                        var newCategory = new Category(txtName.Text.Trim())
-                        {
-                            Comment = txtComment.Text.Trim(),
-                            RequireQuantity = cbRequireQuantity.Checked
-                        };
-                        context.Categories.Add(newCategory);
-                        context.SaveChanges();
-                        SavedCategoryId = newCategory.Id; // Сохраняем ID
-                    }
-                    DataUpdated?.Invoke(this, EventArgs.Empty);
-                    DialogResult = DialogResult.OK;
-                    Close();
+                    _category.Name = txtName.Text.Trim();
+                    _category.Comment = txtComment.Text.Trim();
+                    _category.RequireQuantity = cbRequireQuantity.Checked;
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                    _category = new Category(txtName.Text.Trim())
+                    {
+                        Comment = txtComment.Text.Trim(),
+                        RequireQuantity = cbRequireQuantity.Checked
+                    };
+                    _context.Categories.Add(_category);
                 }
+
+                _context.SaveChanges();
+                SavedCategoryId = _category.Id;
+
+                DataUpdated?.Invoke(this, EventArgs.Empty);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                SavedCategoryId = null;
             }
         }
 

@@ -366,7 +366,7 @@ namespace K_Accounting.Forms
         {
             var selectedCategoryId = (int?)cmbCategory.SelectedValue;
 
-            using (var form = new AddEditSubCategoryForm(_context, selectedCategoryId))
+            using (var form = new AddEditSubCategoryForm((int)selectedCategoryId, _context))
             {
                 form.DataUpdated += (s, args) =>
                 {

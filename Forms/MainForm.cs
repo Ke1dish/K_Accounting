@@ -9,8 +9,6 @@ using K_Accounting.Forms;
 using K_Accounting.Models;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace K_Accounting
@@ -77,7 +75,6 @@ namespace K_Accounting
             LoadCurrencies();
             LoadExpenses();
             LoadSources();
-            //LoadSubCategories();
             LoadIncomes();
 
             // скрываем панели инструментов да странице Отчетов
@@ -276,6 +273,7 @@ namespace K_Accounting
             {
                 CreateColumn("colDate", "Дата", "Date", "dd.MM.yyyy HH:mm"),
                 CreateColumn("colAmount", "Сумма", "Amount", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colQuantity", "Кол-во", "Quantity", "N2", DataGridViewContentAlignment.MiddleRight),
                 CreateColumn("colAccount", "Счет", "Account.Name"),
                 CreateColumn("colCategory", "Категория", "Category.Name"),
                 CreateColumn("colSubCategory", "Подкатегория", "SubCategory.Name"),
@@ -494,7 +492,7 @@ namespace K_Accounting
 
             return AppDbContext.CurrentDbVersion; // Fallback
         }
-        
+
         // проверка наличия файла базы данных
         private bool CheckDatabaseVersion()
         {
@@ -924,6 +922,7 @@ namespace K_Accounting
                 "Accounts_colComment" => 120,
                 "Expenses_colDate" => 120,
                 "Expenses_colAmount" => 120,
+                "Expenses_colQuantity" => 120,
                 "Expenses_colAccount" => 120,
                 "Expenses_colCategory" => 120,
                 "Expenses_colSubCategory" => 120,
@@ -961,11 +960,12 @@ namespace K_Accounting
                 "Accounts_colComment" => 3,
                 "Expenses_colDate" => 0,
                 "Expenses_colAmount" => 1,
-                "Expenses_colAccount" => 2,
-                "Expenses_colCategory" => 3,
-                "Expenses_colSubCategory" => 4,
-                "Expenses_colAdditional" => 5,
-                "Expenses_colComment" => 6,
+                "Expenses_colQuantity" => 2,
+                "Expenses_colAccount" => 3,
+                "Expenses_colCategory" => 4,
+                "Expenses_colSubCategory" => 5,
+                "Expenses_colAdditional" => 6,
+                "Expenses_colComment" => 7,
                 "Incomes_colDate" => 0,
                 "Incomes_colAmount" => 1,
                 "Incomes_colAccount" => 2,
@@ -1151,14 +1151,11 @@ namespace K_Accounting
 
         private void dataGridViewAccounts_SelectionChanged(object sender, EventArgs e)
         {
+            if (dgwAccounts.CurrentRow == null) return;
             _selectedAccount = dgwAccounts.CurrentRow?.DataBoundItem as Account;
             btnEditAccount.Enabled = _selectedAccount != null;
             btnDeleteAccount.Enabled = _selectedAccount != null;
-
-            if (_selectedAccount == null)
-                tbDetailsAccount.Text = "";
-            else
-                tbDetailsAccount.Text = _selectedAccount.Comment;
+            tbDetailsAccount.Text = _selectedAccount?.Comment ?? "";
         }
 
         private void dataGridViewAccounts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -1172,13 +1169,9 @@ namespace K_Accounting
 
         private void dgwAccounts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Проверяем, что кликнули по строке, а не по заголовку
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && dgwAccounts.CurrentRow != null)
             {
-                // Убеждаемся, что строка выбрана
                 dgwAccounts.CurrentCell = dgwAccounts.Rows[e.RowIndex].Cells[0];
-
-                // Вызываем метод кнопки "Изменить"
                 btnEditAccount.PerformClick();
             }
         }
@@ -1187,55 +1180,55 @@ namespace K_Accounting
         {
             using (var form = new AddEditAccountsForm(_context))
             {
-                form.isEditMode = false;
-                // Подписываемся на событие CurrencyAdded
                 form.DataUpdated += (s, args) =>
                 {
-                    // Обновляем список валют и счетов
                     LoadCurrencies();
-                    LoadAccounts();
                 };
 
-                if (form.ShowDialog() == DialogResult.OK)
+                form.isEditMode = false;
+                if (form.ShowDialog() == DialogResult.OK && form.SavedAccountId.HasValue)
                 {
                     LoadAccounts();
+                    foreach (DataGridViewRow row in dgwAccounts.Rows)
+                    {
+                        var account = row.DataBoundItem as Account;
+                        if (account?.Id == form.SavedAccountId.Value)
+                        {
+                            dgwAccounts.CurrentCell = row.Cells[0];
+                            _selectedAccount = dgwAccounts.CurrentRow?.DataBoundItem as Account;
+                            break;
+                        }
+                    }
                 }
             }
         }
 
         private void btnEditAccounts_Click(object sender, EventArgs e)
         {
-            if (_selectedAccount == null) return;
+            if (_selectedAccount == null || dgwAccounts.CurrentRow == null || _selectedAccount.IsDeleted) return;
 
-            // 1. Пересоздаем контекст для формы редактирования
-            using (var editContext = new AppDbContext())
+            int selectedId = _selectedAccount.Id;
+
+            using (var form = new AddEditAccountsForm(_selectedAccount, _context))
             {
-                // 2. Получаем свежую копию счета
-                var accountToEdit = editContext.Accounts
-                    .FirstOrDefault(a => a.Id == _selectedAccount.Id);
-
-                using (var form = new AddEditAccountsForm(editContext, accountToEdit))
+                form.DataUpdated += (s, args) =>
                 {
-                    form.isEditMode = true;
-                    form.DataUpdated += (s, args) =>
-                    {
-                        // 3. Обновляем основной контекст
-                        _context.Entry(_selectedAccount).Reload();
-                        LoadAccounts();
-                    };
+                    LoadCurrencies();
+                };
 
-                    if (form.ShowDialog() == DialogResult.OK)
-                    {
-                        // 4. Синхронизируем изменения
-                        _context.Entry(_selectedAccount).State = EntityState.Detached;
-                        var updatedAccount = editContext.Accounts
-                            .AsNoTracking()
-                            .FirstOrDefault(a => a.Id == _selectedAccount.Id);
+                form.isEditMode = true;
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    _context.Entry(_selectedAccount).Reload();
+                    LoadAccounts();
 
-                        if (updatedAccount != null)
+                    foreach (DataGridViewRow row in dgwAccounts.Rows)
+                    {
+                        var account = row.DataBoundItem as Account;
+                        if (account?.Id == selectedId)
                         {
-                            _context.Update(updatedAccount);
-                            _context.SaveChanges();
+                            dgwAccounts.CurrentCell = row.Cells[0];
+                            break;
                         }
                     }
                 }
@@ -1244,7 +1237,7 @@ namespace K_Accounting
 
         private void btnDeleteAccounts_Click(object sender, EventArgs e)
         {
-            if (_selectedAccount == null) return;
+            if (_selectedAccount == null || dgwAccounts.CurrentRow == null) return;
 
             int savedIndex = dgwAccounts.CurrentRow.Index;
 
@@ -1263,9 +1256,14 @@ namespace K_Accounting
 
                     if (dgwAccounts.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwAccounts.Rows.Count - 1);
-                        dgwAccounts.CurrentCell = dgwAccounts.Rows[newIndex].Cells[0];
-                        _selectedAccount = dgwAccounts.CurrentRow?.DataBoundItem as Account;
+                        int newIndex = savedIndex >= dgwAccounts.Rows.Count ?
+                            dgwAccounts.Rows.Count - 1
+                            : savedIndex;
+                        if (dgwAccounts.Rows.Count > 0 && newIndex >= 0)
+                        {
+                            dgwAccounts.CurrentCell = dgwAccounts.Rows[newIndex].Cells[0];
+                            _selectedAccount = dgwAccounts.CurrentRow?.DataBoundItem as Account;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -1325,7 +1323,7 @@ namespace K_Accounting
                     if (ColumnExists(dgwExpenses, "colAmount"))
                     {
                         decimal total = CalculateTotal(dgwExpenses, "colAmount");
-//                        lblPageExpensesCaption.Text = $"Расходы: {total:N2}";
+                        //                        lblPageExpensesCaption.Text = $"Расходы: {total:N2}";
                         lblPageExpensesCaption.Text = "Расходы: " + total.ToString("C2", CultureInfo.CurrentCulture);
                     }
                 }
@@ -1704,34 +1702,27 @@ namespace K_Accounting
 
         private void dataGridViewCategories_SelectionChanged(object sender, EventArgs e)
         {
+            if (dgwCategorie.CurrentRow == null) return;
             _selectedCategory = dgwCategorie.CurrentRow?.DataBoundItem as Category;
             btnEditCategories.Enabled = _selectedCategory != null;
             btnDeleteCategories.Enabled = _selectedCategory != null;
-
-            if (_selectedCategory == null)
-                tbDetailsCategory.Text = "";
-            else
-                tbDetailsCategory.Text = _selectedCategory.Comment;
+            tbDetailsCategory.Text = _selectedCategory?.Comment ?? "";
 
             LoadSubCategories(_selectedCategory?.Id);
         }
 
         private void dgwCategorie_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Проверяем, что кликнули по строке, а не по заголовку
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && dgwCategorie.CurrentRow != null)
             {
-                // Убеждаемся, что строка выбрана
                 dgwCategorie.CurrentCell = dgwCategorie.Rows[e.RowIndex].Cells[0];
-
-                // Вызываем метод кнопки "Изменить"
                 btnEditCategories.PerformClick();
             }
         }
 
         private void btnAddCategories_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditCategoryForm())
+            using (var form = new AddEditCategoryForm(_context))
             {
                 form.isEditMode = false;
                 form.DataUpdated += (s, args) =>
@@ -1740,9 +1731,19 @@ namespace K_Accounting
                     LoadSubCategories(_selectedCategory?.Id);
                 };
 
-                if (form.ShowDialog() == DialogResult.OK)
+                if (form.ShowDialog() == DialogResult.OK && form.SavedCategoryId.HasValue)
                 {
                     LoadCategories();
+                    foreach (DataGridViewRow row in dgwCategorie.Rows)
+                    {
+                        var categories = row.DataBoundItem as Category;
+                        if (categories?.Id == form.SavedCategoryId.Value)
+                        {
+                            dgwCategorie.CurrentCell = row.Cells[0];
+                            _selectedCategory = dgwCategorie.CurrentRow?.DataBoundItem as Category;
+                            break;
+                        }
+                    }
                     LoadSubCategories(_selectedCategory?.Id);
                 }
             }
@@ -1750,27 +1751,35 @@ namespace K_Accounting
 
         private void btnEditCategories_Click(object sender, EventArgs e)
         {
-            if (_selectedCategory == null) return;
+            if (_selectedCategory == null || dgwCategorie.CurrentRow == null || _selectedCategory.IsDeleted) return;
 
-            using (var tempContext = new AppDbContext())
+            int selectedId = _selectedCategory.Id;
+
+            using (var form = new AddEditCategoryForm(_selectedCategory, _context))
             {
-                var categoryToEdit = tempContext.Categories.Find(_selectedCategory.Id);
-
-                using (var form = new AddEditCategoryForm(categoryToEdit))
+                form.isEditMode = true;
+                if (form.ShowDialog() == DialogResult.OK)
                 {
-                    form.isEditMode = true;
-                    if (form.ShowDialog() == DialogResult.OK)
+                    _context.Entry(_selectedCategory).Reload();
+                    LoadCategories();
+
+                    foreach (DataGridViewRow row in dgwCategorie.Rows)
                     {
-                        _context.Entry(_selectedCategory).Reload();
-                        LoadCategories();
+                        var categories = row.DataBoundItem as Category;
+                        if (categories?.Id == selectedId)
+                        {
+                            dgwCategorie.CurrentCell = row.Cells[0];
+                            break;
+                        }
                     }
+                    LoadSubCategories(_selectedCategory?.Id);
                 }
             }
         }
 
         private void btnDeleteCategories_Click(object sender, EventArgs e)
         {
-            if (_selectedCategory == null) return;
+            if (_selectedCategory == null || dgwCategorie.CurrentRow == null) return;
 
             int savedIndex = dgwCategorie.CurrentRow.Index;
 
@@ -1790,9 +1799,15 @@ namespace K_Accounting
 
                     if (dgwCategorie.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwCategorie.Rows.Count - 1);
-                        dgwCategorie.CurrentCell = dgwCategorie.Rows[newIndex].Cells[0];
-                        _selectedCategory = dgwCategorie.CurrentRow?.DataBoundItem as Category;
+                        int newIndex = savedIndex >= dgwCategorie.Rows.Count?
+                            dgwCategorie.Rows.Count-1
+                            : savedIndex;
+
+                        if (dgwCategorie.Rows.Count > 0 && newIndex >= 0)
+                        {
+                            dgwCategorie.CurrentCell = dgwCategorie.Rows[newIndex].Cells[0];
+                            _selectedCategory = dgwCategorie.CurrentRow?.DataBoundItem as Category;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -1804,53 +1819,12 @@ namespace K_Accounting
         #endregion
 
         #region Подкатегории (SubCategory)
-        //private void LoadSubCategories()
-        //{
-        //    try
-        //    {
-        //        // Явная загрузка связанных данных
-        //        var subCategories = _context.SubCategories
-        //            .Include(s => s.Category) // Важно: подключаем категории
-        //            .Where(s => !s.IsDeleted)
-        //            .OrderBy(s => s.Name)
-        //            .ToList();
-
-        //        dgwSubCategories.DataSource = subCategories;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Ошибка загрузки подкатегорий: {ex.Message}");
-        //    }
-        //}
-
         private void LoadSubCategories(int? categoryId = null)
         {
-            //if (dgwSubCategories == null) return;
-
-            //try
-            //{
-            //    var query = _context.SubCategories
-            //        .Include(s => s.Category)
-            //        .Where(s => !s.IsDeleted);
-
-            //    if (categoryId.HasValue)
-            //    {
-            //        query = query.Where(s => s.CategoryId == categoryId);
-            //    }
-
-            //    dgwSubCategories.DataSource = query
-            //        .OrderBy(s => s.Name)
-            //        .ToList();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Ошибка загрузки подкатегорий: {ex.Message}");
-            //}
-
-            if (dgwSubCategories == null) return;
-
             try
             {
+                int? selectedSubCategoryId = _selectedSubCategory?.Id; 
+
                 var query = _context.SubCategories
                     .Include(s => s.Category)
                     .Where(s => !s.IsDeleted);
@@ -1860,9 +1834,24 @@ namespace K_Accounting
                     query = query.Where(s => s.CategoryId == categoryId);
                 }
 
-                dgwSubCategories.DataSource = query
+                var subCategories = query
                     .OrderBy(s => s.Name)
                     .ToList();
+
+                dgwSubCategories.DataSource = subCategories;
+
+                if (selectedSubCategoryId.HasValue) 
+                {
+                    var targetRow = dgwSubCategories.Rows
+                        .Cast<DataGridViewRow>()
+                        .FirstOrDefault(r => (r.DataBoundItem as SubCategory)?.Id == selectedSubCategoryId);
+
+                    if (targetRow != null)
+                    {
+                        dgwSubCategories.CurrentCell = targetRow.Cells[0];
+                        _selectedSubCategory = targetRow.DataBoundItem as SubCategory;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1872,14 +1861,11 @@ namespace K_Accounting
 
         private void dataGridViewSubCategories_SelectionChanged(object sender, EventArgs e)
         {
+            if (dgwSubCategories.CurrentRow == null) return;
             _selectedSubCategory = dgwSubCategories.CurrentRow?.DataBoundItem as SubCategory;
             btnEditSubCategories.Enabled = _selectedSubCategory != null;
             btnDeleteSubCategories.Enabled = _selectedSubCategory != null;
-
-            if (_selectedSubCategory == null)
-                tbDetailsSubCategory.Text = "";
-            else
-                tbDetailsSubCategory.Text = _selectedSubCategory.Comment;
+            tbDetailsSubCategory.Text = _selectedSubCategory?.Comment ?? "";
         }
 
         private void dataGridViewSubCategories_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -1893,62 +1879,60 @@ namespace K_Accounting
 
         private void dgwSubCategories_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Проверяем, что кликнули по строке, а не по заголовку
             if (e.RowIndex >= 0)
             {
-                // Убеждаемся, что строка выбрана
                 dgwSubCategories.CurrentCell = dgwSubCategories.Rows[e.RowIndex].Cells[0];
-
-                // Вызываем метод кнопки "Изменить"
                 btnEditSubCategories.PerformClick();
             }
         }
 
         private void btnAddSubCategories_Click(object sender, EventArgs e)
         {
-            int? selectedCategoryId = _selectedCategory?.Id;
+            if (_selectedCategory == null) return;
 
-            using (var form = new AddEditSubCategoryForm(_context, selectedCategoryId))
+            int parentCategoryId = _selectedCategory.Id;
+            int? savedSubCategoryId = null;
+
+            using (var form = new AddEditSubCategoryForm(parentCategoryId, _context))
             {
                 form.isEditMode = false;
-                form.CategoryAdded += (s, args) =>
-                {
-                    LoadCategories();
-                    LoadSubCategories(selectedCategoryId);
-                };
-
                 if (form.ShowDialog() == DialogResult.OK)
                 {
+                    savedSubCategoryId = form.SavedSubCategoryId;
                     LoadCategories();
-                    LoadSubCategories(selectedCategoryId);
+                    SelectParentCategory(parentCategoryId);
+                    LoadAndSelectSubCategory(savedSubCategoryId, parentCategoryId);
                 }
             }
         }
 
         private void btnEditSubCategories_Click(object sender, EventArgs e)
         {
-            if (_selectedSubCategory == null) return;
+            if (_selectedSubCategory == null || dgwSubCategories.CurrentRow == null || _selectedSubCategory.IsDeleted) return;
 
-            using (var form = new AddEditSubCategoryForm(_context, _selectedSubCategory))
+            int originalParentId = (int)_selectedSubCategory.CategoryId;
+            int selectedId = _selectedSubCategory.Id;
+
+            using (var form = new AddEditSubCategoryForm(
+                originalParentId,
+                _selectedSubCategory,
+                _context))
             {
                 form.isEditMode = true;
-                form.DataUpdated += (s, args) =>
-                {
-                    //LoadSubCategories();
-                    LoadSubCategories(_selectedCategory?.Id);
-                };
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    _context.Entry(_selectedSubCategory).Reload();  //было
-                    //LoadSubCategories();  //было
-                    LoadSubCategories(_selectedCategory?.Id);   //было
+                    _context.Entry(_selectedSubCategory).Reload();
+                    int currentParentId = (int)_selectedSubCategory.CategoryId;
+                    LoadCategories();
+                    SelectParentCategory(currentParentId);
+                    LoadAndSelectSubCategory(selectedId, currentParentId);
                 }
             }
         }
 
         private void btnDeleteSubCategories_Click(object sender, EventArgs e)
         {
-            if (_selectedSubCategory == null) return;
+            if (_selectedSubCategory == null || dgwSubCategories.CurrentRow == null) return;
 
             int savedIndex = dgwSubCategories.CurrentRow.Index;
 
@@ -1966,14 +1950,53 @@ namespace K_Accounting
                     LoadSubCategories(_selectedCategory?.Id);
                     if (dgwSubCategories.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwSubCategories.Rows.Count - 1);
-                        dgwSubCategories.CurrentCell = dgwSubCategories.Rows[newIndex].Cells[0];
-                        _selectedSubCategory = dgwSubCategories.CurrentRow?.DataBoundItem as SubCategory;
+                        int newIndex = savedIndex >= dgwSubCategories.Rows.Count ?
+                        dgwSubCategories.Rows.Count - 1
+                        : savedIndex;
+
+                        if (dgwSubCategories.Rows.Count > 0 && newIndex >= 0)
+                        {
+                            dgwSubCategories.CurrentCell = dgwSubCategories.Rows[newIndex].Cells[0];
+                            _selectedSubCategory = dgwSubCategories.CurrentRow?.DataBoundItem as SubCategory;
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Ошибка удаления: {ex.Message}");
+                }
+            }
+        }
+
+        private void SelectParentCategory(int categoryId)
+        {
+            foreach (DataGridViewRow row in dgwCategorie.Rows)
+            {
+                var category = row.DataBoundItem as Category;
+                if (category?.Id == categoryId)
+                {
+                    dgwCategorie.CurrentCell = row.Cells[0];
+                    _selectedCategory = category;
+                    break;
+                }
+            }
+        }
+
+        private void LoadAndSelectSubCategory(int? subCategoryId, int parentCategoryId)
+        {
+            LoadSubCategories(parentCategoryId);
+
+            if (subCategoryId.HasValue)
+            {
+                foreach (DataGridViewRow row in dgwSubCategories.Rows)
+                {
+                    var subCat = row.DataBoundItem as SubCategory;
+                    if (subCat?.Id == subCategoryId.Value)
+                    {
+                        dgwSubCategories.CurrentCell = row.Cells[0];
+                        _selectedSubCategory = subCat;
+                        break;
+                    }
                 }
             }
         }
@@ -1999,64 +2022,77 @@ namespace K_Accounting
 
         private void dataGridViewAdditionals_SelectionChanged(object sender, EventArgs e)
         {
+            if (dgwAdditionals.CurrentRow == null) return;
             _selectedAdditional = dgwAdditionals.CurrentRow?.DataBoundItem as Additional;
             btnEditAdditionals.Enabled = _selectedAdditional != null;
             btnDeleteAdditional.Enabled = _selectedAdditional != null;
-
-            if (_selectedAdditional == null)
-                tbDetailsAdditional.Text = "";
-            else
-                tbDetailsAdditional.Text = _selectedAdditional.Comment;
+            tbDetailsAdditional.Text = _selectedAdditional?.Comment ?? "";
         }
 
         private void dgwAdditionals_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Проверяем, что кликнули по строке, а не по заголовку
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && dgwAdditionals.CurrentRow != null)
             {
-                // Убеждаемся, что строка выбрана
                 dgwAdditionals.CurrentCell = dgwAdditionals.Rows[e.RowIndex].Cells[0];
-
-                // Вызываем метод кнопки "Изменить"
                 btnEditAdditionals.PerformClick();
             }
         }
 
         private void btnAddAdditionals_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditAdditionalForm())
+            using (var form = new AddEditAdditionalForm(_context))
             {
                 form.isEditMode = false;
-                if (form.ShowDialog() == DialogResult.OK)
+                if (form.ShowDialog() == DialogResult.OK && form.SavedAdditionalId.HasValue)
                 {
                     LoadAdditionals();
+
+                    foreach (DataGridViewRow row in dgwAdditionals.Rows)
+                    {
+                        var additional = row.DataBoundItem as Additional;
+                        if (additional?.Id == form.SavedAdditionalId.Value)
+                        {
+                            dgwAdditionals.CurrentCell = row.Cells[0];
+                            _selectedAdditional = dgwAdditionals.CurrentRow?.DataBoundItem as Additional;
+                            break;
+                        }
+                    }
                 }
             }
         }
 
         private void btnEditAdditionals_Click(object sender, EventArgs e)
         {
-            if (_selectedAdditional == null) return;
+            if (_selectedAdditional == null || dgwAdditionals.CurrentRow == null || _selectedAdditional.IsDeleted) return;
 
-            using (var tempContext = new AppDbContext())
+            int selectedId = _selectedAdditional.Id;
+
+            using (var form = new AddEditAdditionalForm(_selectedAdditional, _context))
             {
-                var additionalToEdit = tempContext.Additionals.Find(_selectedAdditional.Id);
-
-                using (var form = new AddEditAdditionalForm(additionalToEdit))
+                form.isEditMode = true;
+                if (form.ShowDialog() == DialogResult.OK)
                 {
-                    form.isEditMode = true;
-                    if (form.ShowDialog() == DialogResult.OK)
+                    _context.Entry(_selectedAdditional).Reload();
+                    LoadAdditionals();
+
+                    // Восстанавливаем выделение
+                    foreach (DataGridViewRow row in dgwAdditionals.Rows)
                     {
-                        _context.Entry(_selectedAdditional).Reload();
-                        LoadAdditionals();
+                        var source = row.DataBoundItem as Source;
+                        if (source?.Id == selectedId)
+                        {
+                            dgwAdditionals.CurrentCell = row.Cells[0];
+                            break;
+                        }
                     }
                 }
             }
+
         }
 
         private void btnDeleteAdditionals_Click(object sender, EventArgs e)
         {
-            if (_selectedAdditional == null) return;
+            if (_selectedAdditional == null || dgwAdditionals.CurrentRow == null) return;
 
             int savedIndex = dgwAdditionals.CurrentRow.Index;
 
@@ -2074,9 +2110,12 @@ namespace K_Accounting
                     LoadAdditionals();
                     if (dgwAdditionals.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwAdditionals.Rows.Count - 1);
-                        dgwAdditionals.CurrentCell = dgwAdditionals.Rows[newIndex].Cells[0];
-                        _selectedAdditional = dgwAdditionals.CurrentRow?.DataBoundItem as Additional;
+                        int newIndex = savedIndex >= dgwAdditionals.Rows.Count ? dgwAdditionals.Rows.Count - 1 : savedIndex;
+                        if (dgwAdditionals.Rows.Count > 0 && newIndex >= 0)
+                        {
+                            dgwAdditionals.CurrentCell = dgwAdditionals.Rows[newIndex].Cells[0];
+                            _selectedAdditional = dgwAdditionals.CurrentRow?.DataBoundItem as Additional;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -2107,56 +2146,68 @@ namespace K_Accounting
 
         private void dataGridViewSources_SelectionChanged(object sender, EventArgs e)
         {
+            if (dgwSource.CurrentRow == null) return;
             _selectedSource = dgwSource.CurrentRow?.DataBoundItem as Source;
             btnEditSource.Enabled = _selectedSource != null;
             btnDeleteSource.Enabled = _selectedSource != null;
-
-            if (_selectedSource == null)
-                tbDetailsSource.Text = "";
-            else
-                tbDetailsSource.Text = _selectedSource.Comment;
+            tbDetailsSource.Text = _selectedSource?.Comment ?? "";
         }
 
         private void dgwSource_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Проверяем, что кликнули по строке, а не по заголовку
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && dgwSource.CurrentRow != null)
             {
-                // Убеждаемся, что строка выбрана
                 dgwSource.CurrentCell = dgwSource.Rows[e.RowIndex].Cells[0];
-
-                // Вызываем метод кнопки "Изменить"
-                btnEditSource.PerformClick();
+                btnEditSources.PerformClick();
             }
         }
 
         private void btnAddSources_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditSourceForm())
+            using (var form = new AddEditSourceForm(_context))
             {
                 form.isEditMode = false;
-                if (form.ShowDialog() == DialogResult.OK)
+                if (form.ShowDialog() == DialogResult.OK && form.SavedSourceId.HasValue)
                 {
                     LoadSources();
+
+                    foreach (DataGridViewRow row in dgwSource.Rows)
+                    {
+                        var source = row.DataBoundItem as Source;
+                        if (source?.Id == form.SavedSourceId.Value)
+                        {
+                            dgwSource.CurrentCell = row.Cells[0];
+                            _selectedSource = dgwSource.CurrentRow?.DataBoundItem as Source;
+                            break;
+                        }
+                    }
                 }
             }
         }
 
         private void btnEditSources_Click(object sender, EventArgs e)
         {
-            if (_selectedSource == null) return;
+            if (_selectedSource == null || dgwSource.CurrentRow == null || _selectedSource.IsDeleted) return;
 
-            using (var tempContext = new AppDbContext())
+            int selectedId = _selectedSource.Id;
+
+            using (var form = new AddEditSourceForm(_selectedSource, _context))
             {
-                var sourceToEdit = tempContext.Sources.Find(_selectedSource.Id);
-
-                using (var form = new AddEditSourceForm(sourceToEdit))
+                form.isEditMode = true;
+                if (form.ShowDialog() == DialogResult.OK)
                 {
-                    form.isEditMode = true;
-                    if (form.ShowDialog() == DialogResult.OK)
+                    _context.Entry(_selectedSource).Reload();
+                    LoadSources();
+
+                    // Восстанавливаем выделение
+                    foreach (DataGridViewRow row in dgwSource.Rows)
                     {
-                        _context.Entry(_selectedSource).Reload();
-                        LoadSources();
+                        var source = row.DataBoundItem as Source;
+                        if (source?.Id == selectedId)
+                        {
+                            dgwSource.CurrentCell = row.Cells[0];
+                            break;
+                        }
                     }
                 }
             }
@@ -2164,7 +2215,7 @@ namespace K_Accounting
 
         private void btnDeleteSources_Click(object sender, EventArgs e)
         {
-            if (_selectedSource == null) return;
+            if (_selectedSource == null || dgwSource.CurrentRow == null) return;
 
             int savedIndex = dgwSource.CurrentRow.Index;
 
@@ -2182,9 +2233,16 @@ namespace K_Accounting
                     LoadSources();
                     if (dgwSource.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwSource.Rows.Count - 1);
-                        dgwSource.CurrentCell = dgwSource.Rows[newIndex].Cells[0];
-                        _selectedSource = dgwSource.CurrentRow?.DataBoundItem as Source;
+                        // Проверяем валидность индекса перед использованием
+                        int newIndex = savedIndex >= dgwSource.Rows.Count
+                            ? dgwSource.Rows.Count - 1
+                            : savedIndex;
+
+                        if (dgwSource.Rows.Count > 0 && newIndex >= 0)
+                        {
+                            dgwSource.CurrentCell = dgwSource.Rows[newIndex].Cells[0];
+                            _selectedSource = dgwSource.CurrentRow?.DataBoundItem as Source;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -2215,58 +2273,94 @@ namespace K_Accounting
 
         private void dataGridViewCurrencies_SelectionChanged(object sender, EventArgs e)
         {
+            if (dgwCurrencies.CurrentCell == null) return;
             _selectedCurrency = dgwCurrencies.CurrentRow?.DataBoundItem as Currency;
             btnEditCurrency.Enabled = _selectedCurrency != null;
             btnDeleteCurrency.Enabled = _selectedCurrency != null;
-
-            if (_selectedCurrency == null)
-                tbDetailsCurrency.Text = "";
-            else
-                tbDetailsCurrency.Text = _selectedCurrency.Comment;
+            tbDetailsCurrency.Text = _selectedCurrency?.Comment ?? "";
         }
 
         private void dgwCurrencies_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Проверяем, что кликнули по строке, а не по заголовку
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && dgwCurrencies.CurrentRow != null)
             {
-                // Убеждаемся, что строка выбрана
                 dgwCurrencies.CurrentCell = dgwCurrencies.Rows[e.RowIndex].Cells[0];
-
-                // Вызываем метод кнопки "Изменить"
                 btnEditCurrency.PerformClick();
             }
         }
 
         private void btnAddCurrencie_Click(object sender, EventArgs e)
         {
-            using (var form = new AddEditCurrencyForm())
+            using (var form = new AddEditCurrencyForm(_context))
             {
                 form.isEditMode = false;
-                if (form.ShowDialog() == DialogResult.OK)
+                if (form.ShowDialog() == DialogResult.OK && form.SavedCurrencyId.HasValue)
                 {
                     LoadCurrencies();
+
+                    // ==================== Старый код (удалить) ====================
+                    //foreach (DataGridViewRow row in dgwCurrencies.Rows)
+                    //{
+                    //    var currency = row.DataBoundItem as Currency;
+                    //    if (currency?.Id == form.SavedCurrencyId.Value)
+                    //    {
+                    //        dgwCurrencies.CurrentCell = row.Cells[0];
+                    //        _selectedCurrency = dgwCurrencies.CurrentRow?.DataBoundItem as Currency;
+                    //        break;
+                    //    }
+                    //}
+
+                    // ==================== Новый код (LINQ) ====================
+                    var targetRow = dgwCurrencies.Rows
+                        .Cast<DataGridViewRow>()
+                        .FirstOrDefault(row =>
+                            (row.DataBoundItem as Currency)?.Id == form.SavedCurrencyId.Value);
+
+                    if (targetRow != null)
+                    {
+                        dgwCurrencies.CurrentCell = targetRow.Cells[0];
+                        _selectedCurrency = targetRow.DataBoundItem as Currency;
+                    }
                 }
             }
         }
 
         private void btnEditCurrencie_Click(object sender, EventArgs e)
         {
-            if (_selectedCurrency == null) return;
+            if (_selectedCurrency == null || dgwCurrencies.CurrentRow == null || _selectedCurrency.IsDeleted) return;
 
-            // Важно: Создаем новый контекст для формы редактирования
-            using (var tempContext = new AppDbContext())
+            int selectedId = _selectedCurrency.Id;
+
+            using (var form = new AddEditCurrencyForm(_selectedCurrency, _context))
             {
-                var currencyToEdit = tempContext.Currencies.Find(_selectedCurrency.Id);
-
-                using (var form = new AddEditCurrencyForm(currencyToEdit))
+                form.isEditMode = true;
+                if (form.ShowDialog() == DialogResult.OK)
                 {
-                    form.isEditMode = true;
-                    if (form.ShowDialog() == DialogResult.OK)
+                    // Обновляем основной контекст
+                    _context.Entry(_selectedCurrency).Reload();
+                    LoadCurrencies();
+
+                    // ==================== Старый код (удалить) ====================
+                    //foreach (DataGridViewRow row in dgwCurrencies.Rows)
+                    //{
+                    //    var currency = row.DataBoundItem as Currency;
+                    //    if (currency?.Id == selectedId)
+                    //    {
+                    //        dgwCurrencies.CurrentCell = row.Cells[0];
+                    //        break;
+                    //    }
+                    //}
+
+                    // ==================== Новый код (LINQ) ====================
+                    var targetRow = dgwCurrencies.Rows
+                        .Cast<DataGridViewRow>()
+                        .FirstOrDefault(row =>
+                            (row.DataBoundItem as Currency)?.Id == selectedId);
+
+                    if (targetRow != null)
                     {
-                        // Обновляем основной контекст
-                        _context.Entry(_selectedCurrency).Reload();
-                        LoadCurrencies();
+                        dgwCurrencies.CurrentCell = targetRow.Cells[0];
+                        _selectedCurrency = targetRow.DataBoundItem as Currency;
                     }
                 }
             }
@@ -2274,7 +2368,7 @@ namespace K_Accounting
 
         private void btnDeleteCurrencie_Click(object sender, EventArgs e)
         {
-            if (_selectedCurrency == null) return;
+            if (_selectedSource == null || dgwCurrencies.CurrentRow == null) return;
 
             int savedIndex = dgwCurrencies.CurrentRow.Index;
 
@@ -2292,9 +2386,16 @@ namespace K_Accounting
                     LoadCurrencies();
                     if (dgwCurrencies.Rows.Count > 0)
                     {
-                        int newIndex = Math.Min(savedIndex, dgwCurrencies.Rows.Count - 1);
-                        dgwCurrencies.CurrentCell = dgwCurrencies.Rows[newIndex].Cells[0];
-                        _selectedCurrency = dgwCurrencies.CurrentRow?.DataBoundItem as Currency;
+                        // Проверяем валидность индекса перед использованием
+                        int newIndex = savedIndex >= dgwCurrencies.Rows.Count
+                            ? dgwCurrencies.Rows.Count - 1
+                            : savedIndex;
+
+                        if (dgwCurrencies.Rows.Count > 0 && newIndex >= 0)
+                        {
+                            dgwCurrencies.CurrentCell = dgwCurrencies.Rows[newIndex].Cells[0];
+                            _selectedCurrency = dgwCurrencies.CurrentRow?.DataBoundItem as Currency;
+                        }
                     }
                 }
                 catch (Exception ex)

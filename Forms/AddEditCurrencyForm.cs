@@ -8,7 +8,8 @@ namespace K_Accounting.Forms
         private readonly AppDbContext _context;
 
         private Currency _currency;
-        public int SavedCurrencyId { get; private set; }
+
+        public int? SavedCurrencyId { get; private set; }
 
         private bool _isEditMode;
         public bool isEditMode
@@ -34,18 +35,24 @@ namespace K_Accounting.Forms
             txtName.Focus();
         }
 
-        public AddEditCurrencyForm()
-        {
-            InitializeComponent();
-            numRate.Controls[0].Visible = false;
-            txtName.Focus();
-        }
-
-        public AddEditCurrencyForm(Currency currency) : this()
+        public AddEditCurrencyForm(Currency currency, AppDbContext context) : this(context)
         {
             _currency = currency;
             LoadCurrencyData();
         }
+
+        //public AddEditCurrencyForm()
+        //{
+        //    InitializeComponent();
+        //    numRate.Controls[0].Visible = false;
+        //    txtName.Focus();
+        //}
+
+        //public AddEditCurrencyForm(Currency currency) : this()
+        //{
+        //    _currency = currency;
+        //    LoadCurrencyData();
+        //}
 
         private void LoadCurrencyData()
         {
@@ -57,7 +64,9 @@ namespace K_Accounting.Forms
 
         private bool ValidateForm()
         {
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            string name = txtName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
                 MessageBox.Show("Название валюты обязательно для заполнения");
                 return false;
@@ -69,6 +78,25 @@ namespace K_Accounting.Forms
                 return false;
             }
 
+            bool nameExists;
+
+            if (isEditMode)
+            {
+                // Проверяем существование имени, исключая текущий редактируемый источник
+                nameExists = _context.Currencies.Any(s => s.Name == name && s.Id != _currency.Id);
+            }
+            else
+            {
+                // Проверяем существование имени для нового источника
+                nameExists = _context.Currencies.Any(s => s.Name == name);
+            }
+
+            if (nameExists)
+            {
+                MessageBox.Show("Валюта с таким названием уже существует.");
+                return false;
+            }
+
             return true;
         }
 
@@ -76,44 +104,36 @@ namespace K_Accounting.Forms
         {
             if (!ValidateForm()) return;
 
-            using (var context = new AppDbContext())
+            try
             {
-                try
+                if (_isEditMode)
                 {
-                    if (_isEditMode)
-                    {
-                        var existing = context.Currencies.Find(_currency.Id);
-                        if (existing != null)
-                        {
-                            existing.Name = txtName.Text.Trim();
-                            existing.Symbol = txtSymbol.Text.Trim();
-                            existing.Rate = numRate.Value;
-                            existing.Comment = txtComment.Text.Trim();
-                            context.SaveChanges();
-                            SavedCurrencyId = existing.Id; // Сохраняем ID новой валюты
-                        }
-                    }
-                    else
-                    {
-                        var newCurrency = new Currency(
-                            txtName.Text.Trim(),
-                            numRate.Value)
-                        {
-                            Symbol = txtSymbol.Text.Trim(),
-                            Comment = txtComment.Text.Trim()
-                        };
-                        context.Currencies.Add(newCurrency);
-                        context.SaveChanges();
-                        SavedCurrencyId = newCurrency.Id; // Сохраняем ID новой валюты
-                    }
-                    DataUpdated?.Invoke(this, EventArgs.Empty);
-                    DialogResult = DialogResult.OK;
-                    Close(); ;
+                    _currency.Name = txtName.Text.Trim();
+                    _currency.Symbol = txtSymbol.Text.Trim();
+                    _currency.Rate = numRate.Value;
+                    _currency.Comment = txtComment.Text.Trim();
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                    _currency = new Currency(txtName.Text.Trim(), numRate.Value)
+                    {
+                        Symbol = txtSymbol.Text.Trim(),
+                        Comment = txtComment.Text.Trim()
+                    };
+                    _context.Currencies.Add(_currency);
                 }
+
+                _context.SaveChanges();
+                SavedCurrencyId = _currency.Id;
+
+                DataUpdated?.Invoke(this, EventArgs.Empty);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                SavedCurrencyId = null;
             }
         }
 
@@ -121,11 +141,6 @@ namespace K_Accounting.Forms
         {
             DialogResult = DialogResult.Cancel;
             Close();
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

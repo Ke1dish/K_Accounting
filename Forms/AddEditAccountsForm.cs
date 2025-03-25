@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.Security.Principal;
+using System.Text.Json.Serialization;
 using System.Windows.Forms;
 using K_Accounting.Data;
 using K_Accounting.Models;
@@ -11,6 +13,9 @@ namespace K_Accounting.Forms
         private readonly AppDbContext _context;             // Ссылка на базу данных
 
         private Account _account;                           // Редактируемый счет
+
+        public int? SavedAccountId { get; private set; }
+
         private bool _isEditMode;                           // Режим редактирования/добавления
         public bool isEditMode
         {
@@ -22,11 +27,9 @@ namespace K_Accounting.Forms
                 btnOk.Text = value ? "Сохранить" : "Создать";
             }
         }
-        public int SavedAccountId { get; private set; }
 
         // Добавляем унифицированное событие
         public event EventHandler DataUpdated;
-
 
         public AddEditAccountsForm(AppDbContext context) // Новый конструктор
         {
@@ -38,7 +41,7 @@ namespace K_Accounting.Forms
             txtName.Focus();
         }
 
-        public AddEditAccountsForm(AppDbContext context, Account account) : this(context)
+        public AddEditAccountsForm(Account account, AppDbContext context) : this(context)
         {
             _account = account;
             LoadAccountData();
@@ -75,31 +78,36 @@ namespace K_Accounting.Forms
             numBalance.Value = _account.Balance;
             cmbCurrency.SelectedValue = _account.CurrencyId;
             txtComment.Text = _account.Comment;
-
             cmbCurrency.Text = ((Currency)cmbCurrency.SelectedItem)?.Name;
         }
 
         private bool ValidateForm()
         {
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            string name = txtName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
                 MessageBox.Show("Название счета обязательно для заполнения");
                 return false;
             }
 
-            if (cmbCurrency.SelectedItem == null)
+            bool nameExists;
+
+            if (isEditMode)
             {
-                MessageBox.Show("Необходимо выбрать валюту");
+                nameExists = _context.Accounts.Any(s => s.Name == name && s.Id != _account.Id);
+            }
+            else
+            {
+                nameExists = _context.Accounts.Any(s => s.Name == name);
+            }
+
+            if (nameExists)
+            {
+                MessageBox.Show("Счет с таким наименованием уже существует.");
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtName.Text))
-            {
-                MessageBox.Show("Название счета обязательно для заполнения");
-                return false;
-            }
-
-            // Добавленная проверка для ComboBox
             if (cmbCurrency.SelectedItem == null ||
                 cmbCurrency.Text != ((Currency)cmbCurrency.SelectedItem).Name)
             {
@@ -118,36 +126,22 @@ namespace K_Accounting.Forms
             {
                 if (_isEditMode)
                 {
-                    // 1. Получаем сущность из текущего контекста
-                    var existing = _context.Accounts
-                        .FirstOrDefault(a => a.Id == _account.Id);
-
-                    if (existing != null)
-                    {
-                        // 2. Вносим изменения напрямую в отслеживаемую сущность
-                        existing.Name = txtName.Text.Trim();
-                        existing.Balance = numBalance.Value;
-                        existing.CurrencyId = (int)cmbCurrency.SelectedValue;
-                        existing.Comment = txtComment.Text.Trim();
-
-                        // 3. Сохраняем изменения в оригинальном контексте
-                        _context.SaveChanges();
-                        SavedAccountId = existing.Id;
-                    }
+                    _account.Name = txtName.Text.Trim();
+                    _account.Balance = numBalance.Value;
+                    _account.CurrencyId = (int)cmbCurrency.SelectedValue;
+                    _account.Comment = txtComment.Text.Trim();
                 }
                 else
                 {
-                    var newAccount = new Account(
-                        txtName.Text.Trim(),
-                        numBalance.Value,
-                        (int)cmbCurrency.SelectedValue)
+                    _account = new Account(txtName.Text.Trim(), numBalance.Value, (int)cmbCurrency.SelectedValue)
                     {
                         Comment = txtComment.Text.Trim()
                     };
-                    _context.Accounts.Add(newAccount);
-                    _context.SaveChanges(); // Сохраняем сразу
-                    SavedAccountId = newAccount.Id; // Сохраняем ID нового счета
+                    _context.Accounts.Add(_account);
                 }
+
+                _context.SaveChanges();
+                SavedAccountId = _account.Id;
 
                 DataUpdated?.Invoke(this, EventArgs.Empty);
                 DialogResult = DialogResult.OK;
@@ -163,7 +157,9 @@ namespace K_Accounting.Forms
         {
             using (var form = new AddEditCurrencyForm(_context))
             {
-                if (form.ShowDialog() == DialogResult.OK)
+                form.isEditMode = false;
+
+                if (form.ShowDialog() == DialogResult.OK && form.SavedCurrencyId.HasValue)
                 {
                     // Обновляем список валют с принудительным обновлением
                     var currencies = _context.Currencies

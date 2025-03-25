@@ -32,7 +32,7 @@ namespace K_Accounting.Extensions
                 var category15 = new Category("Огород и дача") { Comment = "" }; // Огород и дача
                 var category16 = new Category("Одежда и обувь") { Comment = "" }; // Одежда и обувь
                 var category17 = new Category("Подарки") { Comment = "" }; // Подарки
-                var category18 = new Category("Продукты питания") { Comment = "" }; // Продукты питания
+                var category18 = new Category("Продукты питания") { Comment = "", RequireQuantity = true }; // Продукты питания
                 var category19 = new Category("Путешествия и отпуск") { Comment = "" }; // Путешествия и отпуск
                 var category20 = new Category("Развлечение") { Comment = "" }; // Развлечение
                 var category21 = new Category("Спорт") { Comment = "" }; // Спорт

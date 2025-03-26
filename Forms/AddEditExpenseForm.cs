@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using K_Accounting.Data;
 using K_Accounting.Models;
+using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace K_Accounting.Forms
@@ -65,8 +66,9 @@ namespace K_Accounting.Forms
                 LoadExpenseData();
                 cmbCategory_SelectedIndexChanged(null, EventArgs.Empty);
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show("Некоторые связанные элементы шаблона были удалены");
                 this.Close();
             }
@@ -162,6 +164,7 @@ namespace K_Accounting.Forms
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка загрузки шаблона: {ex.Message}");
                 this.Close();
             }
@@ -263,6 +266,7 @@ namespace K_Accounting.Forms
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     transaction.Rollback();
                     MessageBox.Show($"Ошибка сохранения: {ex.Message}");
                 }
@@ -469,6 +473,7 @@ namespace K_Accounting.Forms
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка: {ex.Message}");
                 return false;
             }

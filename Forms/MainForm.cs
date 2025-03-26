@@ -100,7 +100,7 @@ namespace K_Accounting
         }
 
         #region MainFom
-        // заполение комбобоксов месяцев и лет
+        /// <summary>Заполение комбобоксов месяцев и лет.</summary>
         private void MainForm_Load(object sender, EventArgs e)
         {
             // Загрузка настроек
@@ -413,6 +413,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка инициализации: {ex.Message}\n{ex.InnerException?.Message}");
                 throw;
             }
@@ -469,6 +470,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 transaction?.Rollback();
                 MessageBox.Show($"Ошибка обновления версий: {ex.Message}");
                 throw;
@@ -503,8 +505,9 @@ namespace K_Accounting
                 using var db = new AppDbContext();
                 return db.Database.CanConnect();
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(ex);
                 return false;
             }
         }
@@ -521,10 +524,25 @@ namespace K_Accounting
             {
                 try
                 {
-                    File.Copy(dbPath, backupPath);
+                    // если файл занят пробуем 3 раза
+                    const int maxRetries = 3;
+                    for (int i = 0; i < maxRetries; i++)
+                    {
+                        try
+                        {
+                            File.Copy(dbPath, backupPath);
+                            break;
+                        }
+                        catch (IOException ex) when (i < maxRetries - 1)
+                        {
+                            Logger.Log(ex);
+                            Thread.Sleep(1000);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     Console.WriteLine($"Ошибка создания бэкапа: {ex.Message}");
                     return;
                 }
@@ -548,6 +566,7 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     Console.WriteLine($"Ошибка удаления {oldestBackup.Name}: {ex.Message}");
                     break; // Прерываем цикл при ошибке
                 }
@@ -1145,6 +1164,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка загрузки счетов: {ex.Message}");
             }
         }
@@ -1268,6 +1288,7 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     MessageBox.Show($"Ошибка удаления: {ex.Message}");
                 }
             }
@@ -1294,9 +1315,6 @@ namespace K_Accounting
             {
                 var selectedMonth = cmbExpenseMonths.SelectedValue is int month ? month : 0;
                 var selectedYear = cmbExpenseYears.SelectedItem is int year ? year : 0;
-
-                //var selectedMonth = (int)cmbExpenseMonths.SelectedValue;
-                //var selectedYear = (int)cmbExpenseYears.SelectedItem;
 
                 var query = _context.Expenses
                     .Include(e => e.Account)
@@ -1329,12 +1347,14 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     lblPageExpensesCaption.Text = "Расходы";
                     Debug.WriteLine($"Ошибка расчёта суммы расходов: {ex.Message}");
                 }
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка загрузки расходов: {ex.Message}");
             }
         }
@@ -1486,6 +1506,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка при удалении: {ex.Message}\n\nДетали:\n{ex.InnerException?.Message}");
             }
         }
@@ -1547,12 +1568,14 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     lblPageIncomesCaption.Text = "Расходы";
                     Debug.WriteLine($"Ошибка расчёта суммы расходов: {ex.Message}");
                 }
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка загрузки доходов: {ex.Message}");
             }
         }
@@ -1676,6 +1699,7 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     MessageBox.Show($"Ошибка: {ex.Message}");
                 }
             }
@@ -1696,6 +1720,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка загрузки категорий: {ex.Message}");
             }
         }
@@ -1812,6 +1837,7 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     MessageBox.Show($"Ошибка удаления: {ex.Message}");
                 }
             }
@@ -1855,6 +1881,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка загрузки подкатегорий: {ex.Message}");
             }
         }
@@ -1963,6 +1990,7 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     MessageBox.Show($"Ошибка удаления: {ex.Message}");
                 }
             }
@@ -2016,6 +2044,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка загрузки: {ex.Message}");
             }
         }
@@ -2120,6 +2149,7 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     MessageBox.Show($"Ошибка удаления: {ex.Message}");
                 }
             }
@@ -2140,6 +2170,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка загрузки источников: {ex.Message}");
             }
         }
@@ -2247,6 +2278,7 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     MessageBox.Show($"Ошибка удаления: {ex.Message}");
                 }
             }
@@ -2267,6 +2299,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageBox.Show($"Ошибка загрузки валют: {ex.Message}");
             }
         }
@@ -2400,6 +2433,7 @@ namespace K_Accounting
                 }
                 catch (Exception ex)
                 {
+                    Logger.Log(ex);
                     MessageBox.Show($"Ошибка удаления: {ex.Message}");
                 }
             }
@@ -2436,6 +2470,7 @@ namespace K_Accounting
             }
             catch (Win32Exception ex) when ((uint)ex.ErrorCode == 0x80004005)
             {
+                Logger.Log(ex);
                 // Ошибка "No application is associated with the specified file"
                 MessageBox.Show("Не найдено приложение для открытия ссылок",
                               "Ошибка",
@@ -2444,6 +2479,7 @@ namespace K_Accounting
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 // Общая ошибка
                 MessageBox.Show($"Не удалось открыть ссылку: {ex.Message}",
                               "Ошибка",

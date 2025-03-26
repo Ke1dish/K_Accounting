@@ -45,6 +45,7 @@ namespace K_Accounting.Utilities
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 Console.WriteLine($"Error saving settings: {ex.Message}");
             }
         }
@@ -81,6 +82,7 @@ namespace K_Accounting.Utilities
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 Debug.WriteLine($"Error saving grid settings: {ex.Message}");
             }
         }

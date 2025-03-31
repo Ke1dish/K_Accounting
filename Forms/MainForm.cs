@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.DirectoryServices;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -7,6 +8,7 @@ using K_Accounting.Data;
 using K_Accounting.Extensions;
 using K_Accounting.Forms;
 using K_Accounting.Models;
+using K_Accounting.Properties;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -192,13 +194,16 @@ namespace K_Accounting
             foreach (var grid in GetAllControls(this).OfType<DataGridView>())
             {
                 SettingsManager.SaveGridSettings(grid);
+                var sortSettings = GridSorter.GetCurrentSortSettings(grid.Name);
+                if (sortSettings != null)
+                {
+                    SettingsManager.SaveSortSettings(
+                        grid,
+                        sortSettings.SortColumn,
+                        sortSettings.SortAscending
+                    );
+                }
             }
-
-            // Сохранение других настроек
-            //_settings.FontSize = (int)Font.Size;
-            // пример сохранения настроек
-            //_settings.AutoSaveEnabled = chkAutoSave.Checked;
-            //_settings.AutoSaveInterval = TimeSpan.FromMinutes((int)nudInterval.Value);
 
             // отключаемся от базы данных
             _context?.Dispose();
@@ -360,6 +365,7 @@ namespace K_Accounting
             lastColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             // Загрузка настроек
+            grid.ColumnHeaderMouseClick += Grid_ColumnHeaderMouseClick;
             SettingsManager.LoadGridSettings(grid);
 
             // Настройка обработчиков событий
@@ -377,6 +383,15 @@ namespace K_Accounting
 
             // Принудительное применение стилей после загрузки
             grid.Refresh();
+        }
+
+        private void Grid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            var grid = sender as DataGridView;
+            if (grid?.DataSource == null) return;
+
+            var currentData = ((IEnumerable<object>)grid.DataSource).ToList();
+            GridSorter.HandleSorting(grid, e, currentData);
         }
         #endregion
 
@@ -775,26 +790,6 @@ namespace K_Accounting
             flPanel5.Visible = false;
             flPanel6.Visible = false;
         }
-
-        private void expenseFilterPanelVisible(object sender, EventArgs e)
-        {
-            expenseFilterPanel.Visible = !expenseFilterPanel.Visible;
-        }
-
-        private void expenseSearhPanelVisible(object sender, EventArgs e)
-        {
-            expenseSearhPanel.Visible = !expenseSearhPanel.Visible;
-        }
-
-        private void incomeFilterPanelVisible(object sender, EventArgs e)
-        {
-            incomeFilterPanel.Visible = !incomeFilterPanel.Visible;
-        }
-
-        private void incomeSearhPanelVisible(object sender, EventArgs e)
-        {
-            incomeSearhPanel.Visible = !incomeSearhPanel.Visible;
-        }
         #endregion
 
         #region Контекстное меню
@@ -1157,10 +1152,11 @@ namespace K_Accounting
                 var accounts = _context.Accounts
                     .Include(a => a.Currency)
                     .Where(a => !a.IsDeleted)
-                    .OrderBy(a => a.Name)
+                    //.OrderBy(a => a.Name)
                     .ToList();
 
                 dgwAccounts.DataSource = accounts;
+                GridSorter.InitializeGrid(dgwAccounts, accounts.Cast<object>().ToList());
             }
             catch (Exception ex)
             {
@@ -1332,6 +1328,7 @@ namespace K_Accounting
                 var expenses = query
                     .OrderByDescending(e => e.Date)
                     .ToList();
+                GridSorter.InitializeGrid(dgwExpenses, expenses.Cast<object>().ToList());
 
                 dgwExpenses.DataSource = expenses;
                 dgwExpenses.Refresh();
@@ -1556,6 +1553,7 @@ namespace K_Accounting
                 dgwIncomes.DataSource = query
                     .OrderByDescending(i => i.Date)
                     .ToList();
+                GridSorter.InitializeGrid(dgwIncomes, query.Cast<object>().ToList());
 
                 try
                 {
@@ -1713,10 +1711,11 @@ namespace K_Accounting
             {
                 var categories = _context.Categories
                     .Where(c => !c.IsDeleted)
-                    .OrderBy(c => c.Name)
+                    //.OrderBy(c => c.Name)
                     .ToList();
 
                 dgwCategorie.DataSource = categories;
+                GridSorter.InitializeGrid(dgwCategorie, categories.Cast<object>().ToList());
             }
             catch (Exception ex)
             {
@@ -1824,8 +1823,8 @@ namespace K_Accounting
 
                     if (dgwCategorie.Rows.Count > 0)
                     {
-                        int newIndex = savedIndex >= dgwCategorie.Rows.Count?
-                            dgwCategorie.Rows.Count-1
+                        int newIndex = savedIndex >= dgwCategorie.Rows.Count ?
+                            dgwCategorie.Rows.Count - 1
                             : savedIndex;
 
                         if (dgwCategorie.Rows.Count > 0 && newIndex >= 0)
@@ -1849,7 +1848,7 @@ namespace K_Accounting
         {
             try
             {
-                int? selectedSubCategoryId = _selectedSubCategory?.Id; 
+                int? selectedSubCategoryId = _selectedSubCategory?.Id;
 
                 var query = _context.SubCategories
                     .Include(s => s.Category)
@@ -1861,12 +1860,13 @@ namespace K_Accounting
                 }
 
                 var subCategories = query
-                    .OrderBy(s => s.Name)
+                    //.OrderBy(s => s.Name)
                     .ToList();
 
                 dgwSubCategories.DataSource = subCategories;
+                GridSorter.InitializeGrid(dgwSubCategories, subCategories.Cast<object>().ToList());
 
-                if (selectedSubCategoryId.HasValue) 
+                if (selectedSubCategoryId.HasValue)
                 {
                     var targetRow = dgwSubCategories.Rows
                         .Cast<DataGridViewRow>()
@@ -2037,10 +2037,11 @@ namespace K_Accounting
             {
                 var additionals = _context.Additionals
                     .Where(a => !a.IsDeleted)
-                    .OrderBy(a => a.Name)
+                    //.OrderBy(a => a.Name)
                     .ToList();
 
                 dgwAdditionals.DataSource = additionals;
+                GridSorter.InitializeGrid(dgwAdditionals, additionals.Cast<object>().ToList());
             }
             catch (Exception ex)
             {
@@ -2163,10 +2164,12 @@ namespace K_Accounting
             {
                 var sources = _context.Sources
                     .Where(s => !s.IsDeleted)
-                    .OrderBy(s => s.Name)
+                    //.OrderBy(s => s.Name)
                     .ToList();
 
                 dgwSource.DataSource = sources;
+                GridSorter.InitializeGrid(dgwSource, sources.Cast<object>().ToList());
+
             }
             catch (Exception ex)
             {
@@ -2292,10 +2295,11 @@ namespace K_Accounting
             {
                 var currencies = _context.Currencies
                     .Where(c => !c.IsDeleted)
-                    .OrderBy(c => c.Name)
+                    //.OrderBy(c => c.Name)
                     .ToList();
 
                 dgwCurrencies.DataSource = currencies;
+                GridSorter.InitializeGrid(dgwCurrencies, currencies.Cast<object>().ToList());
             }
             catch (Exception ex)
             {

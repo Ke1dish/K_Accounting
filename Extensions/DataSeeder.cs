@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Bogus;
 using K_Accounting.Data;
 using K_Accounting.Models;
 
@@ -10,6 +12,30 @@ namespace K_Accounting.Extensions
 {
     public static class DataSeeder
     {
+        public static void Seed(AppDbContext context)
+        {
+            // Проверяем, есть ли уже данные
+            if (context.Categories.Any()) return;
+
+            // Генерация категорий
+            var categories = new Faker<Category>()
+                .RuleFor(c => c.Name, f => f.Commerce.Categories(1)[0])
+                .Generate(5);
+
+            context.Categories.AddRange(categories);
+            context.SaveChanges();
+
+            //// Генерация транзакций
+            //var transactions = new Faker<Transaction>()
+            //    .RuleFor(t => t.Amount, f => f.Finance.Amount(10, 1000))
+            //    .RuleFor(t => t.Date, f => f.Date.Past(30))
+            //    .RuleFor(t => t.CategoryId, f => f.PickRandom(categories).Id)
+            //    .Generate(1000);
+
+            //context.Transactions.AddRange(transactions);
+            //context.SaveChanges();
+        }
+
         public static void SeedCategoriesAndSubCategories(AppDbContext db)
         {
             if (!db.Categories.Any())

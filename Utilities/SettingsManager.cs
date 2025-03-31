@@ -66,19 +66,12 @@ namespace K_Accounting.Utilities
                         Visible = col.Visible,
                         MinimumWidth = col.MinimumWidth,
                         DisplayIndex = col.DisplayIndex,
-                        SortDirection = grid.SortedColumn?.Name == col.Name ?
-                            grid.SortOrder.ToString() : ""
                     });
-                }
-
-                if (grid.SortedColumn != null)
-                {
-                    gridSettings.SortedColumn = grid.SortedColumn.Name;
-                    gridSettings.SortOrder = grid.SortOrder;
                 }
 
                 settings.GridsSettings[grid.Name] = gridSettings;
                 SaveSettings(settings);
+
             }
             catch (Exception ex)
             {
@@ -111,16 +104,33 @@ namespace K_Accounting.Utilities
                 column.Width = colSetting.Width;
                 column.MinimumWidth = colSetting.MinimumWidth;
             }
+        }
 
-            // Восстанавливаем сортировку
-            if (!string.IsNullOrEmpty(gridSettings.SortedColumn))
+        public static void SaveSortSettings(DataGridView grid, string sortColumn, bool ascending)
+        {
+            try
             {
-                var sortColumn = grid.Columns[gridSettings.SortedColumn];
-                if (sortColumn != null)
+                var settings = LoadSettings();
+                settings.GridsSortSettings[grid.Name] = new SortSettings
                 {
-                    grid.Sort(sortColumn, (System.ComponentModel.ListSortDirection)gridSettings.SortOrder);
-                }
+                    SortColumn = sortColumn,
+                    SortAscending = ascending
+                };
+                SaveSettings(settings);
             }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                Debug.WriteLine($"Error saving sort settings: {ex.Message}");
+            }
+        }
+
+        public static SortSettings LoadSortSettings(DataGridView grid)
+        {
+            var settings = LoadSettings();
+            return settings.GridsSortSettings.TryGetValue(grid.Name, out var sortSettings)
+                ? sortSettings
+                : new SortSettings();
         }
     }
 }

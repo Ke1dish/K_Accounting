@@ -1,13 +1,16 @@
-﻿using K_Accounting.Extensions;
+﻿//using System.Data.Entity;
+using K_Accounting.Extensions;
 using K_Accounting.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 // Основной класс для работы с базой данных
 namespace K_Accounting.Data
 {
     public class AppDbContext : DbContext
     {
+
         public const int CurrentDbVersion = 2; // Увеличивать при изменениях
 
         // Таблицы в базе данных
@@ -29,10 +32,8 @@ namespace K_Accounting.Data
             var dbPath = Path.Combine(appDataPath, "K_Accounting", "budget.db");
             options.UseSqlite($"Data Source={dbPath}");
 
-
-//            options.UseSqlite($"Data Source={dbPath}")
-                //.ConfigureWarnings(warnings => warnings
-                //.Ignore(CoreEventId.PendingModelChangesWarning));
+            options.EnableSensitiveDataLogging()
+               .LogTo(Console.WriteLine, LogLevel.Information); // Логи в консоль
         }
 
 

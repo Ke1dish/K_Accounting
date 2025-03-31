@@ -114,39 +114,11 @@
             btnPrintExpenses = new Button();
             cmbExpenseMonths = new ComboBox();
             cmbExpenseYears = new ComboBox();
-            btnExpenseFilter = new Button();
-            btnExpenseSearh = new Button();
-            expenseFilterPanel = new FlowLayoutPanel();
-            panel2 = new Panel();
-            label13 = new Label();
-            comboBox1 = new ComboBox();
-            panel4 = new Panel();
-            label26 = new Label();
-            textBox1 = new TextBox();
-            expenseSearhPanel = new FlowLayoutPanel();
-            panel3 = new Panel();
-            label15 = new Label();
-            textBox3 = new TextBox();
-            btnExpenseSearhLeft = new Button();
-            btnExpenseSearhRight = new Button();
             tableLayoutPanel3 = new TableLayoutPanel();
             label3 = new Label();
             tbDetailsExpenses = new TextBox();
             tpIncome = new TabPage();
             tableLayoutPanel20 = new TableLayoutPanel();
-            incomeSearhPanel = new FlowLayoutPanel();
-            panel7 = new Panel();
-            label27 = new Label();
-            textBox5 = new TextBox();
-            btnIncomeSearhLeft = new Button();
-            btnIncomeSearhRight = new Button();
-            incomeFilterPanel = new FlowLayoutPanel();
-            panel5 = new Panel();
-            label24 = new Label();
-            comboBox2 = new ComboBox();
-            panel6 = new Panel();
-            label25 = new Label();
-            textBox4 = new TextBox();
             dgwIncomes = new DataGridView();
             lblPageIncomesCaption = new Label();
             flowLayoutPanel8 = new FlowLayoutPanel();
@@ -156,8 +128,6 @@
             btnPrintIncomes = new Button();
             cmbIncomeMonths = new ComboBox();
             cmbIncomeYears = new ComboBox();
-            btnIncomeFilter = new Button();
-            btnIncomeSearh = new Button();
             tableLayoutPanel6 = new TableLayoutPanel();
             label4 = new Label();
             tbDetailsIncome = new TextBox();
@@ -283,19 +253,9 @@
             tableLayoutPanel19.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgwExpenses).BeginInit();
             flowLayoutPanel6.SuspendLayout();
-            expenseFilterPanel.SuspendLayout();
-            panel2.SuspendLayout();
-            panel4.SuspendLayout();
-            expenseSearhPanel.SuspendLayout();
-            panel3.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tpIncome.SuspendLayout();
             tableLayoutPanel20.SuspendLayout();
-            incomeSearhPanel.SuspendLayout();
-            panel7.SuspendLayout();
-            incomeFilterPanel.SuspendLayout();
-            panel5.SuspendLayout();
-            panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgwIncomes).BeginInit();
             flowLayoutPanel8.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
@@ -1178,16 +1138,14 @@
             // 
             tableLayoutPanel19.ColumnCount = 1;
             tableLayoutPanel19.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel19.Controls.Add(dgwExpenses, 0, 4);
+            tableLayoutPanel19.Controls.Add(dgwExpenses, 0, 2);
             tableLayoutPanel19.Controls.Add(lblPageExpensesCaption, 0, 0);
             tableLayoutPanel19.Controls.Add(flowLayoutPanel6, 0, 1);
-            tableLayoutPanel19.Controls.Add(expenseFilterPanel, 0, 2);
-            tableLayoutPanel19.Controls.Add(expenseSearhPanel, 0, 3);
             tableLayoutPanel19.Dock = DockStyle.Fill;
             tableLayoutPanel19.Location = new Point(0, 0);
             tableLayoutPanel19.Name = "tableLayoutPanel19";
             tableLayoutPanel19.Padding = new Padding(5);
-            tableLayoutPanel19.RowCount = 5;
+            tableLayoutPanel19.RowCount = 3;
             tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel19.RowStyles.Add(new RowStyle());
@@ -1206,13 +1164,13 @@
             dgwExpenses.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgwExpenses.ContextMenuStrip = contextMenu;
             dgwExpenses.EditMode = DataGridViewEditMode.EditProgrammatically;
-            dgwExpenses.Location = new Point(8, 172);
+            dgwExpenses.Location = new Point(8, 80);
             dgwExpenses.MultiSelect = false;
             dgwExpenses.Name = "dgwExpenses";
             dgwExpenses.RowHeadersVisible = false;
             dgwExpenses.RowHeadersWidth = 51;
             dgwExpenses.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwExpenses.Size = new Size(556, 255);
+            dgwExpenses.Size = new Size(556, 345);
             dgwExpenses.TabIndex = 3;
             dgwExpenses.CellDoubleClick += dgwExpenses_CellDoubleClick;
             dgwExpenses.CellFormatting += dataGridView3_CellFormatting;
@@ -1239,8 +1197,6 @@
             flowLayoutPanel6.Controls.Add(btnPrintExpenses);
             flowLayoutPanel6.Controls.Add(cmbExpenseMonths);
             flowLayoutPanel6.Controls.Add(cmbExpenseYears);
-            flowLayoutPanel6.Controls.Add(btnExpenseFilter);
-            flowLayoutPanel6.Controls.Add(btnExpenseSearh);
             flowLayoutPanel6.Dock = DockStyle.Fill;
             flowLayoutPanel6.Location = new Point(8, 34);
             flowLayoutPanel6.Name = "flowLayoutPanel6";
@@ -1317,152 +1273,6 @@
             cmbExpenseYears.Size = new Size(80, 23);
             cmbExpenseYears.TabIndex = 5;
             // 
-            // btnExpenseFilter
-            // 
-            btnExpenseFilter.Image = Properties.Resources.FilterIco;
-            btnExpenseFilter.Location = new Point(491, 8);
-            btnExpenseFilter.Name = "btnExpenseFilter";
-            btnExpenseFilter.Size = new Size(23, 23);
-            btnExpenseFilter.TabIndex = 7;
-            btnExpenseFilter.UseVisualStyleBackColor = true;
-            btnExpenseFilter.Click += expenseFilterPanelVisible;
-            // 
-            // btnExpenseSearh
-            // 
-            btnExpenseSearh.Image = Properties.Resources.SearchIco;
-            btnExpenseSearh.Location = new Point(520, 8);
-            btnExpenseSearh.Name = "btnExpenseSearh";
-            btnExpenseSearh.Size = new Size(23, 23);
-            btnExpenseSearh.TabIndex = 8;
-            btnExpenseSearh.UseVisualStyleBackColor = true;
-            btnExpenseSearh.Click += expenseSearhPanelVisible;
-            // 
-            // expenseFilterPanel
-            // 
-            expenseFilterPanel.Controls.Add(panel2);
-            expenseFilterPanel.Controls.Add(comboBox1);
-            expenseFilterPanel.Controls.Add(panel4);
-            expenseFilterPanel.Controls.Add(textBox1);
-            expenseFilterPanel.Dock = DockStyle.Fill;
-            expenseFilterPanel.Location = new Point(8, 80);
-            expenseFilterPanel.Name = "expenseFilterPanel";
-            expenseFilterPanel.Padding = new Padding(5);
-            expenseFilterPanel.Size = new Size(556, 40);
-            expenseFilterPanel.TabIndex = 4;
-            expenseFilterPanel.Visible = false;
-            // 
-            // panel2
-            // 
-            panel2.Controls.Add(label13);
-            panel2.Location = new Point(8, 8);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(100, 23);
-            panel2.TabIndex = 1;
-            // 
-            // label13
-            // 
-            label13.Dock = DockStyle.Fill;
-            label13.Location = new Point(0, 0);
-            label13.Name = "label13";
-            label13.Size = new Size(100, 23);
-            label13.TabIndex = 1;
-            label13.Text = "Фильтр.    Поле:";
-            label13.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // comboBox1
-            // 
-            comboBox1.Dock = DockStyle.Left;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(114, 8);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
-            comboBox1.TabIndex = 3;
-            // 
-            // panel4
-            // 
-            panel4.Controls.Add(label26);
-            panel4.Dock = DockStyle.Left;
-            panel4.Location = new Point(241, 8);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(89, 23);
-            panel4.TabIndex = 4;
-            // 
-            // label26
-            // 
-            label26.Dock = DockStyle.Fill;
-            label26.Location = new Point(0, 0);
-            label26.Name = "label26";
-            label26.Size = new Size(89, 23);
-            label26.TabIndex = 6;
-            label26.Text = "     Значение:";
-            label26.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // textBox1
-            // 
-            textBox1.Dock = DockStyle.Left;
-            textBox1.Location = new Point(336, 8);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(207, 23);
-            textBox1.TabIndex = 6;
-            // 
-            // expenseSearhPanel
-            // 
-            expenseSearhPanel.Controls.Add(panel3);
-            expenseSearhPanel.Controls.Add(textBox3);
-            expenseSearhPanel.Controls.Add(btnExpenseSearhLeft);
-            expenseSearhPanel.Controls.Add(btnExpenseSearhRight);
-            expenseSearhPanel.Dock = DockStyle.Fill;
-            expenseSearhPanel.Location = new Point(8, 126);
-            expenseSearhPanel.Name = "expenseSearhPanel";
-            expenseSearhPanel.Padding = new Padding(5);
-            expenseSearhPanel.Size = new Size(556, 40);
-            expenseSearhPanel.TabIndex = 5;
-            expenseSearhPanel.Visible = false;
-            // 
-            // panel3
-            // 
-            panel3.Controls.Add(label15);
-            panel3.Location = new Point(8, 8);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(100, 23);
-            panel3.TabIndex = 2;
-            // 
-            // label15
-            // 
-            label15.Dock = DockStyle.Fill;
-            label15.Location = new Point(0, 0);
-            label15.Name = "label15";
-            label15.Size = new Size(100, 23);
-            label15.TabIndex = 1;
-            label15.Text = "Поиск:";
-            label15.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // textBox3
-            // 
-            textBox3.Dock = DockStyle.Left;
-            textBox3.Location = new Point(114, 8);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(371, 23);
-            textBox3.TabIndex = 7;
-            // 
-            // btnExpenseSearhLeft
-            // 
-            btnExpenseSearhLeft.Image = Properties.Resources.LeftIco;
-            btnExpenseSearhLeft.Location = new Point(491, 8);
-            btnExpenseSearhLeft.Name = "btnExpenseSearhLeft";
-            btnExpenseSearhLeft.Size = new Size(23, 23);
-            btnExpenseSearhLeft.TabIndex = 8;
-            btnExpenseSearhLeft.UseVisualStyleBackColor = true;
-            // 
-            // btnExpenseSearhRight
-            // 
-            btnExpenseSearhRight.Image = Properties.Resources.RightIco;
-            btnExpenseSearhRight.Location = new Point(520, 8);
-            btnExpenseSearhRight.Name = "btnExpenseSearhRight";
-            btnExpenseSearhRight.Size = new Size(23, 23);
-            btnExpenseSearhRight.TabIndex = 9;
-            btnExpenseSearhRight.UseVisualStyleBackColor = true;
-            // 
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.ColumnCount = 2;
@@ -1513,16 +1323,14 @@
             // 
             tableLayoutPanel20.ColumnCount = 1;
             tableLayoutPanel20.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel20.Controls.Add(incomeSearhPanel, 0, 3);
-            tableLayoutPanel20.Controls.Add(incomeFilterPanel, 0, 2);
-            tableLayoutPanel20.Controls.Add(dgwIncomes, 0, 4);
+            tableLayoutPanel20.Controls.Add(dgwIncomes, 0, 2);
             tableLayoutPanel20.Controls.Add(lblPageIncomesCaption, 0, 0);
             tableLayoutPanel20.Controls.Add(flowLayoutPanel8, 0, 1);
             tableLayoutPanel20.Dock = DockStyle.Fill;
             tableLayoutPanel20.Location = new Point(0, 0);
             tableLayoutPanel20.Name = "tableLayoutPanel20";
             tableLayoutPanel20.Padding = new Padding(5);
-            tableLayoutPanel20.RowCount = 5;
+            tableLayoutPanel20.RowCount = 3;
             tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel20.RowStyles.Add(new RowStyle());
@@ -1530,132 +1338,6 @@
             tableLayoutPanel20.RowStyles.Add(new RowStyle());
             tableLayoutPanel20.Size = new Size(572, 433);
             tableLayoutPanel20.TabIndex = 3;
-            // 
-            // incomeSearhPanel
-            // 
-            incomeSearhPanel.Controls.Add(panel7);
-            incomeSearhPanel.Controls.Add(textBox5);
-            incomeSearhPanel.Controls.Add(btnIncomeSearhLeft);
-            incomeSearhPanel.Controls.Add(btnIncomeSearhRight);
-            incomeSearhPanel.Dock = DockStyle.Fill;
-            incomeSearhPanel.Location = new Point(8, 126);
-            incomeSearhPanel.Name = "incomeSearhPanel";
-            incomeSearhPanel.Padding = new Padding(5);
-            incomeSearhPanel.Size = new Size(556, 40);
-            incomeSearhPanel.TabIndex = 6;
-            incomeSearhPanel.Visible = false;
-            // 
-            // panel7
-            // 
-            panel7.Controls.Add(label27);
-            panel7.Location = new Point(8, 8);
-            panel7.Name = "panel7";
-            panel7.Size = new Size(100, 23);
-            panel7.TabIndex = 2;
-            // 
-            // label27
-            // 
-            label27.Dock = DockStyle.Fill;
-            label27.Location = new Point(0, 0);
-            label27.Name = "label27";
-            label27.Size = new Size(100, 23);
-            label27.TabIndex = 1;
-            label27.Text = "Поиск:";
-            label27.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // textBox5
-            // 
-            textBox5.Dock = DockStyle.Left;
-            textBox5.Location = new Point(114, 8);
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(371, 23);
-            textBox5.TabIndex = 7;
-            // 
-            // btnIncomeSearhLeft
-            // 
-            btnIncomeSearhLeft.Image = Properties.Resources.LeftIco;
-            btnIncomeSearhLeft.Location = new Point(491, 8);
-            btnIncomeSearhLeft.Name = "btnIncomeSearhLeft";
-            btnIncomeSearhLeft.Size = new Size(23, 23);
-            btnIncomeSearhLeft.TabIndex = 8;
-            btnIncomeSearhLeft.UseVisualStyleBackColor = true;
-            // 
-            // btnIncomeSearhRight
-            // 
-            btnIncomeSearhRight.Image = Properties.Resources.RightIco;
-            btnIncomeSearhRight.Location = new Point(520, 8);
-            btnIncomeSearhRight.Name = "btnIncomeSearhRight";
-            btnIncomeSearhRight.Size = new Size(23, 23);
-            btnIncomeSearhRight.TabIndex = 9;
-            btnIncomeSearhRight.UseVisualStyleBackColor = true;
-            // 
-            // incomeFilterPanel
-            // 
-            incomeFilterPanel.Controls.Add(panel5);
-            incomeFilterPanel.Controls.Add(comboBox2);
-            incomeFilterPanel.Controls.Add(panel6);
-            incomeFilterPanel.Controls.Add(textBox4);
-            incomeFilterPanel.Dock = DockStyle.Fill;
-            incomeFilterPanel.Location = new Point(8, 80);
-            incomeFilterPanel.Name = "incomeFilterPanel";
-            incomeFilterPanel.Padding = new Padding(5);
-            incomeFilterPanel.Size = new Size(556, 40);
-            incomeFilterPanel.TabIndex = 5;
-            incomeFilterPanel.Visible = false;
-            // 
-            // panel5
-            // 
-            panel5.Controls.Add(label24);
-            panel5.Location = new Point(8, 8);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(100, 23);
-            panel5.TabIndex = 1;
-            // 
-            // label24
-            // 
-            label24.Dock = DockStyle.Fill;
-            label24.Location = new Point(0, 0);
-            label24.Name = "label24";
-            label24.Size = new Size(100, 23);
-            label24.TabIndex = 1;
-            label24.Text = "Фильтр.    Поле:";
-            label24.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // comboBox2
-            // 
-            comboBox2.Dock = DockStyle.Left;
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(114, 8);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(121, 23);
-            comboBox2.TabIndex = 3;
-            // 
-            // panel6
-            // 
-            panel6.Controls.Add(label25);
-            panel6.Dock = DockStyle.Left;
-            panel6.Location = new Point(241, 8);
-            panel6.Name = "panel6";
-            panel6.Size = new Size(89, 23);
-            panel6.TabIndex = 4;
-            // 
-            // label25
-            // 
-            label25.Dock = DockStyle.Fill;
-            label25.Location = new Point(0, 0);
-            label25.Name = "label25";
-            label25.Size = new Size(89, 23);
-            label25.TabIndex = 6;
-            label25.Text = "     Значение:";
-            label25.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // textBox4
-            // 
-            textBox4.Dock = DockStyle.Left;
-            textBox4.Location = new Point(336, 8);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(207, 23);
-            textBox4.TabIndex = 6;
             // 
             // dgwIncomes
             // 
@@ -1667,13 +1349,13 @@
             dgwIncomes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgwIncomes.ContextMenuStrip = contextMenu;
             dgwIncomes.EditMode = DataGridViewEditMode.EditProgrammatically;
-            dgwIncomes.Location = new Point(8, 172);
+            dgwIncomes.Location = new Point(8, 80);
             dgwIncomes.MultiSelect = false;
             dgwIncomes.Name = "dgwIncomes";
             dgwIncomes.RowHeadersVisible = false;
             dgwIncomes.RowHeadersWidth = 51;
             dgwIncomes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwIncomes.Size = new Size(556, 255);
+            dgwIncomes.Size = new Size(556, 345);
             dgwIncomes.TabIndex = 3;
             dgwIncomes.CellDoubleClick += dgwIncomes_CellDoubleClick;
             dgwIncomes.CellFormatting += dgwIncomes_CellFormatting;
@@ -1699,8 +1381,6 @@
             flowLayoutPanel8.Controls.Add(btnPrintIncomes);
             flowLayoutPanel8.Controls.Add(cmbIncomeMonths);
             flowLayoutPanel8.Controls.Add(cmbIncomeYears);
-            flowLayoutPanel8.Controls.Add(btnIncomeFilter);
-            flowLayoutPanel8.Controls.Add(btnIncomeSearh);
             flowLayoutPanel8.Dock = DockStyle.Fill;
             flowLayoutPanel8.Location = new Point(8, 34);
             flowLayoutPanel8.Name = "flowLayoutPanel8";
@@ -1764,26 +1444,6 @@
             cmbIncomeYears.Name = "cmbIncomeYears";
             cmbIncomeYears.Size = new Size(80, 23);
             cmbIncomeYears.TabIndex = 7;
-            // 
-            // btnIncomeFilter
-            // 
-            btnIncomeFilter.Image = Properties.Resources.FilterIco;
-            btnIncomeFilter.Location = new Point(397, 8);
-            btnIncomeFilter.Name = "btnIncomeFilter";
-            btnIncomeFilter.Size = new Size(23, 23);
-            btnIncomeFilter.TabIndex = 9;
-            btnIncomeFilter.UseVisualStyleBackColor = true;
-            btnIncomeFilter.Click += incomeFilterPanelVisible;
-            // 
-            // btnIncomeSearh
-            // 
-            btnIncomeSearh.Image = Properties.Resources.SearchIco;
-            btnIncomeSearh.Location = new Point(426, 8);
-            btnIncomeSearh.Name = "btnIncomeSearh";
-            btnIncomeSearh.Size = new Size(23, 23);
-            btnIncomeSearh.TabIndex = 10;
-            btnIncomeSearh.UseVisualStyleBackColor = true;
-            btnIncomeSearh.Click += incomeSearhPanelVisible;
             // 
             // tableLayoutPanel6
             // 
@@ -2943,7 +2603,7 @@
             tbAbout.ScrollBars = ScrollBars.Both;
             tbAbout.Size = new Size(458, 90);
             tbAbout.TabIndex = 6;
-            tbAbout.Text = "Домашняя Бухгалтерия v.{AppVersion} ({DBVersion})  \r\nАвтор: {Author}  - {Copyright}\r\nKeldish@mail.ru (github.com/home_accounting) \r\n\r\n.NET 8, Windows Forms, SQLite & Entity Framework, OxyPlot";
+            tbAbout.Text = "Домашняя Бухгалтерия v.{AppVersion} ({DBVersion})  \r\nАвтор: {Author}  - {Copyright}\r\nKeldish@mail.ru (github.com/home_accounting) \r\n\r\n.NET 8, Windows Forms, SQLite & Entity Framework, OxyPlot, Linq";
             // 
             // pictureBox1
             // 
@@ -3012,25 +2672,11 @@
             tableLayoutPanel19.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgwExpenses).EndInit();
             flowLayoutPanel6.ResumeLayout(false);
-            expenseFilterPanel.ResumeLayout(false);
-            expenseFilterPanel.PerformLayout();
-            panel2.ResumeLayout(false);
-            panel4.ResumeLayout(false);
-            expenseSearhPanel.ResumeLayout(false);
-            expenseSearhPanel.PerformLayout();
-            panel3.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
             tpIncome.ResumeLayout(false);
             tableLayoutPanel20.ResumeLayout(false);
             tableLayoutPanel20.PerformLayout();
-            incomeSearhPanel.ResumeLayout(false);
-            incomeSearhPanel.PerformLayout();
-            panel7.ResumeLayout(false);
-            incomeFilterPanel.ResumeLayout(false);
-            incomeFilterPanel.PerformLayout();
-            panel5.ResumeLayout(false);
-            panel6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgwIncomes).EndInit();
             flowLayoutPanel8.ResumeLayout(false);
             tableLayoutPanel6.ResumeLayout(false);
@@ -3280,36 +2926,6 @@
         private ContextMenuStrip contextMenu;
         private Panel panel1;
         private CheckBox checkBox1;
-        private Button btnExpenseFilter;
-        private Button btnExpenseSearh;
-        private FlowLayoutPanel expenseFilterPanel;
-        private Panel panel2;
-        private ComboBox comboBox1;
-        private Panel panel4;
-        private TextBox textBox1;
-        private FlowLayoutPanel expenseSearhPanel;
-        private Label label13;
-        private Label label26;
-        private Panel panel3;
-        private Label label15;
-        private TextBox textBox3;
-        private Button btnExpenseSearhLeft;
-        private Button btnExpenseSearhRight;
-        private FlowLayoutPanel incomeSearhPanel;
-        private Panel panel7;
-        private Label label27;
-        private TextBox textBox5;
-        private Button btnIncomeSearhLeft;
-        private Button btnIncomeSearhRight;
-        private FlowLayoutPanel incomeFilterPanel;
-        private Panel panel5;
-        private Label label24;
-        private ComboBox comboBox2;
-        private Panel panel6;
-        private Label label25;
-        private TextBox textBox4;
-        private Button btnIncomeFilter;
-        private Button btnIncomeSearh;
         private Label label35;
         private Label label36;
         private Label label37;

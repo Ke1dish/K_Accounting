@@ -9,9 +9,12 @@ using K_Accounting.Extensions;
 using K_Accounting.Forms;
 using K_Accounting.Models;
 using K_Accounting.Properties;
+using K_Accounting.Reports;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using OxyPlot;
+using OxyPlot.WindowsForms;
 
 namespace K_Accounting
 {
@@ -40,6 +43,11 @@ namespace K_Accounting
         string appFolder, dbPath;
 
         private ToolStripItem _lastClickedItem; // Поле для хранения последнего кликнутого пункта
+
+        private PlotView plotView;
+        private DateTimePicker dtpStart;
+        private DateTimePicker dtpEnd;
+        private ReportBase currentReport;
 
         public MainForm()
         {
@@ -79,9 +87,6 @@ namespace K_Accounting
             LoadSources();
             LoadIncomes();
 
-            // скрываем панели инструментов да странице Отчетов
-            HideReportBars();
-
             // визуально убираем ярлыки закладок на пейджконтрол
             tcPage.Appearance = TabAppearance.FlatButtons;
             tcPage.ItemSize = new Size(0, 1); // Ширина = 0, Высота = 1
@@ -97,8 +102,28 @@ namespace K_Accounting
             cmbExpenseMonths.SelectedIndex = DateTime.Now.Month;
             cmbIncomeMonths.SelectedIndex = DateTime.Now.Month;
 
+            InitializeReportPage();
+
+            //plotView.BackColor = Color.White;
+            plotView1.Model = new PlotModel
+            {
+                PlotAreaBorderColor = OxyColors.LightGray,
+                DefaultFont = "Segoe UI",
+                TitleFont = "Segoe UI Bold",
+                SubtitleFont = "Segoe UI"
+            };
+
             // меняем внешний вид тривью
             SetWindowTheme(tvMenuPanel.Handle, "explorer", null);
+
+            // пока не реализованна главная страница удаляем ссылку на нее и при старте переходим на страницу "счета"
+            // Удалить следующие строки после реализации главной страницы
+            tvMenuPanel.Nodes.RemoveAt(0);
+            tvMenuPanel_AfterSelect(this, new TreeViewEventArgs(tvMenuPanel.Nodes[0]));
+            // пока не реализованна страница настроек удаляем ссылку на нее
+            // Удалить следующие строки после реализации страницы настроек
+            tvMenuPanel.Nodes.RemoveAt(5);
+
         }
 
         #region MainFom
@@ -393,6 +418,7 @@ namespace K_Accounting
             var currentData = ((IEnumerable<object>)grid.DataSource).ToList();
             GridSorter.HandleSorting(grid, e, currentData);
         }
+
         #endregion
 
         #region База Данных
@@ -709,87 +735,6 @@ namespace K_Accounting
             }
         }
 
-        private void cmbReportTipe_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            HideReportBars();
-            string s = "";
-            switch (cmbReportTipe.SelectedIndex)
-            {
-                case 0:
-                    s = "Отображает текущие остатки на всех счетах (наличные, карты, вклады).";
-                    flPanel1.Visible = true;
-                    break;
-                case 1:
-                    s = "Изменение общего баланса с течением времени.";
-                    // показать панель выбора периода
-                    flPanel2.Visible = true;
-                    break;
-                case 2:
-                    s = "Основные статьи расходов или источники доходов за период.";
-                    // показать панель выбора периода
-                    flPanel3.Visible = true;
-                    break;
-                case 3:
-                    s = "Основные источники поступлений за выбранный период.";
-                    // показать панель выбора периода
-                    flPanel4.Visible = true;
-                    break;
-                case 4:
-                    s = "Показывает, какая часть доходов сохраняется после обязательных трат.";
-                    flPanel5.Visible = true;
-                    break;
-                case 5:
-                    s = "Визуализирует доли трат по категориям за выбранный период. Позволяет быстро определить самые затратные статьи.";
-                    // показать панель выбора периода
-                    // показать панель выбора категории
-                    flPanel6.Visible = true;
-                    break;
-                case 6:
-                    s = "Распределение трат по основным категориям.";
-                    // показать панель выбора периода
-                    break;
-                case 7:
-                    s = "Распределение трат по дополнительным параметрам (например, член семьи).";
-                    // показать панель выбора дополнительного
-                    break;
-                case 8:
-                    s = "Сравнение доходов и расходов по месяцам.";
-                    // показать панель выбора периода
-                    break;
-                case 9:
-                    s = "Частота операций в разных ценовых диапазонах.";
-                    // показать панель выбора периода
-                    break;
-                case 10:
-                    s = "Активность операций по дням.";
-                    // показать панель выбора месяца
-                    break;
-                case 11:
-                    s = "Оценивает баланс между ключевыми финансовыми показателями (сбережения, долги, доходы и т.д.).";
-                    break;
-                case 12:
-                    s = "Анализирует, как траты растут/падают в зависимости от уровня доходов.";
-                    // показать панель выбора года
-                    break;
-                case 13:
-                    s = "Анализ доходов/расходов за разные периоды.";
-                    // показать панель выбора периода
-                    break;
-                default:
-                    break;
-            }
-            tbDetailsReport.Text = s;
-        }
-
-        private void HideReportBars()
-        {
-            flPanel1.Visible = false;
-            flPanel2.Visible = false;
-            flPanel3.Visible = false;
-            flPanel4.Visible = false;
-            flPanel5.Visible = false;
-            flPanel6.Visible = false;
-        }
         #endregion
 
         #region Контекстное меню
@@ -1560,14 +1505,13 @@ namespace K_Accounting
                     if (ColumnExists(dgwIncomes, "colAmount"))
                     {
                         decimal total = CalculateTotal(dgwIncomes, "colAmount");
-                        //                        lblPageExpensesCaption.Text = $"Расходы: {total:N2}";
-                        lblPageIncomesCaption.Text = "Расходы: " + total.ToString("C2", CultureInfo.CurrentCulture);
+                        lblPageIncomesCaption.Text = "Приходы: " + total.ToString("C2", CultureInfo.CurrentCulture);
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Log(ex);
-                    lblPageIncomesCaption.Text = "Расходы";
+                    lblPageIncomesCaption.Text = "Приходы";
                     Debug.WriteLine($"Ошибка расчёта суммы расходов: {ex.Message}");
                 }
             }
@@ -2446,7 +2390,132 @@ namespace K_Accounting
         #endregion
 
         #region Отчеты
+        private void InitializeReportPage()
+        {
+            // Заполнение списка отчетов
+            cmbReports.Items.AddRange(new object[]
+            {
+                new { Text = "Баланс счетов", Type = typeof(AccountsBalanceReport) },
+                new { Text = "Динамика баланса", Type = typeof(BalanceDynamicReport) },
+                new { Text = "Топ 5 расходов", Type = typeof(TopExpensesReport) },
+                new { Text = "Топ 5 приходов", Type = typeof(TopIncomesReport) },
+                new { Text = "Источники доходов", Type = typeof(IncomeSourcesReport) },
+                new { Text = "Конверсия доходов в сбережения", Type = typeof(IncomeSavingsConversionReport) },
+                new { Text = "Распределение расходов", Type = typeof(DistributionExpensesReport) },
+                new { Text = "Расходы по категориям", Type = typeof(ExpenseByCategoryReport) },
+                new { Text = "Расходы по упоминанию", Type = typeof(AdditionalExpensesReport) },
+                new { Text = "Доходы vs Расходы", Type = typeof(IncomeVsExpensesReport) },
+                new { Text = "Распределение сумм", Type = typeof(AmountDistributionReport) },
+                new { Text = "Календарь трат", Type = typeof(SpendingCalendarReport)  },
+                new { Text = "Финансовый профиль", Type = typeof(FinancialProfileReport) },
+                new { Text = "Зависимость расходов от доходов", Type = typeof(ExpenseIncomeDependencyReport) },
+                new { Text = "Сравнение периодов", Type = typeof(PeriodComparisonReport) },
 
+                //График погашений по месяцам
+                //Топ контрагентов
+                //Просроченные долги (с подсветкой)
+            });
+
+            cmbReports.DisplayMember = "Text";
+            cmbReports.ValueMember = "Type";
+            cmbReports.SelectedIndexChanged += (s, e) => RefreshReport();
+
+            btnRefresh.Click += (s, e) => RefreshReport();
+
+            dtpStartReportDate.Format = DateTimePickerFormat.Short;
+            dtpStartReportDate.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month-1, 1);
+            dtpStartReportDate.ValueChanged += (s, e) => RefreshReport();
+
+            dtpEndReportDate.Format = DateTimePickerFormat.Short;
+            dtpEndReportDate.Value = DateTime.Today;
+            dtpEndReportDate.ValueChanged += (s, e) => RefreshReport();
+
+        }
+
+        private void RefreshReport()
+        {
+            if (cmbReports.SelectedItem == null) return;
+
+            //// Сохраняем текущие фильтры
+            var filters = currentReport?.GetFilterValues() ?? new Dictionary<string, object>();
+
+            // Создаем новый отчет
+            currentReport = (ReportBase)Activator.CreateInstance(
+                (cmbReports.SelectedItem as dynamic).Type,
+                _context,
+                dtpStartReportDate.Value,
+                dtpEndReportDate.Value);
+
+            // Применяем фильтры
+            currentReport?.ApplyFilters(filters);
+
+            // Обновляем график
+            plotView1.Model = currentReport?.CreatePlotModel();
+            //plotView1.Model = currentReport.CreatePlotModel();
+            plotView1.InvalidatePlot(true);
+
+            // Обновляем элементы управления
+            UpdateFilterControls();
+        }
+
+        private void UpdateFilterControls()
+        {
+            // Очищаем предыдущие фильтры
+            pnlFilters.Controls.Clear();
+
+            if (currentReport == null) return;
+
+            // Получаем элементы управления фильтрами из отчета
+            var filterControls = currentReport.GetFilterControls();
+
+            // Добавляем элементы на панель с правильным порядком
+            foreach (var control in filterControls)
+            {
+                control.Margin = new Padding(3, 0, 3, 5); 
+                control.Font = new Font("Segoe UI", 9F);
+                pnlFilters.Controls.Add(control);
+            }
+
+            pnlFilters.Visible = filterControls != null;
+
+            // Подписываемся на события изменения фильтров
+            SubscribeToFilterEvents(filterControls);
+        }
+
+        private void SubscribeToFilterEvents(Control[] controls)
+        {
+            if (currentReport != null)
+            {
+                // Подписываемся через защищенное событие базового класса
+                currentReport.FilterChanged += (s, e) => RefreshReport();
+            }
+
+            foreach (var control in controls)
+            {
+                if (control is ComboBox comboBox)
+                {
+                    comboBox.SelectedIndexChanged += (s, e) =>
+                    {
+                        // Сохраняем фильтры перед обновлением
+                        var filters = currentReport?.GetFilterValues() ?? new Dictionary<string, object>();
+
+                        if (comboBox.SelectedValue != null && comboBox.SelectedValue.GetType() == typeof(int))
+                        {
+                            filters["CategoryId"] = comboBox.SelectedValue;
+                        }
+                        else
+                        {
+                            filters.Remove("CategoryId");
+                        }
+
+                        // Принудительное обновление без пересоздания отчета
+                        currentReport?.ApplyFilters(currentReport.GetFilterValues());
+                        plotView1.Model = currentReport?.CreatePlotModel();
+                        plotView1.InvalidatePlot(true);
+                    };
+                }
+            }
+        }
         #endregion
 
         #region О программе

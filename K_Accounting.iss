@@ -53,42 +53,12 @@ Name: "{commondesktop}\Мои финансы"; Filename: "{app}\K_Accounting.exe
 Name: "desktopicon"; Description: "Создать значок на рабочем столе"
 
 [Code]
-  
 function InitializeSetup(): Boolean;
-var
-  DotNetVersion: String;
-  ResultCode: Integer;
 begin
-  // Проверка наличия .NET 8 Desktop Runtime
-  if not RegQueryStringValue(
-    HKEY_LOCAL_MACHINE,
-    'SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedhost',
-    'Version',
-    DotNetVersion) 
-  or (CompareStr(DotNetVersion, '8.0.0') < 0) then
-  begin
-    if MsgBox(
-      'Для работы K_Accounting требуется .NET 8 Runtime.' + #13#10 +
-      'Установить сейчас? (требуется интернет-соединение)',
-      mbConfirmation, MB_YESNO) = IDYES 
-    then begin
-      ShellExec(
-        'open',
-        'https://download.visualstudio.microsoft.com/download/pr/815a0e0c-38f9-4f12-8933-03d9f6b6f0a2/6e6157f370a39ee0cc5a5d54770dbb3e/windowsdesktop-runtime-8.0.0-win-x64.exe',
-        '',
-        '',
-        SW_SHOW,
-        ewNoWait,
-        ResultCode);
-    end;
-  end;
-  
   Result := True;
 end;
 
 [CustomMessages]
-russian.NetFrameworkMissingTitle=Требуется .NET Framework
-russian.NetFrameworkMissing=Для работы приложения необходимо установить .NET 8 Runtime.
 russian.LaunchProgram=Запустить "Мои финансы" после установки
 
 [Run]

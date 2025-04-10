@@ -144,7 +144,7 @@
             txtComment.Location = new Point(145, 120);
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
-            txtComment.Size = new Size(226, 70);
+            txtComment.Size = new Size(226, 64);
             txtComment.TabIndex = 4;
             // 
             // label2

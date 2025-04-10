@@ -11,7 +11,7 @@ namespace K_Accounting.Data
     public class AppDbContext : DbContext
     {
 
-        public const int CurrentDbVersion = 2; // Увеличивать при изменениях
+        public const int CurrentDbVersion = 3; // Увеличивать при изменениях
 
         // Таблицы в базе данных
         public DbSet<DbVersion> DbVersions { get; set; }
@@ -23,6 +23,9 @@ namespace K_Accounting.Data
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Additional> Additionals { get; set; }
+        public DbSet<Debt> Debts { get; set; }
+        public DbSet<DebtPayment> DebtPayments { get; set; }
+        public DbSet<Counterparty> Counterparties { get; set; }
 
         // Настройка подключения к базе SQLite
 
@@ -40,12 +43,10 @@ namespace K_Accounting.Data
         // Настройка отношений между таблицами
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Глобальный фильр мягкого удаления
-            // Автоматическое скрытие удаленных записей
+            // Глобальный фильтр мягкого удаления
             modelBuilder.ApplyGlobalFilters<Interfaces.ISoftDelete>(e => e.IsDeleted == false);
 
-            // Конфигурация связей
-            // Связь расходов со счетами (нельзя удалять счет с расходами)
+            // Конфигурация для Expense
             modelBuilder.Entity<Expense>(e =>
             {
                 e.HasOne(x => x.Account)
@@ -53,16 +54,15 @@ namespace K_Accounting.Data
                     .OnDelete(DeleteBehavior.Restrict);
 
                 e.HasIndex(x => new { x.Date, x.Amount });
+
+                e.Property(x => x.Quantity)
+                    .HasDefaultValue(1m);
+
+                e.Property(x => x.IsAutoUnit)
+                    .HasDefaultValue(true);
             });
 
-            modelBuilder.Entity<Expense>()
-                .Property(e => e.Quantity)
-                .HasDefaultValue(1m);
-
-            modelBuilder.Entity<Expense>()
-                .Property(e => e.IsAutoUnit)
-                .HasDefaultValue(true);
-
+            // Конфигурация для SubCategory
             modelBuilder.Entity<SubCategory>(s =>
             {
                 s.HasOne(x => x.Category)
@@ -70,16 +70,69 @@ namespace K_Accounting.Data
                     .OnDelete(DeleteBehavior.SetNull);
             });
 
-            // Индексы
+            // Индексы для Account и Income
             modelBuilder.Entity<Account>().HasIndex(a => a.Name);
             modelBuilder.Entity<Income>().HasIndex(i => i.Date);
 
+            // Конфигурация для DbVersion
             modelBuilder.Entity<DbVersion>(entity =>
             {
                 entity.HasIndex(v => v.Version).IsUnique();
                 entity.Property(v => v.MigrationId).HasMaxLength(100);
             });
 
+            // Единый блок конфигурации для Debt
+            modelBuilder.Entity<Debt>(d =>
+            {
+                // Настройка свойств
+                d.Property(x => x.Type)
+                    .HasConversion<string>()
+                    .HasMaxLength(20);
+
+                d.Property(x => x.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(20)
+                    .HasDefaultValue(DebtStatus.Active);
+
+                d.Property(x => x.InitialAmount)
+                    .HasPrecision(18, 2);
+
+                d.Property(x => x.RemainingAmount)
+                    .HasPrecision(18, 2);
+
+                // Индексы
+                d.HasIndex(x => x.DueDate);
+                d.HasIndex(x => x.Status);
+                d.HasIndex(x => x.Type);
+
+                // Связи
+                d.HasMany(x => x.Payments)
+                    .WithOne(x => x.Debt)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                d.HasOne(x => x.Counterparty)
+                    .WithMany()
+                    .HasForeignKey(x => x.CounterpartyId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // Конфигурация для DebtPayment
+            modelBuilder.Entity<DebtPayment>(d =>
+            {
+                d.HasIndex(x => x.PaymentDate);
+                d.Property(x => x.Amount)
+                    .HasPrecision(18, 2);
+                d.Property(x => x.Comment)
+                    .HasMaxLength(1000);
+            });
+
+            // Конфигурация для Counterparty
+            modelBuilder.Entity<Counterparty>(c =>
+            {
+                c.HasIndex(x => x.Name).IsUnique();
+                c.Property(x => x.Phone).HasMaxLength(20);
+                c.Property(x => x.Email).HasMaxLength(100);
+            });
         }
 
         // Автоматическое "мягкое удаление" - пометка IsDeleted вместо реального удаления

@@ -31,6 +31,8 @@
 
         public Dictionary<string, SortSettings> GridsSortSettings { get; set; } = new();
 
+        public int SplitterDistance { get; set; } = 150; // Значение по умолчанию
+
         // Пример дополнительных настроек
         public string Theme { get; set; } = "Light";
         public int FontSize { get; set; } = 12;

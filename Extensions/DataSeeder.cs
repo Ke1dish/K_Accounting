@@ -24,16 +24,6 @@ namespace K_Accounting.Extensions
 
             context.Categories.AddRange(categories);
             context.SaveChanges();
-
-            //// Генерация транзакций
-            //var transactions = new Faker<Transaction>()
-            //    .RuleFor(t => t.Amount, f => f.Finance.Amount(10, 1000))
-            //    .RuleFor(t => t.Date, f => f.Date.Past(30))
-            //    .RuleFor(t => t.CategoryId, f => f.PickRandom(categories).Id)
-            //    .Generate(1000);
-
-            //context.Transactions.AddRange(transactions);
-            //context.SaveChanges();
         }
 
         public static void SeedCategoriesAndSubCategories(AppDbContext db)

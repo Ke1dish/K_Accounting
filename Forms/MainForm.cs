@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Diagnostics;
-using System.DirectoryServices;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -8,7 +7,6 @@ using K_Accounting.Data;
 using K_Accounting.Extensions;
 using K_Accounting.Forms;
 using K_Accounting.Models;
-using K_Accounting.Properties;
 using K_Accounting.Reports;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +17,8 @@ using OxyPlot.WindowsForms;
 namespace K_Accounting
 {
     // Создать и применить миграцию
-    // EntityFrameworkCore\Add-Migration InitialCreate
-    // EntityFrameworkCore\Update-Database
+    // dotnet ef migrations add НАЗВАНИЕ МИГРАЦИИ --context AppDbContext
+    // dotnet ef database update --context AppDbContext
 
     public partial class MainForm : Form
     {
@@ -33,6 +31,9 @@ namespace K_Accounting
         private Account _selectedAccount;
         private Expense _selectedExpense;
         private Income _selectedIncome;
+        private Debt _selectedGivenDebt;
+        private Debt _selectedReceivedDebt;
+        private Counterparty _selectedCounterparties;
 
         private AppSettings _settings;
 
@@ -48,6 +49,8 @@ namespace K_Accounting
         private DateTimePicker dtpStart;
         private DateTimePicker dtpEnd;
         private ReportBase currentReport;
+
+        private int _clickCount = 0; // Счетчик кликов
 
         public MainForm()
         {
@@ -86,6 +89,9 @@ namespace K_Accounting
             LoadExpenses();
             LoadSources();
             LoadIncomes();
+            LoadGivenDebts();
+            LoadReceivedDebts();
+            LoadCounterparties();
 
             // визуально убираем ярлыки закладок на пейджконтрол
             tcPage.Appearance = TabAppearance.FlatButtons;
@@ -99,8 +105,14 @@ namespace K_Accounting
             cmbExpenseYears.SelectedIndexChanged += (s, e) => LoadExpenses();
             cmbIncomeMonths.SelectedIndexChanged += (s, e) => LoadIncomes();
             cmbIncomeYears.SelectedIndexChanged += (s, e) => LoadIncomes();
+            cmbGivenDebtMonths.SelectedIndexChanged += (s, e) => LoadGivenDebts();
+            cmbGivenDebtYears.SelectedIndexChanged += (s, e) => LoadGivenDebts();
+            cmbReceivedDebtMonths.SelectedIndexChanged += (s, e) => LoadReceivedDebts();
+            cmbReceivedDebtYears.SelectedIndexChanged += (s, e) => LoadReceivedDebts();
             cmbExpenseMonths.SelectedIndex = DateTime.Now.Month;
             cmbIncomeMonths.SelectedIndex = DateTime.Now.Month;
+            cmbGivenDebtMonths.SelectedIndex = DateTime.Now.Month;
+            cmbReceivedDebtMonths.SelectedIndex = DateTime.Now.Month;
 
             InitializeReportPage();
 
@@ -122,7 +134,7 @@ namespace K_Accounting
             tvMenuPanel_AfterSelect(this, new TreeViewEventArgs(tvMenuPanel.Nodes[0]));
             // пока не реализованна страница настроек удаляем ссылку на нее
             // Удалить следующие строки после реализации страницы настроек
-            tvMenuPanel.Nodes.RemoveAt(5);
+            tvMenuPanel.Nodes.RemoveAt(6);
 
         }
 
@@ -160,6 +172,15 @@ namespace K_Accounting
             {
                 StartPosition = FormStartPosition.CenterScreen;
                 Size = new Size(800, 600); // Размер по умолчанию
+            }
+
+            if (_settings.SplitterDistance > 0 && _settings.SplitterDistance < splitContainer1.Width)
+            {
+                splitContainer1.SplitterDistance = _settings.SplitterDistance;
+            }
+            else
+            {
+                splitContainer1.SplitterDistance = 150; // Значение по умолчанию
             }
 
             // Гарантия минимального размера
@@ -213,6 +234,8 @@ namespace K_Accounting
                 _settings.WindowState = WindowState;
             }
 
+            _settings.SplitterDistance = splitContainer1.SplitterDistance;
+
             SettingsManager.SaveSettings(_settings);
 
             // Сохраняем настройки всех гридов
@@ -250,6 +273,20 @@ namespace K_Accounting
             cmbIncomeMonths.DisplayMember = "Name";
             cmbIncomeMonths.ValueMember = "Value";
 
+            var debtMonths = Enumerable.Range(1, 12)
+                .Select(m => new { Value = m, Name = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m) })
+                .ToList();
+
+            debtMonths.Insert(0, new { Value = 0, Name = "Все месяцы" });
+
+            cmbGivenDebtMonths.DataSource = debtMonths;
+            cmbGivenDebtMonths.DisplayMember = "Name";
+            cmbGivenDebtMonths.ValueMember = "Value";
+
+            cmbReceivedDebtMonths.DataSource = debtMonths;
+            cmbReceivedDebtMonths.DisplayMember = "Name";
+            cmbReceivedDebtMonths.ValueMember = "Value";
+
             // Заполнение годов
             RefreshYearFilters();
         }
@@ -269,11 +306,24 @@ namespace K_Accounting
                 .OrderBy(y => y)
                 .ToList();
 
-            var allYears = expenseYears.Union(incomeYears).OrderBy(y => y).ToList();
-            allYears.Insert(0, 0); // Добавляем "Все годы"
+            var debtYears = _context.Debts
+                .Select(d => d.LoanDate.Year)
+                .Distinct()
+                .OrderBy(y => y)
+                .ToList();
 
+            var allYears = expenseYears.Union(expenseYears).OrderBy(y => y).ToList();
+            allYears.Insert(0, 0); // Добавляем "Все годы"
             cmbExpenseYears.DataSource = allYears.ToList();
+
+            allYears = expenseYears.Union(incomeYears).OrderBy(y => y).ToList();
+            allYears.Insert(0, 0); // Добавляем "Все годы"
             cmbIncomeYears.DataSource = allYears.ToList();
+
+            allYears = allYears.Union(debtYears).Distinct().OrderBy(y => y).ToList();
+            allYears.Insert(0, 0); // Добавляем "Все годы"
+            cmbGivenDebtYears.DataSource = allYears.ToList();
+            cmbReceivedDebtYears.DataSource = allYears.ToList();
 
             // Установка текущего года по умолчанию
             var currentYear = DateTime.Now.Year;
@@ -287,6 +337,8 @@ namespace K_Accounting
                 cmbExpenseYears.SelectedIndex = 0;
                 cmbIncomeYears.SelectedIndex = 0;
             }
+
+            allYears = allYears.Union(debtYears).Distinct().OrderBy(y => y).ToList();
         }
 
         private void InitializeDataGridViews()
@@ -350,6 +402,35 @@ namespace K_Accounting
                 CreateColumn("colName", "Название", "Name"),
                 CreateColumn("colRate", "Курс", "Rate", "N6", DataGridViewContentAlignment.MiddleRight),
                 CreateColumn("colSymbol", "Символ", "Symbol"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
+
+            InitializeGrid(dgwGivenDebts, "GivenDebts", new List<DataGridViewColumn>
+            {
+                CreateColumn("colCounterparty", "Контрагент", "Counterparty.Name"),
+                CreateColumn("colLoanDate", "Дата займа", "LoanDate", "dd.MM.yyyy"),
+                CreateColumn("colDueDate", "Дата возврата", "DueDate", "dd.MM.yyyy"),
+                CreateColumn("colAmount", "Сумма", "InitialAmount", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colRemaining", "Остаток", "RemainingAmount", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colStatus", "Статус", "Status")
+            });
+
+            InitializeGrid(dgwReceivedDebts, "ReceivedDebts", new List<DataGridViewColumn>
+            {
+                CreateColumn("colCounterparty", "Контрагент", "Counterparty.Name"),
+                CreateColumn("colLoanDate", "Дата займа", "LoanDate", "dd.MM.yyyy"),
+                CreateColumn("colDueDate", "Дата возврата", "DueDate", "dd.MM.yyyy"),
+                CreateColumn("colAmount", "Сумма", "InitialAmount", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colRemaining", "Остаток", "RemainingAmount", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colStatus", "Статус", "Status")
+            });
+
+            InitializeGrid(dgwCounterparties, "Counterparties", new List<DataGridViewColumn>
+            {
+                CreateColumn("colName", "Название", "Name"),
+                CreateColumn("colPhone", "Телефон", "Phone"),
+                CreateColumn("colEmail", "Email", "Email"),
+                CreateColumn("colAddress", "Адрес", "Address"),
                 CreateColumn("colComment", "Комментарий", "Comment")
             });
         }
@@ -419,6 +500,17 @@ namespace K_Accounting
             GridSorter.HandleSorting(grid, e, currentData);
         }
 
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            _clickCount++; // Увеличиваем счетчик
+
+            if (_clickCount >= 5)
+            {
+                using (var form = new GratitudeForm()) { form.ShowDialog(); }
+                _clickCount = 0; // Сбрасываем счетчик
+            }
+        }
+
         #endregion
 
         #region База Данных
@@ -462,15 +554,17 @@ namespace K_Accounting
 
         private void LogDbVersion(AppDbContext db)
         {
-            // была строка var lastMigration = db.Database.GetAppliedMigrations().LastOrDefault();
+            var firstMigration = db.Database.GetAppliedMigrations().FirstOrDefault();
+            if (firstMigration == null) return;
 
+            var version = ExtractVersionFromMigration(firstMigration);
             db.DbVersions.Add(new DbVersion
             {
-                Version = AppDbContext.CurrentDbVersion,
-                ScriptName = "InitialCreate",  // было так ScriptName = lastMigration ?? "Initial",
+                Version = version,
+                ScriptName = "InitialCreate",
                 AppliedAt = DateTime.UtcNow,
-                MigrationId = "initial_migration",  // было так MigrationId = lastMigration ?? Guid.NewGuid().ToString()
-                IsDeleted = false // Явное указание значения
+                MigrationId = firstMigration,
+                IsDeleted = false
             });
             db.SaveChanges();
         }
@@ -491,6 +585,13 @@ namespace K_Accounting
                     if (existingMigrations.Contains(migration)) continue;
 
                     var version = ExtractVersionFromMigration(migration);
+
+                    // Проверка уникальности версии
+                    if (db.DbVersions.Any(v => v.Version == version))
+                    {
+                        continue; // или обработать конфликт
+                    }
+
                     var dbVersion = new DbVersion
                     {
                         Version = version,
@@ -499,9 +600,6 @@ namespace K_Accounting
                         MigrationId = migration,
                         IsDeleted = false
                     };
-
-                    if (string.IsNullOrEmpty(dbVersion.MigrationId))
-                        throw new InvalidOperationException("Invalid migration ID");
 
                     db.DbVersions.Add(dbVersion);
                 }
@@ -525,15 +623,13 @@ namespace K_Accounting
         // Вспомогательный метод для извлечения версии
         private int ExtractVersionFromMigration(string migrationName)
         {
-            // Пример имени миграции: 20240602120000_AddNewFeatures
             var versionPart = migrationName.Split('_').FirstOrDefault();
-
-            if (versionPart != null && int.TryParse(versionPart[..8], out int version))
+            if (versionPart != null && versionPart.Length >= 14
+                && int.TryParse(versionPart[..8], out int version))
             {
                 return version;
             }
-
-            return AppDbContext.CurrentDbVersion; // Fallback
+            throw new InvalidOperationException($"Невозможно извлечь версию из миграции: {migrationName}");
         }
 
         // проверка наличия файла базы данных
@@ -702,11 +798,20 @@ namespace K_Accounting
                 case 5: // Источники
                     LoadSources();
                     break;
-                case 6: // Дополнительно
+                case 6: // Упоминание
                     LoadAdditionals();
+                    break;
+                case 13: // Контрагенты
+                    LoadCounterparties();
                     break;
                 case 7: // Валюты
                     LoadCurrencies();
+                    break;
+                case 11: // Долги выданные
+                    LoadGivenDebts();
+                    break;
+                case 12: // Долги полученные
+                    LoadReceivedDebts();
                     break;
                 case 8: // Отчеты
                     break;
@@ -905,6 +1010,23 @@ namespace K_Accounting
                 "Currencies_colRate" => 120,
                 "Currencies_colSymbol" => 120,
                 "Currencies_colComment" => 120,
+                "GivenDebts_colCounterparty" => 120,
+                "GivenDebts_colLoanDate" => 120,
+                "GivenDebts_colDueDate" => 120,
+                "GivenDebts_colAmount" => 120,
+                "GivenDebts_colRemaining" => 120,
+                "GivenDebts_colStatus" => 120,
+                "ReceivedDebts_colCounterparty" => 120,
+                "ReceivedDebts_colLoanDate" => 120,
+                "ReceivedDebts_colDueDate" => 120,
+                "ReceivedDebts_colAmount" => 120,
+                "ReceivedDebts_colRemaining" => 120,
+                "ReceivedDebts_colStatus" => 120,
+                "Counterparties_colName" => 180,
+                "Counterparties_colPhone" => 120,
+                "Counterparties_colEmail" => 150,
+                "Counterparties_colAddress" => 200,
+                "Counterparties_colComment" => 250,
                 _ => 200
             };
         }
@@ -942,7 +1064,24 @@ namespace K_Accounting
                 "Currencies_colName" => 0,
                 "Currencies_colRate" => 1,
                 "Currencies_colSymbol" => 2,
-                "Currencies_colComment" => 3
+                "Currencies_colComment" => 3,
+                "GivenDebts_colCounterparty" => 0,
+                "GivenDebts_colLoanDate" => 1,
+                "GivenDebts_colDueDate" => 2,
+                "GivenDebts_colAmount" => 3,
+                "GivenDebts_colRemaining" => 4,
+                "GivenDebts_colStatus" => 5,
+                "ReceivedDebts_colCounterparty" => 0,
+                "ReceivedDebts_colLoanDate" => 1,
+                "ReceivedDebts_colDueDate" => 2,
+                "ReceivedDebts_colAmount" => 3,
+                "ReceivedDebts_colRemaining" => 4,
+                "ReceivedDebts_colStatus" => 5,
+                "Counterparties_colName" => 0,
+                "Counterparties_colPhone" => 1,
+                "Counterparties_colEmail" => 2,
+                "Counterparties_colAddress" => 3,
+                "Counterparties_colComment" => 4,
             };
         }
 
@@ -1017,6 +1156,9 @@ namespace K_Accounting
             "Source" => () => btnAddSources_Click(null, EventArgs.Empty),
             "Additionals" => () => btnAddAdditionals_Click(null, EventArgs.Empty),
             "Currencies" => () => btnAddCurrencie_Click(null, EventArgs.Empty),
+            "GivenDebts" => () => btnAddGivenDebt_Click(null, EventArgs.Empty),
+            "ReceivedDebts" => () => btnAddReceivedDebt_Click(null, EventArgs.Empty),
+            "Counterparties" => () => btnAddCounterparties_Click(null, EventArgs.Empty),
             _ => null
         };
 
@@ -1030,6 +1172,9 @@ namespace K_Accounting
             "Source" => () => btnEditSources_Click(null, EventArgs.Empty),
             "Additionals" => () => btnEditAdditionals_Click(null, EventArgs.Empty),
             "Currencies" => () => btnEditCurrencie_Click(null, EventArgs.Empty),
+            "GivenDebts" => () => btnEditGivenDebt_Click(null, EventArgs.Empty),
+            "ReceivedDebts" => () => btnEditReceivedDebt_Click(null, EventArgs.Empty),
+            "Counterparties" => () => btnEditCounterparties_Click(null, EventArgs.Empty),
             _ => null
         };
 
@@ -1043,12 +1188,15 @@ namespace K_Accounting
             "Source" => () => btnDeleteSources_Click(null, EventArgs.Empty),
             "Additionals" => () => btnDeleteAdditionals_Click(null, EventArgs.Empty),
             "Currencies" => () => btnDeleteCurrencie_Click(null, EventArgs.Empty),
+            "GivenDebts" => () => btnDeleteGivenDebt_Click(null, EventArgs.Empty),
+            "ReceivedDebts" => () => btnDeleteReceivedDebt_Click(null, EventArgs.Empty),
+            "Counterparties" => () => btnDeleteCounterparties_Click(null, EventArgs.Empty),
             _ => null
         };
 
         private void AddSpecialMenuItems(ContextMenuStrip menu, DataGridView dgv)
         {
-            if (new[] { "Accounts", "Expenses" }.Contains(dgv.Name))
+            if (new[] { "Accounts", "Expenses", "ReceivedDebts", "GivenDebts" }.Contains(dgv.Name))
             {
                 menu.Items.Add(new ToolStripSeparator());
             }
@@ -1062,7 +1210,15 @@ namespace K_Accounting
                 {
                     "Expenses",
                     ("Шаблоны", () => btnEditExpenses1_Click(null, EventArgs.Empty))
-                }
+                },
+                {
+                    "ReceivedDebts",
+                    ("Добавить платеж", () => btnPaymentReceivedDebt_Click(null, EventArgs.Empty))  // изменить процедуру вызова AddPayment
+                },
+                {
+                    "GivenDebts",
+                    ("Добавить платеж", () => btnPaymentGivenDebt_Click(null, EventArgs.Empty))  // изменить процедуру вызова AddPayment
+                },
             };
 
             if (items.TryGetValue(dgv.Name, out var menuItem))
@@ -1071,11 +1227,18 @@ namespace K_Accounting
                 item.Click += (s, e) => menuItem.Handler();
                 menu.Items.Add(item);
             }
+
+            if (items.TryGetValue(dgv.Name + '1', out var menuItem1))
+            {
+                var item = new ToolStripMenuItem(menuItem1.Name);
+                item.Click += (s, e) => menuItem1.Handler();
+                menu.Items.Add(item);
+            }
         }
 
         private void AddPrintMenuItems(ContextMenuStrip menu, DataGridView dgv)
         {
-            if (new[] { "Accounts", "Expenses", "Incomes" }.Contains(dgv.Name))
+            if (new[] { "Accounts", "Expenses", "Incomes", "GivenDebts", "ReceivedDebts" }.Contains(dgv.Name))
             {
                 menu.Items.Add(new ToolStripSeparator());
 
@@ -2389,6 +2552,577 @@ namespace K_Accounting
 
         #endregion
 
+        #region Контрагенты (Counterparties)
+        private void LoadCounterparties()
+        {
+            try
+            {
+                var counterparties = _context.Counterparties
+                    .Where(c => !c.IsDeleted)
+                    .OrderBy(c => c.Name)
+                    .ToList();
+
+                dgwCounterparties.DataSource = counterparties;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                MessageBox.Show($"Ошибка загрузки контрагентов: {ex.Message}");
+            }
+        }
+
+        private void dgwCounterparties_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgwCounterparties.CurrentCell == null) return;
+            _selectedCounterparties = dgwCounterparties.CurrentRow?.DataBoundItem as Counterparty;
+            btnEditCounterparties.Enabled = _selectedCounterparties != null;
+            btnDeleteCounterparties.Enabled = _selectedCounterparties != null;
+            tbDetailsCounterparties.Text = _selectedCounterparties?.Comment ?? "";
+        }
+
+        private void dgwCounterparties_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && dgwCounterparties.CurrentRow != null)
+            {
+                dgwCounterparties.CurrentCell = dgwCounterparties.Rows[e.RowIndex].Cells[0];
+                btnEditCounterparties.PerformClick();
+            }
+        }
+
+        private void btnAddCounterparties_Click(object sender, EventArgs e)
+        {
+            using (var form = new AddEditCounterpartyForm(_context))
+            {
+                form.isEditMode = false;
+                if (form.ShowDialog() == DialogResult.OK && form.SavedCounterpartyId.HasValue)
+                {
+                    LoadCounterparties();
+                    foreach (DataGridViewRow row in dgwCounterparties.Rows)
+                    {
+                        var Counterparti = row.DataBoundItem as Counterparty;
+                        if (Counterparti?.Id == form.SavedCounterpartyId.Value)
+                        {
+                            dgwCounterparties.CurrentCell = row.Cells[0];
+                            _selectedCounterparties = dgwCounterparties.CurrentRow?.DataBoundItem as Counterparty;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnEditCounterparties_Click(object sender, EventArgs e)
+        {
+            if (_selectedCounterparties == null || dgwCounterparties.CurrentRow == null || _selectedCounterparties.IsDeleted) return;
+
+            int selectedId = _selectedCounterparties.Id;
+
+            using (var form = new AddEditCounterpartyForm(_selectedCounterparties, _context))
+            {
+                form.isEditMode = true;
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    _context.Entry(_selectedCounterparties).Reload();
+                    LoadCounterparties();
+
+                    foreach (DataGridViewRow row in dgwCounterparties.Rows)
+                    {
+                        var Counterparti = row.DataBoundItem as Counterparty;
+                        if (Counterparti?.Id == selectedId)
+                        {
+                            dgwCounterparties.CurrentCell = row.Cells[0];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnDeleteCounterparties_Click(object sender, EventArgs e)
+        {
+            if (_selectedCounterparties == null || dgwCounterparties.CurrentRow == null) return;
+
+            int savedIndex = dgwCounterparties.CurrentRow.Index;
+
+            var result = MessageBox.Show(
+                $"Вы уверены что хотите удалить источник'{_selectedCounterparties.Name}'?",
+                "Подтверждение удаления",
+                MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    _selectedCounterparties.IsDeleted = true;
+                    _context.SaveChanges();
+                    LoadCounterparties();
+                    if (dgwCounterparties.Rows.Count > 0)
+                    {
+                        int newIndex = savedIndex >= dgwCounterparties.Rows.Count
+                            ? dgwCounterparties.Rows.Count - 1
+                            : savedIndex;
+
+                        if (dgwCounterparties.Rows.Count > 0 && newIndex >= 0)
+                        {
+                            dgwCounterparties.CurrentCell = dgwCounterparties.Rows[newIndex].Cells[0];
+                            _selectedCounterparties = dgwCounterparties.CurrentRow?.DataBoundItem as Counterparty;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка удаления : {ex.Message}");
+                }
+            }
+        }
+
+        #endregion
+
+        #region Долги выданные (Given Debts)
+        private void LoadGivenDebts(int? preserveSelectionId = null)
+        {
+            try
+            {
+                var selectedMonth = cmbGivenDebtMonths.SelectedValue is int month ? month : 0;
+                var selectedYear = cmbGivenDebtYears.SelectedItem is int year ? year : 0;
+
+                var query = _context.Debts
+                    .Include(d => d.Counterparty)
+                    .Include(d => d.Account)
+                    .Include(d => d.Payments)
+                    .Where(d => !d.IsDeleted && d.Type == DebtType.Given);
+
+                if (selectedMonth > 0)
+                    query = query.Where(d => d.LoanDate.Month == selectedMonth);
+
+                if (selectedYear > 0)
+                    query = query.Where(d => d.LoanDate.Year == selectedYear);
+
+                var debts = query
+                    .OrderByDescending(d => d.DueDate)
+                    .ToList();
+
+                dgwGivenDebts.DataSource = debts;
+                UpdateGivenDebtTotals();
+
+                // Восстановление выделения
+                if (preserveSelectionId.HasValue)
+                {
+                    foreach (DataGridViewRow row in dgwGivenDebts.Rows)
+                    {
+                        var debt = row.DataBoundItem as Debt;
+                        if (debt?.Id == preserveSelectionId.Value)
+                        {
+                            dgwGivenDebts.ClearSelection();
+                            row.Selected = true;
+                            dgwGivenDebts.CurrentCell = row.Cells[0];
+                            dgwGivenDebts.FirstDisplayedScrollingRowIndex = row.Index;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                MessageBox.Show($"Ошибка загрузки выданных долгов: {ex.Message}");
+            }
+        }
+
+        private void ApplyDateFilters(ref IQueryable<Debt> query, int month, int year)
+        {
+            if (month > 0) query = query.Where(d => d.LoanDate.Month == month);
+            if (year > 0) query = query.Where(d => d.LoanDate.Year == year);
+        }
+
+        private void UpdateGivenDebtTotals()
+        {
+            var givenTotal = _context.Debts
+                .Where(d => d.Type == DebtType.Given && !d.IsDeleted)
+                .Sum(d => d.RemainingAmount);
+
+            lblGivenDebtsTotal.Text = $"Долги выданные: {givenTotal:N2}";
+        }
+
+        private void dgwGivenDebts_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgwGivenDebts.CurrentCell == null) return;
+            _selectedGivenDebt = dgwGivenDebts.CurrentRow?.DataBoundItem as Debt;
+            btnEditGivenDebt.Enabled = _selectedGivenDebt != null;
+            btnDeleteGivenDebt.Enabled = _selectedGivenDebt != null;
+            tbDetailsGivenDebts.Text = _selectedGivenDebt?.Comment ?? "";
+        }
+
+        private void dgwGivenDebts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            var grid = sender as DataGridView;
+            grid.CurrentCell = grid.Rows[e.RowIndex].Cells[0];
+            btnEditGivenDebt.PerformClick();
+
+        }
+
+        private void dgwGivenDebts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var grid = sender as DataGridView;
+            if (grid.Rows[e.RowIndex].DataBoundItem is Debt debt)
+            {
+                if (dgwGivenDebts.Columns[e.ColumnIndex].Name == "colCounterparty" && e.RowIndex >= 0)
+                {
+                    debt = dgwGivenDebts.Rows[e.RowIndex].DataBoundItem as Debt;
+                    e.Value = debt?.Counterparty?.Name ?? "Контрагент не указан";
+                }
+
+                // Подсветка просроченных
+                if (debt.DueDate < DateTime.Now && debt.Status == DebtStatus.Active)
+                {
+                    e.CellStyle.BackColor = Color.LightCoral;
+                    e.CellStyle.Font = new Font(grid.Font, FontStyle.Bold);
+                }
+
+                // Форматирование статуса
+                if (grid.Columns[e.ColumnIndex].Name == "colStatus")
+                {
+                    e.Value = debt.Status switch
+                    {
+                        DebtStatus.Active => "Активен",
+                        DebtStatus.Repaid => "Погашен",
+                        _ => e.Value
+                    };
+                }
+            }
+        }
+
+        private void btnAddGivenDebt_Click(object sender, EventArgs e)
+        {
+            using (var form = new AddEditDebtForm(_context, DebtType.Given))
+            {
+                form.DataUpdated += (s, args) =>
+                {
+                    LoadGivenDebts();
+                    LoadAccounts();
+
+                    if (form.SavedDebtId.HasValue)
+                    {
+                        SelectDebtInGrid(dgwGivenDebts, form.SavedDebtId.Value);
+                    }
+                };
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    LoadGivenDebts(form.SavedDebtId); // Выделяем новую запись
+                    LoadAccounts();
+                }
+            }
+        }
+
+        private void btnEditGivenDebt_Click(object sender, EventArgs e)
+        {
+            if (_selectedGivenDebt == null) return;
+
+            int selectedId = _selectedGivenDebt.Id;
+
+            using (var form = new AddEditDebtForm(_context, DebtType.Given, _selectedGivenDebt))
+            {
+                form.DataUpdated += (s, args) =>
+                {
+                    LoadGivenDebts(selectedId);
+                    LoadAccounts();
+                };
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    LoadGivenDebts(selectedId);
+                }
+            }
+        }
+
+        private void btnDeleteGivenDebt_Click(object sender, EventArgs e)
+        {
+            if (_selectedGivenDebt == null) return;
+
+            int savedIndex = dgwGivenDebts.CurrentRow.Index; // Сохраняем индекс
+
+            var result = MessageBox.Show(
+                $"Вы уверены что хотите удалить долг от {_selectedGivenDebt.LoanDate:d}?\nКонтрагент: {_selectedGivenDebt.Counterparty?.Name}",
+                "Подтверждение удаления",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (result != DialogResult.Yes) return;
+
+            try
+            {
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    // ... существующий код удаления ...
+
+                    _context.SaveChanges();
+                    transaction.Commit();
+                }
+
+                LoadGivenDebts();
+                LoadAccounts();
+
+                // Восстанавливаем выделение
+                RestoreGridSelection(dgwGivenDebts, savedIndex);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка удаления: {ex.Message}");
+            }
+        }
+
+        private void btnPaymentGivenDebt_Click(object sender, EventArgs e)
+        {
+            using (var paymentsForm = new PaymentsForm(_context, _selectedGivenDebt?.Id))
+            {
+                paymentsForm.ShowDialog();
+
+                // Обновить данные после закрытия формы
+                if (paymentsForm.DataUpdated)
+                {
+                    LoadGivenDebts();
+                    LoadReceivedDebts();
+                }
+            }
+        }
+
+        private void SelectDebtInGrid(DataGridView grid, int debtId)
+        {
+            foreach (DataGridViewRow row in grid.Rows)
+            {
+                var debt = row.DataBoundItem as Debt;
+                if (debt?.Id == debtId)
+                {
+                    grid.CurrentCell = row.Cells[0];
+                    break;
+                }
+            }
+        }
+
+        private void RestoreGridSelection(DataGridView grid, int originalIndex)
+        {
+            if (grid.Rows.Count == 0) return;
+
+            int newIndex = originalIndex >= grid.Rows.Count
+                ? grid.Rows.Count - 1
+                : originalIndex;
+
+            if (newIndex >= 0)
+            {
+                grid.Rows[newIndex].Selected = true;
+                grid.CurrentCell = grid.Rows[newIndex].Cells[0];
+                grid.FirstDisplayedScrollingRowIndex = newIndex;
+            }
+        }
+        #endregion
+
+        #region Долги полученные (Received Debts)
+        private void LoadReceivedDebts(int? preserveSelectionId = null)
+        {
+            try
+            {
+                var selectedMonth = cmbReceivedDebtMonths.SelectedValue is int month ? month : 0;
+                var selectedYear = cmbReceivedDebtYears.SelectedItem is int year ? year : 0;
+
+                var query = _context.Debts
+                    .Include(d => d.Counterparty)
+                    .Include(d => d.Account)
+                    .Include(d => d.Payments)
+                    .Where(d => !d.IsDeleted && d.Type == DebtType.Received);
+
+                if (selectedMonth > 0)
+                    query = query.Where(d => d.LoanDate.Month == selectedMonth);
+
+                if (selectedYear > 0)
+                    query = query.Where(d => d.LoanDate.Year == selectedYear);
+
+                var debts = query
+                    .OrderByDescending(d => d.DueDate)
+                    .ToList();
+
+                dgwReceivedDebts.DataSource = debts;
+                UpdateReceivedDebtTotals();
+
+                // Восстановление выделения
+                if (preserveSelectionId.HasValue)
+                {
+                    foreach (DataGridViewRow row in dgwReceivedDebts.Rows)
+                    {
+                        var debt = row.DataBoundItem as Debt;
+                        if (debt?.Id == preserveSelectionId.Value)
+                        {
+                            dgwReceivedDebts.ClearSelection();
+                            row.Selected = true;
+                            dgwReceivedDebts.CurrentCell = row.Cells[0];
+                            dgwReceivedDebts.FirstDisplayedScrollingRowIndex = row.Index;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                MessageBox.Show($"Ошибка загрузки полученных долгов: {ex.Message}");
+            }
+        }
+
+        private void UpdateReceivedDebtTotals()
+        {
+            var receivedTotal = _context.Debts
+                .Where(d => d.Type == DebtType.Received && !d.IsDeleted)
+                .Sum(d => d.RemainingAmount);
+
+            lblReceivedDebtsTotal.Text = $"Долги полученные: {receivedTotal:N2}";
+        }
+
+        private void dgwReceivedDebts_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgwReceivedDebts.CurrentRow == null) return;
+            _selectedReceivedDebt = dgwReceivedDebts.CurrentRow?.DataBoundItem as Debt;
+            btnEditReceivedDebt.Enabled = _selectedReceivedDebt != null;
+            btnDeleteReceivedDebt.Enabled = _selectedReceivedDebt != null;
+        }
+
+        private void dgwReceivedDebts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            var grid = sender as DataGridView;
+            grid.CurrentCell = grid.Rows[e.RowIndex].Cells[0];
+            btnEditReceivedDebt.PerformClick();
+        }
+
+        private void dgwReceivedDebts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var grid = sender as DataGridView;
+            if (grid.Rows[e.RowIndex].DataBoundItem is Debt debt)
+            {
+
+                if (dgwReceivedDebts.Columns[e.ColumnIndex].Name == "colCounterparty" && e.RowIndex >= 0)
+                {
+                    debt = dgwReceivedDebts.Rows[e.RowIndex].DataBoundItem as Debt;
+                    e.Value = debt?.Counterparty?.Name ?? "Контрагент не указан";
+                }
+
+                // Подсветка просроченных
+                if (debt.DueDate < DateTime.Now && debt.Status == DebtStatus.Active)
+                {
+                    e.CellStyle.BackColor = Color.LightCoral;
+                    e.CellStyle.Font = new Font(grid.Font, FontStyle.Bold);
+                }
+
+                // Форматирование статуса
+                if (grid.Columns[e.ColumnIndex].Name == "colStatus")
+                {
+                    e.Value = debt.Status switch
+                    {
+                        DebtStatus.Active => "Активен",
+                        DebtStatus.Repaid => "Погашен",
+                        _ => e.Value
+                    };
+                }
+            }
+        }
+
+        private void btnAddReceivedDebt_Click(object sender, EventArgs e)
+        {
+            using (var form = new AddEditDebtForm(_context, DebtType.Received))
+            {
+                form.DataUpdated += (s, args) =>
+                {
+                    LoadReceivedDebts();
+                    LoadAccounts();
+
+                    if (form.SavedDebtId.HasValue)
+                    {
+                        SelectDebtInGrid(dgwReceivedDebts, form.SavedDebtId.Value);
+                    }
+                };
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    LoadReceivedDebts(form.SavedDebtId); // Выделяем новую запись
+                    LoadAccounts();
+                }
+            }
+        }
+
+        private void btnEditReceivedDebt_Click(object sender, EventArgs e)
+        {
+            if (_selectedReceivedDebt == null) return;
+
+            int selectedId = _selectedReceivedDebt.Id;
+
+            using (var form = new AddEditDebtForm(_context, DebtType.Received, _selectedReceivedDebt))
+            {
+                form.DataUpdated += (s, args) =>
+                {
+                    LoadReceivedDebts(selectedId);
+                    LoadAccounts();
+                };
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    LoadReceivedDebts(selectedId);
+                }
+            }
+        }
+
+        private void btnDeleteReceivedDebt_Click(object sender, EventArgs e)
+        {
+            if (_selectedReceivedDebt == null) return;
+
+            int savedIndex = dgwReceivedDebts.CurrentRow.Index; // Сохраняем индекс
+
+            var result = MessageBox.Show(
+                $"Вы уверены что хотите удалить долг от {_selectedReceivedDebt.LoanDate:d}?\nКонтрагент: {_selectedReceivedDebt.Counterparty?.Name}",
+                "Подтверждение удаления",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (result != DialogResult.Yes) return;
+
+            try
+            {
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    // ... существующий код удаления ...
+
+                    _context.SaveChanges();
+                    transaction.Commit();
+                }
+
+                LoadReceivedDebts();
+                LoadAccounts();
+
+                // Восстанавливаем выделение
+                RestoreGridSelection(dgwReceivedDebts, savedIndex);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка удаления: {ex.Message}");
+            }
+        }
+
+        private void btnPaymentReceivedDebt_Click(object sender, EventArgs e)
+        {
+            using (var paymentsForm = new PaymentsForm(_context, _selectedReceivedDebt?.Id))
+            {
+                paymentsForm.ShowDialog();
+
+                // Обновить данные после закрытия формы
+                if (paymentsForm.DataUpdated)
+                {
+                    LoadGivenDebts();
+                    LoadReceivedDebts();
+                }
+            }
+        }
+        #endregion
+
         #region Отчеты
         private void InitializeReportPage()
         {
@@ -2423,7 +3157,7 @@ namespace K_Accounting
             btnRefresh.Click += (s, e) => RefreshReport();
 
             dtpStartReportDate.Format = DateTimePickerFormat.Short;
-            dtpStartReportDate.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month-1, 1);
+            dtpStartReportDate.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, 1);
             dtpStartReportDate.ValueChanged += (s, e) => RefreshReport();
 
             dtpEndReportDate.Format = DateTimePickerFormat.Short;
@@ -2471,7 +3205,7 @@ namespace K_Accounting
             // Добавляем элементы на панель с правильным порядком
             foreach (var control in filterControls)
             {
-                control.Margin = new Padding(3, 0, 3, 5); 
+                control.Margin = new Padding(3, 0, 3, 5);
                 control.Font = new Font("Segoe UI", 9F);
                 pnlFilters.Controls.Add(control);
             }

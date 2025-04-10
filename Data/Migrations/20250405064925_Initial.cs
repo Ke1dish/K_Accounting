@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace K_Accounting.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,6 +44,26 @@ namespace K_Accounting.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Counterparties",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Phone = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Address = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    Comment = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Counterparties", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,6 +173,42 @@ namespace K_Accounting.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Debts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CounterpartyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Type = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    LoanDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    InitialAmount = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: false),
+                    RemainingAmount = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: false),
+                    Status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false, defaultValue: "Active"),
+                    Comment = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Debts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Debts_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Debts_Counterparties_CounterpartyId",
+                        column: x => x.CounterpartyId,
+                        principalTable: "Counterparties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Expenses",
                 columns: table => new
                 {
@@ -233,6 +289,31 @@ namespace K_Accounting.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DebtPayments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DebtId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Amount = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: false),
+                    Comment = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DebtPayments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DebtPayments_Debts_DebtId",
+                        column: x => x.DebtId,
+                        principalTable: "Debts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_CurrencyId",
                 table: "Accounts",
@@ -244,10 +325,51 @@ namespace K_Accounting.Data.Migrations
                 column: "Name");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Counterparties_Name",
+                table: "Counterparties",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DbVersions_Version",
                 table: "DbVersions",
                 column: "Version",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DebtPayments_DebtId",
+                table: "DebtPayments",
+                column: "DebtId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DebtPayments_PaymentDate",
+                table: "DebtPayments",
+                column: "PaymentDate");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Debts_AccountId",
+                table: "Debts",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Debts_CounterpartyId",
+                table: "Debts",
+                column: "CounterpartyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Debts_DueDate",
+                table: "Debts",
+                column: "DueDate");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Debts_Status",
+                table: "Debts",
+                column: "Status");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Debts_Type",
+                table: "Debts",
+                column: "Type");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Expenses_AccountId",
@@ -302,10 +424,16 @@ namespace K_Accounting.Data.Migrations
                 name: "DbVersions");
 
             migrationBuilder.DropTable(
+                name: "DebtPayments");
+
+            migrationBuilder.DropTable(
                 name: "Expenses");
 
             migrationBuilder.DropTable(
                 name: "Incomes");
+
+            migrationBuilder.DropTable(
+                name: "Debts");
 
             migrationBuilder.DropTable(
                 name: "Additionals");
@@ -314,10 +442,13 @@ namespace K_Accounting.Data.Migrations
                 name: "SubCategories");
 
             migrationBuilder.DropTable(
+                name: "Sources");
+
+            migrationBuilder.DropTable(
                 name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "Sources");
+                name: "Counterparties");
 
             migrationBuilder.DropTable(
                 name: "Categories");

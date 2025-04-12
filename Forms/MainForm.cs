@@ -1,7 +1,7 @@
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -9,14 +9,14 @@ using K_Accounting.Data;
 using K_Accounting.Extensions;
 using K_Accounting.Forms;
 using K_Accounting.Models;
-using K_Accounting.Properties;
 using K_Accounting.Reports;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Newtonsoft.Json;
 using OxyPlot;
 using OxyPlot.WindowsForms;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using VersionChecker = K_Accounting.Utilities.VersionChecker;
 
 namespace K_Accounting
 {
@@ -3651,8 +3651,41 @@ namespace K_Accounting
                               MessageBoxIcon.Error);
             }
         }
-        #endregion
 
+        private async void CheckForUpdatesButton_Click(object sender, EventArgs e)
+        {
+            if (VersionChecker.IsUpdateAvailable(out var newVersion,
+                out var changelog,
+                out var downloadUrl))
+            {
+                var result = MessageBox.Show(
+                    $"Доступна новая версия {newVersion}\n\nИзменения:\n{changelog}\n\nОбновить сейчас?",
+                    "Обновление доступно",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Information);
+
+                if (result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        Cursor = Cursors.WaitCursor;
+                        await Updater.PerformUpdate(downloadUrl);
+                    }
+                    finally
+                    {
+                        Cursor = Cursors.Default;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("У вас установлена последняя версия", "Обновлений нет",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+        }
+
+        #endregion
     }
 }
 

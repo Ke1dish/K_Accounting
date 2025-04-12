@@ -226,6 +226,8 @@
             tableLayoutPanel28 = new TableLayoutPanel();
             tbAbout = new TextBox();
             pictureBox1 = new PictureBox();
+            flowLayoutPanel18 = new FlowLayoutPanel();
+            button2 = new Button();
             tpDebtGiven = new TabPage();
             tableLayoutPanel33 = new TableLayoutPanel();
             dgwGivenDebts = new DataGridView();
@@ -358,6 +360,7 @@
             tableLayoutPanel27.SuspendLayout();
             tableLayoutPanel28.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            flowLayoutPanel18.SuspendLayout();
             tpDebtGiven.SuspendLayout();
             tableLayoutPanel33.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgwGivenDebts).BeginInit();
@@ -2615,11 +2618,12 @@
             tableLayoutPanel27.Controls.Add(tbVersionHistory, 0, 2);
             tableLayoutPanel27.Controls.Add(label10, 0, 0);
             tableLayoutPanel27.Controls.Add(tableLayoutPanel28, 0, 1);
+            tableLayoutPanel27.Controls.Add(flowLayoutPanel18, 0, 3);
             tableLayoutPanel27.Dock = DockStyle.Fill;
             tableLayoutPanel27.Location = new Point(0, 0);
             tableLayoutPanel27.Name = "tableLayoutPanel27";
             tableLayoutPanel27.Padding = new Padding(5);
-            tableLayoutPanel27.RowCount = 3;
+            tableLayoutPanel27.RowCount = 4;
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -2638,7 +2642,7 @@
             tbVersionHistory.Name = "tbVersionHistory";
             tbVersionHistory.ReadOnly = true;
             tbVersionHistory.ScrollBars = ScrollBars.Both;
-            tbVersionHistory.Size = new Size(1024, 385);
+            tbVersionHistory.Size = new Size(1024, 339);
             tbVersionHistory.TabIndex = 6;
             tbVersionHistory.Text = resources.GetString("tbVersionHistory.Text");
             // 
@@ -2695,6 +2699,27 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             pictureBox1.Click += pictureBox1_Click;
+            // 
+            // flowLayoutPanel18
+            // 
+            flowLayoutPanel18.Controls.Add(button2);
+            flowLayoutPanel18.Dock = DockStyle.Fill;
+            flowLayoutPanel18.Location = new Point(8, 483);
+            flowLayoutPanel18.Name = "flowLayoutPanel18";
+            flowLayoutPanel18.Padding = new Padding(5);
+            flowLayoutPanel18.RightToLeft = RightToLeft.Yes;
+            flowLayoutPanel18.Size = new Size(1028, 40);
+            flowLayoutPanel18.TabIndex = 7;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(881, 8);
+            button2.Name = "button2";
+            button2.Size = new Size(134, 23);
+            button2.TabIndex = 0;
+            button2.Text = "Обновить";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += CheckForUpdatesButton_Click;
             // 
             // tpDebtGiven
             // 
@@ -3492,6 +3517,7 @@
             tableLayoutPanel28.ResumeLayout(false);
             tableLayoutPanel28.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            flowLayoutPanel18.ResumeLayout(false);
             tpDebtGiven.ResumeLayout(false);
             tableLayoutPanel33.ResumeLayout(false);
             tableLayoutPanel33.PerformLayout();
@@ -3759,5 +3785,7 @@
         private TableLayoutPanel tableLayoutPanel37;
         private Label label25;
         private TextBox tbDetailsGoal;
+        private FlowLayoutPanel flowLayoutPanel18;
+        private Button button2;
     }
 }

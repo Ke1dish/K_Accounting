@@ -1,18 +1,22 @@
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using K_Accounting.Data;
 using K_Accounting.Extensions;
 using K_Accounting.Forms;
 using K_Accounting.Models;
+using K_Accounting.Properties;
 using K_Accounting.Reports;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using OxyPlot;
 using OxyPlot.WindowsForms;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace K_Accounting
 {
@@ -34,6 +38,7 @@ namespace K_Accounting
         private Debt _selectedGivenDebt;
         private Debt _selectedReceivedDebt;
         private Counterparty _selectedCounterparties;
+        private Goal _selectedGoal;
 
         private AppSettings _settings;
 
@@ -60,8 +65,13 @@ namespace K_Accounting
 
             InitializeComponent();
 
+            _settings = SettingsManager.LoadSettings();
+
             //// <<<<<<<<<<<<<<<<<<<< начиная здесь
             InitializeDataGridViews();
+
+            InitializeGoalFilter();
+            InitializeDebtFilters();
 
             // инициализируем базу данных
             InitializeDatabase();
@@ -105,14 +115,12 @@ namespace K_Accounting
             cmbExpenseYears.SelectedIndexChanged += (s, e) => LoadExpenses();
             cmbIncomeMonths.SelectedIndexChanged += (s, e) => LoadIncomes();
             cmbIncomeYears.SelectedIndexChanged += (s, e) => LoadIncomes();
-            cmbGivenDebtMonths.SelectedIndexChanged += (s, e) => LoadGivenDebts();
-            cmbGivenDebtYears.SelectedIndexChanged += (s, e) => LoadGivenDebts();
-            cmbReceivedDebtMonths.SelectedIndexChanged += (s, e) => LoadReceivedDebts();
-            cmbReceivedDebtYears.SelectedIndexChanged += (s, e) => LoadReceivedDebts();
             cmbExpenseMonths.SelectedIndex = DateTime.Now.Month;
             cmbIncomeMonths.SelectedIndex = DateTime.Now.Month;
-            cmbGivenDebtMonths.SelectedIndex = DateTime.Now.Month;
-            cmbReceivedDebtMonths.SelectedIndex = DateTime.Now.Month;
+
+
+            cmbGivenDebtStatusFilter.SelectedIndexChanged += (s, e) => LoadGivenDebts();
+            cmbReceivedDebtStatusFilter.SelectedIndexChanged += (s, e) => LoadReceivedDebts();
 
             InitializeReportPage();
 
@@ -236,6 +244,10 @@ namespace K_Accounting
 
             _settings.SplitterDistance = splitContainer1.SplitterDistance;
 
+            _settings.SelectedGoalFilter = cmbGoalFilter.SelectedItem?.ToString() ?? "Все";
+            _settings.SelectedGivenDebtFilter = (int)cmbGivenDebtStatusFilter.SelectedValue;
+            _settings.SelectedReceivedDebtFilter = (int)cmbReceivedDebtStatusFilter.SelectedValue;
+
             SettingsManager.SaveSettings(_settings);
 
             // Сохраняем настройки всех гридов
@@ -273,20 +285,6 @@ namespace K_Accounting
             cmbIncomeMonths.DisplayMember = "Name";
             cmbIncomeMonths.ValueMember = "Value";
 
-            var debtMonths = Enumerable.Range(1, 12)
-                .Select(m => new { Value = m, Name = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m) })
-                .ToList();
-
-            debtMonths.Insert(0, new { Value = 0, Name = "Все месяцы" });
-
-            cmbGivenDebtMonths.DataSource = debtMonths;
-            cmbGivenDebtMonths.DisplayMember = "Name";
-            cmbGivenDebtMonths.ValueMember = "Value";
-
-            cmbReceivedDebtMonths.DataSource = debtMonths;
-            cmbReceivedDebtMonths.DisplayMember = "Name";
-            cmbReceivedDebtMonths.ValueMember = "Value";
-
             // Заполнение годов
             RefreshYearFilters();
         }
@@ -306,12 +304,6 @@ namespace K_Accounting
                 .OrderBy(y => y)
                 .ToList();
 
-            var debtYears = _context.Debts
-                .Select(d => d.LoanDate.Year)
-                .Distinct()
-                .OrderBy(y => y)
-                .ToList();
-
             var allYears = expenseYears.Union(expenseYears).OrderBy(y => y).ToList();
             allYears.Insert(0, 0); // Добавляем "Все годы"
             cmbExpenseYears.DataSource = allYears.ToList();
@@ -319,11 +311,6 @@ namespace K_Accounting
             allYears = expenseYears.Union(incomeYears).OrderBy(y => y).ToList();
             allYears.Insert(0, 0); // Добавляем "Все годы"
             cmbIncomeYears.DataSource = allYears.ToList();
-
-            allYears = allYears.Union(debtYears).Distinct().OrderBy(y => y).ToList();
-            allYears.Insert(0, 0); // Добавляем "Все годы"
-            cmbGivenDebtYears.DataSource = allYears.ToList();
-            cmbReceivedDebtYears.DataSource = allYears.ToList();
 
             // Установка текущего года по умолчанию
             var currentYear = DateTime.Now.Year;
@@ -337,8 +324,6 @@ namespace K_Accounting
                 cmbExpenseYears.SelectedIndex = 0;
                 cmbIncomeYears.SelectedIndex = 0;
             }
-
-            allYears = allYears.Union(debtYears).Distinct().OrderBy(y => y).ToList();
         }
 
         private void InitializeDataGridViews()
@@ -433,6 +418,18 @@ namespace K_Accounting
                 CreateColumn("colAddress", "Адрес", "Address"),
                 CreateColumn("colComment", "Комментарий", "Comment")
             });
+
+            InitializeGrid(dgwGoals, "Goals", new List<DataGridViewColumn>
+            {
+                CreateColumn("colTitle", "Название", "Title"),
+                CreateColumn("colTargetAmount", "Целевая сумма", "TargetAmount", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colCurrentAmount", "Накоплено", "CurrentAmount", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colCurrency", "Валюта", "Currency.Name"),
+                CreateColumn("colTargetDate", "Срок", "TargetDate", "dd.MM.yyyy"),
+                CreateColumn("colProgress", "Прогресс", "Progress", "P0", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colStatus", "Статус", "Status"),
+                CreateColumn("colComment", "Комментарий", "Comment")
+            });
         }
 
         private DataGridViewColumn CreateColumn(string name, string header, string dataProperty, string format = null,
@@ -509,6 +506,61 @@ namespace K_Accounting
                 using (var form = new GratitudeForm()) { form.ShowDialog(); }
                 _clickCount = 0; // Сбрасываем счетчик
             }
+        }
+
+        private void InitializeGoalFilter()
+        {
+            cmbGoalFilter.Items.AddRange(new[] { "Все", "Активные", "Достигнутые", "Замороженные" });
+            var savedFilter = _settings?.SelectedGoalFilter;
+            var defaultFilter = "Все";
+            int index = cmbGoalFilter.Items.IndexOf(savedFilter);
+            cmbGoalFilter.SelectedIndex = (index != -1) ? index : 0; // 0 = "Все"
+            cmbGoalFilter.SelectedIndexChanged += (s, e) =>
+            {
+                if (cmbGoalFilter.SelectedItem != null)
+                {
+                    _settings.SelectedGoalFilter = cmbGoalFilter.SelectedItem.ToString();
+                    LoadGoals();
+                }
+            };
+        }
+
+        private void InitializeDebtFilters()
+        {
+            // Для выданных долгов
+            cmbGivenDebtStatusFilter.DataSource = new List<dynamic>
+    {
+        new { Text = "Все", Value = 0 },
+        new { Text = "Активные", Value = 1 },
+        new { Text = "Закрытые", Value = 2 }
+    };
+            cmbGivenDebtStatusFilter.DisplayMember = "Text";
+            cmbGivenDebtStatusFilter.ValueMember = "Value";
+            cmbGivenDebtStatusFilter.SelectedValue = _settings.SelectedGivenDebtFilter;
+
+            // Для полученных долгов
+            cmbReceivedDebtStatusFilter.DataSource = new List<dynamic>
+    {
+        new { Text = "Все", Value = 0 },
+        new { Text = "Активные", Value = 1 },
+        new { Text = "Закрытые", Value = 2 }
+    };
+            cmbReceivedDebtStatusFilter.DisplayMember = "Text";
+            cmbReceivedDebtStatusFilter.ValueMember = "Value";
+            cmbReceivedDebtStatusFilter.SelectedValue = _settings.SelectedReceivedDebtFilter;
+
+            // Обработчики изменений
+            cmbGivenDebtStatusFilter.SelectedIndexChanged += (s, e) =>
+            {
+                _settings.SelectedGivenDebtFilter = (int)cmbGivenDebtStatusFilter.SelectedValue;
+                LoadGivenDebts();
+            };
+
+            cmbReceivedDebtStatusFilter.SelectedIndexChanged += (s, e) =>
+            {
+                _settings.SelectedReceivedDebtFilter = (int)cmbReceivedDebtStatusFilter.SelectedValue;
+                LoadReceivedDebts();
+            };
         }
 
         #endregion
@@ -791,6 +843,15 @@ namespace K_Accounting
                 case 3: // Доходы
                     LoadIncomes();
                     break;
+                case 14: // Цели
+                    LoadGoals();
+                    break;
+                case 11: // Долги выданные
+                    LoadGivenDebts();
+                    break;
+                case 12: // Долги полученные
+                    LoadReceivedDebts();
+                    break;
                 case 4: // Категории и Подкатегории
                     LoadCategories();
                     LoadSubCategories(_selectedCategory?.Id);
@@ -806,12 +867,6 @@ namespace K_Accounting
                     break;
                 case 7: // Валюты
                     LoadCurrencies();
-                    break;
-                case 11: // Долги выданные
-                    LoadGivenDebts();
-                    break;
-                case 12: // Долги полученные
-                    LoadReceivedDebts();
                     break;
                 case 8: // Отчеты
                     break;
@@ -1027,6 +1082,13 @@ namespace K_Accounting
                 "Counterparties_colEmail" => 150,
                 "Counterparties_colAddress" => 200,
                 "Counterparties_colComment" => 250,
+                "Goals_colTargetAmount" => 120,
+                "Goals_colCurrentAmount" => 120,
+                "Goals_colCurrency" => 100,
+                "Goals_colTargetDate" => 100,
+                "Goals_colProgress" => 80,
+                "Goals_colStatus" => 100,
+                "Goals_colComment" => 200,
                 _ => 200
             };
         }
@@ -1082,6 +1144,15 @@ namespace K_Accounting
                 "Counterparties_colEmail" => 2,
                 "Counterparties_colAddress" => 3,
                 "Counterparties_colComment" => 4,
+                "Goals_colTitle" => 0,
+                "Goals_colTargetAmount" => 1,
+                "Goals_colCurrentAmount" => 2,
+                "Goals_colCurrency" => 3,
+                "Goals_colTargetDate" => 4,
+                "Goals_colProgress" => 5,
+                "Goals_colStatus" => 6,
+                "Goals_colComment" => 7,
+                _ => 0
             };
         }
 
@@ -1159,6 +1230,7 @@ namespace K_Accounting
             "GivenDebts" => () => btnAddGivenDebt_Click(null, EventArgs.Empty),
             "ReceivedDebts" => () => btnAddReceivedDebt_Click(null, EventArgs.Empty),
             "Counterparties" => () => btnAddCounterparties_Click(null, EventArgs.Empty),
+            "Goals" => () => btnAddGoal_Click(null, EventArgs.Empty),
             _ => null
         };
 
@@ -1175,6 +1247,7 @@ namespace K_Accounting
             "GivenDebts" => () => btnEditGivenDebt_Click(null, EventArgs.Empty),
             "ReceivedDebts" => () => btnEditReceivedDebt_Click(null, EventArgs.Empty),
             "Counterparties" => () => btnEditCounterparties_Click(null, EventArgs.Empty),
+            "Goals" => () => btnEditGoal_Click(null, EventArgs.Empty),
             _ => null
         };
 
@@ -1191,6 +1264,7 @@ namespace K_Accounting
             "GivenDebts" => () => btnDeleteGivenDebt_Click(null, EventArgs.Empty),
             "ReceivedDebts" => () => btnDeleteReceivedDebt_Click(null, EventArgs.Empty),
             "Counterparties" => () => btnDeleteCounterparties_Click(null, EventArgs.Empty),
+            "Goals" => () => btnDeleteGoal_Click(null, EventArgs.Empty),
             _ => null
         };
 
@@ -1233,6 +1307,25 @@ namespace K_Accounting
                 var item = new ToolStripMenuItem(menuItem1.Name);
                 item.Click += (s, e) => menuItem1.Handler();
                 menu.Items.Add(item);
+            }
+
+            if (dgv.Name == "Goals")  //ваотвсаолдтвадлявмлдячьсдячьсдяьсдячьсюдячьсяьсдяччьсячсьюбячьсюбячьсюбячьсюбячьсбюячьсябючьсябючсьячбючс
+            {
+                menu.Items.Add(new ToolStripSeparator());
+
+                var UpGoalItem = new ToolStripMenuItem("Пополнить");
+                UpGoalItem.Click += (s, e) => btnFundGoal_Click(null, EventArgs.Empty);
+                menu.Items.Add(UpGoalItem);
+
+                var DownGoalItem = new ToolStripMenuItem("Перевод");
+                DownGoalItem.Click += (s, e) => btnGoalTransfer_Click(null, EventArgs.Empty);
+                menu.Items.Add(DownGoalItem);
+
+                menu.Items.Add(new ToolStripSeparator());
+
+                var adviceItem = new ToolStripMenuItem("Совет");
+                adviceItem.Click += (s, e) => ShowGoalAdvice();
+                menu.Items.Add(adviceItem);
             }
         }
 
@@ -2264,6 +2357,272 @@ namespace K_Accounting
         }
         #endregion
 
+        #region Цели (Goals)
+        private void LoadGoals()
+        {
+            try
+            {
+                var goals = _context.Goals
+                    .Include(g => g.Currency)
+                    .Where(g => !g.IsDeleted);
+
+                // Применение фильтра
+                switch (cmbGoalFilter.SelectedItem?.ToString())
+                {
+                    case "Активные":
+                        goals = goals.Where(g => g.Status == GoalStatus.Active);
+                        break;
+                    case "Достигнутые":
+                        goals = goals.Where(g => g.Status == GoalStatus.Completed);
+                        break;
+                    case "Замороженные":
+                        goals = goals.Where(g => g.Status == GoalStatus.Frozen);
+                        break;
+                }
+
+                dgwGoals.DataSource = goals.ToList();
+                GridSorter.InitializeGrid(dgwGoals, goals.Cast<object>().ToList());
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                MessageBox.Show($"Ошибка загрузки целей: {ex.Message}");
+            }
+        }
+
+        private void dgvGoals_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgwGoals.CurrentRow == null) return;
+            _selectedGoal = dgwGoals.CurrentRow?.DataBoundItem as Goal;
+            btnEditGoal.Enabled = _selectedGoal != null;
+            btnDeleteGoal.Enabled = _selectedGoal != null;
+            tbDetailsGoal.Text = _selectedGoal?.Comment ?? "";
+        }
+
+        private void dgvGoals_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                _selectedGoal = dgwGoals.Rows[e.RowIndex].DataBoundItem as Goal;
+                if (_selectedGoal != null)
+                {
+                    btnEditGoal.PerformClick();
+                }
+            }
+        }
+
+        private void dgvGoals_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            var grid = sender as DataGridView;
+            var goal = grid.Rows[e.RowIndex].DataBoundItem as Goal;
+
+            // Подсветка статусов
+            if (grid.Columns[e.ColumnIndex].Name == "colStatus")
+            {
+                switch (goal.Status)
+                {
+                    case GoalStatus.Active:
+                        e.CellStyle.BackColor = Color.LightGreen;
+                        break;
+                    case GoalStatus.Frozen:
+                        e.CellStyle.BackColor = Color.LightGray;
+                        break;
+                    case GoalStatus.Completed:
+                        e.CellStyle.BackColor = Color.LightBlue;
+                        break;
+                }
+            }
+
+            // Прогресс в %
+            if (grid.Columns[e.ColumnIndex].Name == "colProgress")
+            {
+                var progress = goal.TargetAmount - goal.CurrentAmount;
+                e.Value = $"{progress:N0}%";
+            }
+
+            if (dgwGoals.Columns[e.ColumnIndex].Name == "colCurrency" && e.Value == null)
+            {
+                e.Value = goal?.Currency?.Name ?? "Не указана";
+            }
+        }
+
+        private void btnAddGoal_Click(object sender, EventArgs e)
+        {
+            using (var form = new AddEditGoalsForm(_context))
+            {
+                form.DataUpdated += (s, args) =>
+                {
+                    LoadCurrencies();
+                    LoadGoals();
+                };
+
+                form.isEditMode = false;
+                if (form.ShowDialog() == DialogResult.OK && form.SavedGoalId.HasValue)
+                {
+                    LoadGoals();
+                    foreach (DataGridViewRow row in dgwGoals.Rows)
+                    {
+                        var goal = row.DataBoundItem as Goal;
+                        if (goal?.Id == form.SavedGoalId.Value)
+                        {
+                            dgwGoals.CurrentCell = row.Cells[0];
+                            _selectedGoal = dgwGoals.CurrentRow?.DataBoundItem as Goal;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnEditGoal_Click(object sender, EventArgs e)
+        {
+            if (_selectedGoal == null || dgwGoals.CurrentRow == null || _selectedGoal.IsDeleted) return;
+
+            int selectedId = _selectedGoal.Id;
+
+            using (var form = new AddEditGoalsForm(_selectedGoal, _context))
+            {
+                form.DataUpdated += (s, args) =>
+                {
+                    LoadCurrencies();
+                    LoadGoals();
+                };
+
+                form.isEditMode = true;
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    _context.Entry(_selectedGoal).Reload();
+                    LoadGoals();
+
+                    foreach (DataGridViewRow row in dgwGoals.Rows)
+                    {
+                        var goal = row.DataBoundItem as Goal;
+                        if (goal?.Id == selectedId)
+                        {
+                            dgwGoals.CurrentCell = row.Cells[0];
+                            _selectedGoal = dgwGoals.CurrentRow?.DataBoundItem as Goal;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnDeleteGoal_Click(object sender, EventArgs e)
+        {
+            if (_selectedGoal == null || dgwGoals.CurrentRow == null) return;
+
+            int savedIndex = dgwGoals.CurrentRow.Index;
+
+            var result = MessageBox.Show(
+                $"Вы уверены что хотите удалить цель '{_selectedGoal.Title}'?",
+                "Подтверждение удаления",
+                MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    _selectedGoal.IsDeleted = true;
+                    _context.SaveChanges();
+                    LoadGoals();
+
+                    if (dgwGoals.Rows.Count > 0)
+                    {
+                        int newIndex = savedIndex >= dgwGoals.Rows.Count
+                            ? dgwGoals.Rows.Count - 1
+                            : savedIndex;
+
+                        if (dgwGoals.Rows.Count > 0 && newIndex >= 0)
+                        {
+                            dgwGoals.CurrentCell = dgwGoals.Rows[newIndex].Cells[0];
+                            _selectedGoal = dgwGoals.CurrentRow?.DataBoundItem as Goal;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(ex);
+                    MessageBox.Show($"Ошибка удаления: {ex.Message}");
+                }
+            }
+        }
+
+        private void btnFundGoal_Click(object sender, EventArgs e)
+        {
+            if (_selectedGoal == null) return;
+
+            var selectedId = _selectedGoal.Id; // Сохраняем ID
+
+            using (var form = new FundGoalForm(_context, _selectedGoal.Id))
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    LoadGoals(); // Перезагружаем данные
+
+                    // Восстанавливаем выделение
+                    foreach (DataGridViewRow row in dgwGoals.Rows)
+                    {
+                        var goal = row.DataBoundItem as Goal;
+                        if (goal?.Id == selectedId)
+                        {
+                            dgwGoals.CurrentCell = row.Cells[0];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnGoalTransfer_Click(object sender, EventArgs e)
+        {
+            if (_selectedGoal == null) return;
+
+            var selectedId = _selectedGoal.Id; // Сохраняем ID
+
+            using (var form = new GoalTransferForm(_context, _selectedGoal.Id))
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    LoadGoals(); // Перезагружаем данные
+
+                    // Восстанавливаем выделение
+                    foreach (DataGridViewRow row in dgwGoals.Rows)
+                    {
+                        var goal = row.DataBoundItem as Goal;
+                        if (goal?.Id == selectedId)
+                        {
+                            dgwGoals.CurrentCell = row.Cells[0];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ShowGoalAdvice()
+        {
+            if (_selectedGoal == null || dgwGoals.CurrentRow == null || _selectedGoal.IsDeleted) return;
+
+            var goal = _context.Goals.FirstOrDefault(g => g.Id == _selectedGoal.Id);
+            if (goal == null) return;
+
+            var daysLeft = (goal.TargetDate - DateTime.Today).TotalDays;
+            var amountLeft = goal.TargetAmount - goal.CurrentAmount;
+            var monthly = daysLeft > 0 ? amountLeft / (decimal)(daysLeft / 30.0) : 0;
+
+            var message = new StringBuilder();
+            message.AppendLine($"Осталось дней: {Math.Ceiling(daysLeft)}");
+            message.AppendLine($"Осталось накопить: {amountLeft:N2} {goal.Currency?.Symbol}");
+            message.AppendLine($"Рекомендуемый ежемесячный взнос: {monthly:N2} {goal.Currency?.Symbol}");
+
+            MessageBox.Show(message.ToString(), "Совет по цели", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        #endregion
+
         #region Источники (Source)
         private void LoadSources()
         {
@@ -2512,7 +2871,7 @@ namespace K_Accounting
 
         private void btnDeleteCurrencie_Click(object sender, EventArgs e)
         {
-            if (_selectedSource == null || dgwCurrencies.CurrentRow == null) return;
+            if (_selectedCurrency == null || dgwCurrencies.CurrentRow == null) return;
 
             int savedIndex = dgwCurrencies.CurrentRow.Index;
 
@@ -2682,8 +3041,7 @@ namespace K_Accounting
         {
             try
             {
-                var selectedMonth = cmbGivenDebtMonths.SelectedValue is int month ? month : 0;
-                var selectedYear = cmbGivenDebtYears.SelectedItem is int year ? year : 0;
+                var statusFilter = cmbGivenDebtStatusFilter.SelectedValue as int? ?? 0;
 
                 var query = _context.Debts
                     .Include(d => d.Counterparty)
@@ -2691,11 +3049,15 @@ namespace K_Accounting
                     .Include(d => d.Payments)
                     .Where(d => !d.IsDeleted && d.Type == DebtType.Given);
 
-                if (selectedMonth > 0)
-                    query = query.Where(d => d.LoanDate.Month == selectedMonth);
-
-                if (selectedYear > 0)
-                    query = query.Where(d => d.LoanDate.Year == selectedYear);
+                switch (statusFilter)
+                {
+                    case 1: // Активные
+                        query = query.Where(d => d.Status == DebtStatus.Active);
+                        break;
+                    case 2: // Закрытые
+                        query = query.Where(d => d.Status == DebtStatus.Repaid);
+                        break;
+                }
 
                 var debts = query
                     .OrderByDescending(d => d.DueDate)
@@ -2703,23 +3065,7 @@ namespace K_Accounting
 
                 dgwGivenDebts.DataSource = debts;
                 UpdateGivenDebtTotals();
-
-                // Восстановление выделения
-                if (preserveSelectionId.HasValue)
-                {
-                    foreach (DataGridViewRow row in dgwGivenDebts.Rows)
-                    {
-                        var debt = row.DataBoundItem as Debt;
-                        if (debt?.Id == preserveSelectionId.Value)
-                        {
-                            dgwGivenDebts.ClearSelection();
-                            row.Selected = true;
-                            dgwGivenDebts.CurrentCell = row.Cells[0];
-                            dgwGivenDebts.FirstDisplayedScrollingRowIndex = row.Index;
-                            break;
-                        }
-                    }
-                }
+                RestoreGridSelection(dgwGivenDebts, preserveSelectionId);
             }
             catch (Exception ex)
             {
@@ -2736,10 +3082,22 @@ namespace K_Accounting
 
         private void UpdateGivenDebtTotals()
         {
-            var givenTotal = _context.Debts
-                .Where(d => d.Type == DebtType.Given && !d.IsDeleted)
-                .Sum(d => d.RemainingAmount);
+            var statusFilter = cmbGivenDebtStatusFilter.SelectedValue as int? ?? 0;
 
+            var query = _context.Debts
+                .Where(d => d.Type == DebtType.Given && !d.IsDeleted);
+
+            switch (statusFilter)
+            {
+                case 1:
+                    query = query.Where(d => d.Status == DebtStatus.Active);
+                    break;
+                case 2:
+                    query = query.Where(d => d.Status == DebtStatus.Repaid);
+                    break;
+            }
+
+            var givenTotal = query.Sum(d => d.RemainingAmount);
             lblGivenDebtsTotal.Text = $"Долги выданные: {givenTotal:N2}";
         }
 
@@ -2901,15 +3259,15 @@ namespace K_Accounting
             }
         }
 
-        private void RestoreGridSelection(DataGridView grid, int originalIndex)
+        private void RestoreGridSelection(DataGridView grid, int? originalIndex)
         {
-            if (grid.Rows.Count == 0) return;
+            if (!originalIndex.HasValue || grid.Rows.Count == 0) return;
 
-            int newIndex = originalIndex >= grid.Rows.Count
+            int newIndex = originalIndex.Value >= grid.Rows.Count
                 ? grid.Rows.Count - 1
-                : originalIndex;
+                : originalIndex.Value;
 
-            if (newIndex >= 0)
+            if (newIndex >= 0 && newIndex < grid.Rows.Count)
             {
                 grid.Rows[newIndex].Selected = true;
                 grid.CurrentCell = grid.Rows[newIndex].Cells[0];
@@ -2923,8 +3281,7 @@ namespace K_Accounting
         {
             try
             {
-                var selectedMonth = cmbReceivedDebtMonths.SelectedValue is int month ? month : 0;
-                var selectedYear = cmbReceivedDebtYears.SelectedItem is int year ? year : 0;
+                var statusFilter = cmbReceivedDebtStatusFilter.SelectedValue as int? ?? 0;
 
                 var query = _context.Debts
                     .Include(d => d.Counterparty)
@@ -2932,11 +3289,15 @@ namespace K_Accounting
                     .Include(d => d.Payments)
                     .Where(d => !d.IsDeleted && d.Type == DebtType.Received);
 
-                if (selectedMonth > 0)
-                    query = query.Where(d => d.LoanDate.Month == selectedMonth);
-
-                if (selectedYear > 0)
-                    query = query.Where(d => d.LoanDate.Year == selectedYear);
+                switch (statusFilter)
+                {
+                    case 1: // Активные
+                        query = query.Where(d => d.Status == DebtStatus.Active);
+                        break;
+                    case 2: // Закрытые
+                        query = query.Where(d => d.Status == DebtStatus.Repaid);
+                        break;
+                }
 
                 var debts = query
                     .OrderByDescending(d => d.DueDate)
@@ -2944,37 +3305,33 @@ namespace K_Accounting
 
                 dgwReceivedDebts.DataSource = debts;
                 UpdateReceivedDebtTotals();
-
-                // Восстановление выделения
-                if (preserveSelectionId.HasValue)
-                {
-                    foreach (DataGridViewRow row in dgwReceivedDebts.Rows)
-                    {
-                        var debt = row.DataBoundItem as Debt;
-                        if (debt?.Id == preserveSelectionId.Value)
-                        {
-                            dgwReceivedDebts.ClearSelection();
-                            row.Selected = true;
-                            dgwReceivedDebts.CurrentCell = row.Cells[0];
-                            dgwReceivedDebts.FirstDisplayedScrollingRowIndex = row.Index;
-                            break;
-                        }
-                    }
-                }
+                RestoreGridSelection(dgwReceivedDebts, preserveSelectionId);
             }
             catch (Exception ex)
             {
                 Logger.Log(ex);
-                MessageBox.Show($"Ошибка загрузки полученных долгов: {ex.Message}");
+                MessageBox.Show($"Ошибка загрузки выданных долгов: {ex.Message}");
             }
         }
 
         private void UpdateReceivedDebtTotals()
         {
-            var receivedTotal = _context.Debts
-                .Where(d => d.Type == DebtType.Received && !d.IsDeleted)
-                .Sum(d => d.RemainingAmount);
+            var statusFilter = cmbReceivedDebtStatusFilter.SelectedValue as int? ?? 0;
 
+            var query = _context.Debts
+                .Where(d => d.Type == DebtType.Received && !d.IsDeleted);
+
+            switch (statusFilter)
+            {
+                case 1:
+                    query = query.Where(d => d.Status == DebtStatus.Active);
+                    break;
+                case 2:
+                    query = query.Where(d => d.Status == DebtStatus.Repaid);
+                    break;
+            }
+
+            var receivedTotal = query.Sum(d => d.RemainingAmount);
             lblReceivedDebtsTotal.Text = $"Долги полученные: {receivedTotal:N2}";
         }
 
@@ -3298,3 +3655,24 @@ namespace K_Accounting
 
     }
 }
+
+
+//универсальный способ востанавливать ранее выделенную строку
+
+//private void RestoreGridSelection<T>(DataGridView grid, int? targetId) where T : class
+//{
+//    if (!targetId.HasValue) return;
+
+//    foreach (DataGridViewRow row in grid.Rows)
+//    {
+//        var item = row.DataBoundItem as T;
+//        if (item != null && (int)item.GetType().GetProperty("Id").GetValue(item) == targetId)
+//        {
+//            grid.CurrentCell = row.Cells[0];
+//            break;
+//        }
+//    }
+//}
+
+//// Использование:
+//RestoreGridSelection<Goal>(dgwGoals, _preservedGoalId);

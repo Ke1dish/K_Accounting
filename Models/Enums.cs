@@ -17,4 +17,11 @@ namespace K_Accounting.Models
         Active,    // Активный
         Repaid     // Погашенный
     }
+
+    public enum GoalStatus
+    {
+        Active,     // Активна
+        Frozen,     // Заморожена
+        Completed   // Выполнена
+    }
 }

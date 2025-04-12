@@ -11,7 +11,7 @@ namespace K_Accounting.Data
     public class AppDbContext : DbContext
     {
 
-        public const int CurrentDbVersion = 3; // Увеличивать при изменениях
+        public const int CurrentDbVersion = 4; // Увеличивать при изменениях
 
         // Таблицы в базе данных
         public DbSet<DbVersion> DbVersions { get; set; }
@@ -26,6 +26,7 @@ namespace K_Accounting.Data
         public DbSet<Debt> Debts { get; set; }
         public DbSet<DebtPayment> DebtPayments { get; set; }
         public DbSet<Counterparty> Counterparties { get; set; }
+        public DbSet<Goal> Goals { get; set; }
 
         // Настройка подключения к базе SQLite
 
@@ -132,6 +133,30 @@ namespace K_Accounting.Data
                 c.HasIndex(x => x.Name).IsUnique();
                 c.Property(x => x.Phone).HasMaxLength(20);
                 c.Property(x => x.Email).HasMaxLength(100);
+            });
+
+            // Конфигурация для Goal
+            modelBuilder.Entity<Goal>(g =>
+            {
+                // Индексы
+                g.HasIndex(x => x.TargetDate);
+                g.HasIndex(x => x.Status);
+                g.HasIndex(x => x.ReminderDate);
+
+                // Ограничения
+                g.Property(x => x.Title)
+                    .HasMaxLength(200)
+                    .IsRequired();
+
+                g.Property(x => x.TargetAmount)
+                    .HasPrecision(18, 2)
+                    .IsRequired();
+
+                // Связь с Currency
+                g.HasOne(x => x.Currency)
+                    .WithMany()
+                    .HasForeignKey(x => x.CurrencyId)
+                    .OnDelete(DeleteBehavior.Restrict); // Запрещаем удаление валюты с целями
             });
         }
 

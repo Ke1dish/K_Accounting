@@ -132,5 +132,6 @@ namespace K_Accounting.Utilities
                 ? sortSettings
                 : new SortSettings();
         }
+
     }
 }

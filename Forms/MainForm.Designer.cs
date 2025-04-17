@@ -33,19 +33,20 @@
             TreeNode treeNode2 = new TreeNode("Счета", 9, 9);
             TreeNode treeNode3 = new TreeNode("Расходы", 8, 8);
             TreeNode treeNode4 = new TreeNode("Приходы", 7, 7);
-            TreeNode treeNode5 = new TreeNode("Цели");
-            TreeNode treeNode6 = new TreeNode("Выданные");
-            TreeNode treeNode7 = new TreeNode("Полученые");
-            TreeNode treeNode8 = new TreeNode("Долги", new TreeNode[] { treeNode6, treeNode7 });
+            TreeNode treeNode5 = new TreeNode("Цели", 12, 12);
+            TreeNode treeNode6 = new TreeNode("Полученые", 11, 11);
+            TreeNode treeNode7 = new TreeNode("Выданные", 13, 13);
+            TreeNode treeNode8 = new TreeNode("Долги", 11, 11, new TreeNode[] { treeNode6, treeNode7 });
             TreeNode treeNode9 = new TreeNode("Категории", 2, 2);
             TreeNode treeNode10 = new TreeNode("Источники", 1, 1);
             TreeNode treeNode11 = new TreeNode("Упоминания", 10, 10);
             TreeNode treeNode12 = new TreeNode("Контрагенты");
             TreeNode treeNode13 = new TreeNode("Валюты", 3, 3);
-            TreeNode treeNode14 = new TreeNode("Справочники", 2, 2, new TreeNode[] { treeNode9, treeNode10, treeNode11, treeNode12, treeNode13 });
-            TreeNode treeNode15 = new TreeNode("Отчеты", 6, 6);
-            TreeNode treeNode16 = new TreeNode("Настройки", 4, 4);
-            TreeNode treeNode17 = new TreeNode("О программе", 0, 0);
+            TreeNode treeNode14 = new TreeNode("Единицы");
+            TreeNode treeNode15 = new TreeNode("Справочники", 2, 2, new TreeNode[] { treeNode9, treeNode10, treeNode11, treeNode12, treeNode13, treeNode14 });
+            TreeNode treeNode16 = new TreeNode("Отчеты", 6, 6);
+            TreeNode treeNode17 = new TreeNode("Настройки", 4, 4);
+            TreeNode treeNode18 = new TreeNode("О программе", 0, 0);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tableLayoutPanel5 = new TableLayoutPanel();
             label16 = new Label();
@@ -218,6 +219,7 @@
             tableLayoutPanel29 = new TableLayoutPanel();
             label11 = new Label();
             panel1 = new Panel();
+            label27 = new Label();
             checkBox1 = new CheckBox();
             tpAbout = new TabPage();
             tableLayoutPanel27 = new TableLayoutPanel();
@@ -228,6 +230,7 @@
             pictureBox1 = new PictureBox();
             flowLayoutPanel18 = new FlowLayoutPanel();
             button2 = new Button();
+            button4 = new Button();
             tpDebtGiven = new TabPage();
             tableLayoutPanel33 = new TableLayoutPanel();
             dgwGivenDebts = new DataGridView();
@@ -282,6 +285,17 @@
             tableLayoutPanel37 = new TableLayoutPanel();
             label25 = new Label();
             tbDetailsGoal = new TextBox();
+            tbMeasurements = new TabPage();
+            tableLayoutPanel40 = new TableLayoutPanel();
+            dgwMeasurement = new DataGridView();
+            label42 = new Label();
+            flowLayoutPanel19 = new FlowLayoutPanel();
+            btnAddMeasurement = new Button();
+            btnEditMeasurement = new Button();
+            btnDeleteMeasurement = new Button();
+            tableLayoutPanel39 = new TableLayoutPanel();
+            label41 = new Label();
+            tbDetailsMeasurement = new TextBox();
             tableLayoutPanel5.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -381,6 +395,11 @@
             ((System.ComponentModel.ISupportInitialize)dgwGoals).BeginInit();
             flowLayoutPanel1.SuspendLayout();
             tableLayoutPanel37.SuspendLayout();
+            tbMeasurements.SuspendLayout();
+            tableLayoutPanel40.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgwMeasurement).BeginInit();
+            flowLayoutPanel19.SuspendLayout();
+            tableLayoutPanel39.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel5
@@ -872,8 +891,8 @@
             // 
             splitContainer1.Panel2.Controls.Add(tcPage);
             splitContainer1.Panel2MinSize = 400;
-            splitContainer1.Size = new Size(1213, 559);
-            splitContainer1.SplitterDistance = 157;
+            splitContainer1.Size = new Size(1253, 559);
+            splitContainer1.SplitterDistance = 162;
             splitContainer1.TabIndex = 0;
             // 
             // tvMenuPanel
@@ -906,17 +925,25 @@
             treeNode4.SelectedImageIndex = 7;
             treeNode4.Tag = "3";
             treeNode4.Text = "Приходы";
+            treeNode5.ImageIndex = 12;
             treeNode5.Name = "tnGoals";
+            treeNode5.SelectedImageIndex = 12;
             treeNode5.Tag = "14";
             treeNode5.Text = "Цели";
-            treeNode6.Name = "tnDebtGiven";
-            treeNode6.Tag = "11";
-            treeNode6.Text = "Выданные";
-            treeNode7.Name = "tnDebtReceived";
-            treeNode7.Tag = "12";
-            treeNode7.Text = "Полученые";
+            treeNode6.ImageIndex = 11;
+            treeNode6.Name = "tnDebtReceived";
+            treeNode6.SelectedImageIndex = 11;
+            treeNode6.Tag = "12";
+            treeNode6.Text = "Полученые";
+            treeNode7.ImageIndex = 13;
+            treeNode7.Name = "tnDebtGiven";
+            treeNode7.SelectedImageIndex = 13;
+            treeNode7.Tag = "11";
+            treeNode7.Text = "Выданные";
+            treeNode8.ImageIndex = 11;
             treeNode8.Name = "tnDebt";
-            treeNode8.Tag = "11";
+            treeNode8.SelectedImageIndex = 11;
+            treeNode8.Tag = "12";
             treeNode8.Text = "Долги";
             treeNode9.ImageIndex = 2;
             treeNode9.Name = "tnCategory";
@@ -941,30 +968,33 @@
             treeNode13.SelectedImageIndex = 3;
             treeNode13.Tag = "7";
             treeNode13.Text = "Валюты";
-            treeNode14.ImageIndex = 2;
-            treeNode14.Name = "tnDirectory";
-            treeNode14.SelectedImageIndex = 2;
-            treeNode14.Tag = "4";
-            treeNode14.Text = "Справочники";
-            treeNode15.ImageIndex = 6;
-            treeNode15.Name = "tnReports";
-            treeNode15.SelectedImageIndex = 6;
-            treeNode15.Tag = "8";
-            treeNode15.Text = "Отчеты";
-            treeNode16.ImageIndex = 4;
-            treeNode16.Name = "tnSettings";
-            treeNode16.SelectedImageIndex = 4;
-            treeNode16.Tag = "9";
-            treeNode16.Text = "Настройки";
-            treeNode17.ImageIndex = 0;
-            treeNode17.Name = "tnAbout";
-            treeNode17.SelectedImageIndex = 0;
-            treeNode17.Tag = "10";
-            treeNode17.Text = "О программе";
-            tvMenuPanel.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3, treeNode4, treeNode5, treeNode8, treeNode14, treeNode15, treeNode16, treeNode17 });
+            treeNode14.Name = "tnMeasurements";
+            treeNode14.Tag = "15";
+            treeNode14.Text = "Единицы";
+            treeNode15.ImageIndex = 2;
+            treeNode15.Name = "tnDirectory";
+            treeNode15.SelectedImageIndex = 2;
+            treeNode15.Tag = "4";
+            treeNode15.Text = "Справочники";
+            treeNode16.ImageIndex = 6;
+            treeNode16.Name = "tnReports";
+            treeNode16.SelectedImageIndex = 6;
+            treeNode16.Tag = "8";
+            treeNode16.Text = "Отчеты";
+            treeNode17.ImageIndex = 4;
+            treeNode17.Name = "tnSettings";
+            treeNode17.SelectedImageIndex = 4;
+            treeNode17.Tag = "9";
+            treeNode17.Text = "Настройки";
+            treeNode18.ImageIndex = 0;
+            treeNode18.Name = "tnAbout";
+            treeNode18.SelectedImageIndex = 0;
+            treeNode18.Tag = "10";
+            treeNode18.Text = "О программе";
+            tvMenuPanel.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3, treeNode4, treeNode5, treeNode8, treeNode15, treeNode16, treeNode17, treeNode18 });
             tvMenuPanel.SelectedImageIndex = 0;
             tvMenuPanel.ShowLines = false;
-            tvMenuPanel.Size = new Size(147, 549);
+            tvMenuPanel.Size = new Size(152, 549);
             tvMenuPanel.TabIndex = 0;
             tvMenuPanel.AfterSelect += tvMenuPanel_AfterSelect;
             // 
@@ -984,6 +1014,9 @@
             imageList1.Images.SetKeyName(8, "expence.png");
             imageList1.Images.SetKeyName(9, "Account.png");
             imageList1.Images.SetKeyName(10, "additional.png");
+            imageList1.Images.SetKeyName(11, "debt.png");
+            imageList1.Images.SetKeyName(12, "target.png");
+            imageList1.Images.SetKeyName(13, "time-to-pay.png");
             // 
             // tcPage
             // 
@@ -1002,11 +1035,12 @@
             tcPage.Controls.Add(tpDebtReceived);
             tcPage.Controls.Add(tbCounterparties);
             tcPage.Controls.Add(tbGoals);
+            tcPage.Controls.Add(tbMeasurements);
             tcPage.Dock = DockStyle.Fill;
             tcPage.Location = new Point(0, 0);
             tcPage.Name = "tcPage";
             tcPage.SelectedIndex = 0;
-            tcPage.Size = new Size(1052, 559);
+            tcPage.Size = new Size(1087, 559);
             tcPage.TabIndex = 0;
             tcPage.SelectedIndexChanged += tcPage_SelectedIndexChanged;
             // 
@@ -1016,7 +1050,7 @@
             tpStart.Location = new Point(4, 24);
             tpStart.Name = "tpStart";
             tpStart.Padding = new Padding(3);
-            tpStart.Size = new Size(1044, 531);
+            tpStart.Size = new Size(1079, 531);
             tpStart.TabIndex = 0;
             tpStart.Text = "Стартовая";
             tpStart.UseVisualStyleBackColor = true;
@@ -1035,7 +1069,7 @@
             tableLayoutPanel30.RowStyles.Add(new RowStyle());
             tableLayoutPanel30.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel30.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel30.Size = new Size(1038, 525);
+            tableLayoutPanel30.Size = new Size(1073, 525);
             tableLayoutPanel30.TabIndex = 7;
             // 
             // label12
@@ -1043,10 +1077,10 @@
             label12.AutoSize = true;
             label12.Dock = DockStyle.Fill;
             label12.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label12.ForeColor = Color.Maroon;
+            label12.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label12.Location = new Point(8, 5);
             label12.Name = "label12";
-            label12.Size = new Size(1022, 26);
+            label12.Size = new Size(1057, 26);
             label12.TabIndex = 0;
             label12.Text = "День недели и дата";
             // 
@@ -1056,7 +1090,7 @@
             tpAccounts.Controls.Add(tableLayoutPanel2);
             tpAccounts.Location = new Point(4, 24);
             tpAccounts.Name = "tpAccounts";
-            tpAccounts.Size = new Size(1044, 531);
+            tpAccounts.Size = new Size(1079, 531);
             tpAccounts.TabIndex = 1;
             tpAccounts.Text = "Счета";
             tpAccounts.UseVisualStyleBackColor = true;
@@ -1076,7 +1110,7 @@
             tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel18.RowStyles.Add(new RowStyle());
-            tableLayoutPanel18.Size = new Size(1044, 431);
+            tableLayoutPanel18.Size = new Size(1079, 431);
             tableLayoutPanel18.TabIndex = 2;
             // 
             // label9
@@ -1084,10 +1118,10 @@
             label9.AutoSize = true;
             label9.Dock = DockStyle.Fill;
             label9.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label9.ForeColor = Color.Maroon;
+            label9.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label9.Location = new Point(8, 5);
             label9.Name = "label9";
-            label9.Size = new Size(1028, 26);
+            label9.Size = new Size(1063, 26);
             label9.TabIndex = 0;
             label9.Text = "Счета";
             // 
@@ -1102,7 +1136,7 @@
             flowLayoutPanel3.Location = new Point(8, 34);
             flowLayoutPanel3.Name = "flowLayoutPanel3";
             flowLayoutPanel3.Padding = new Padding(5);
-            flowLayoutPanel3.Size = new Size(1028, 40);
+            flowLayoutPanel3.Size = new Size(1063, 40);
             flowLayoutPanel3.TabIndex = 1;
             // 
             // btnAddAccounts
@@ -1174,7 +1208,7 @@
             dgwAccounts.RowHeadersVisible = false;
             dgwAccounts.RowHeadersWidth = 51;
             dgwAccounts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwAccounts.Size = new Size(1028, 343);
+            dgwAccounts.Size = new Size(1063, 343);
             dgwAccounts.TabIndex = 2;
             dgwAccounts.CellDoubleClick += dgwAccounts_CellDoubleClick;
             dgwAccounts.CellFormatting += dataGridViewAccounts_CellFormatting;
@@ -1184,7 +1218,8 @@
             // 
             contextMenu.ImageScalingSize = new Size(20, 20);
             contextMenu.Name = "contextMenu";
-            contextMenu.Size = new Size(61, 4);
+            contextMenu.Size = new Size(181, 26);
+            contextMenu.Closing += Menu_Closing;
             contextMenu.Opening += contextMenu_Opening;
             // 
             // tableLayoutPanel2
@@ -1200,7 +1235,7 @@
             tableLayoutPanel2.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(1044, 100);
+            tableLayoutPanel2.Size = new Size(1079, 100);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // label2
@@ -1219,7 +1254,7 @@
             tbDetailsAccount.Multiline = true;
             tbDetailsAccount.Name = "tbDetailsAccount";
             tbDetailsAccount.ReadOnly = true;
-            tbDetailsAccount.Size = new Size(928, 92);
+            tbDetailsAccount.Size = new Size(963, 89);
             tbDetailsAccount.TabIndex = 1;
             // 
             // tpExpenses
@@ -1228,7 +1263,7 @@
             tpExpenses.Controls.Add(tableLayoutPanel3);
             tpExpenses.Location = new Point(4, 24);
             tpExpenses.Name = "tpExpenses";
-            tpExpenses.Size = new Size(1044, 531);
+            tpExpenses.Size = new Size(1079, 531);
             tpExpenses.TabIndex = 2;
             tpExpenses.Text = "Расходы";
             tpExpenses.UseVisualStyleBackColor = true;
@@ -1250,7 +1285,7 @@
             tableLayoutPanel19.RowStyles.Add(new RowStyle());
             tableLayoutPanel19.RowStyles.Add(new RowStyle());
             tableLayoutPanel19.RowStyles.Add(new RowStyle());
-            tableLayoutPanel19.Size = new Size(1044, 431);
+            tableLayoutPanel19.Size = new Size(1079, 431);
             tableLayoutPanel19.TabIndex = 3;
             // 
             // dgwExpenses
@@ -1269,7 +1304,7 @@
             dgwExpenses.RowHeadersVisible = false;
             dgwExpenses.RowHeadersWidth = 51;
             dgwExpenses.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwExpenses.Size = new Size(1028, 343);
+            dgwExpenses.Size = new Size(1063, 343);
             dgwExpenses.TabIndex = 3;
             dgwExpenses.CellDoubleClick += dgwExpenses_CellDoubleClick;
             dgwExpenses.CellFormatting += dataGridView3_CellFormatting;
@@ -1280,10 +1315,10 @@
             lblPageExpensesCaption.AutoSize = true;
             lblPageExpensesCaption.Dock = DockStyle.Fill;
             lblPageExpensesCaption.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            lblPageExpensesCaption.ForeColor = Color.Maroon;
+            lblPageExpensesCaption.ForeColor = Color.FromArgb(0, 37, 118, 8);
             lblPageExpensesCaption.Location = new Point(8, 5);
             lblPageExpensesCaption.Name = "lblPageExpensesCaption";
-            lblPageExpensesCaption.Size = new Size(1028, 26);
+            lblPageExpensesCaption.Size = new Size(1063, 26);
             lblPageExpensesCaption.TabIndex = 0;
             lblPageExpensesCaption.Text = "Расходы";
             // 
@@ -1300,7 +1335,7 @@
             flowLayoutPanel6.Location = new Point(8, 34);
             flowLayoutPanel6.Name = "flowLayoutPanel6";
             flowLayoutPanel6.Padding = new Padding(5);
-            flowLayoutPanel6.Size = new Size(1028, 40);
+            flowLayoutPanel6.Size = new Size(1063, 40);
             flowLayoutPanel6.TabIndex = 1;
             // 
             // btnAddExpenses
@@ -1385,7 +1420,7 @@
             tableLayoutPanel3.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.Size = new Size(1044, 100);
+            tableLayoutPanel3.Size = new Size(1079, 100);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // label3
@@ -1404,7 +1439,7 @@
             tbDetailsExpenses.Multiline = true;
             tbDetailsExpenses.Name = "tbDetailsExpenses";
             tbDetailsExpenses.ReadOnly = true;
-            tbDetailsExpenses.Size = new Size(928, 90);
+            tbDetailsExpenses.Size = new Size(963, 90);
             tbDetailsExpenses.TabIndex = 1;
             // 
             // tpIncome
@@ -1413,7 +1448,7 @@
             tpIncome.Controls.Add(tableLayoutPanel6);
             tpIncome.Location = new Point(4, 24);
             tpIncome.Name = "tpIncome";
-            tpIncome.Size = new Size(1044, 531);
+            tpIncome.Size = new Size(1079, 531);
             tpIncome.TabIndex = 3;
             tpIncome.Text = "Доходы";
             tpIncome.UseVisualStyleBackColor = true;
@@ -1435,7 +1470,7 @@
             tableLayoutPanel20.RowStyles.Add(new RowStyle());
             tableLayoutPanel20.RowStyles.Add(new RowStyle());
             tableLayoutPanel20.RowStyles.Add(new RowStyle());
-            tableLayoutPanel20.Size = new Size(1044, 431);
+            tableLayoutPanel20.Size = new Size(1079, 431);
             tableLayoutPanel20.TabIndex = 3;
             // 
             // dgwIncomes
@@ -1454,7 +1489,7 @@
             dgwIncomes.RowHeadersVisible = false;
             dgwIncomes.RowHeadersWidth = 51;
             dgwIncomes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwIncomes.Size = new Size(1028, 343);
+            dgwIncomes.Size = new Size(1063, 343);
             dgwIncomes.TabIndex = 3;
             dgwIncomes.CellDoubleClick += dgwIncomes_CellDoubleClick;
             dgwIncomes.CellFormatting += dgwIncomes_CellFormatting;
@@ -1465,10 +1500,10 @@
             lblPageIncomesCaption.AutoSize = true;
             lblPageIncomesCaption.Dock = DockStyle.Fill;
             lblPageIncomesCaption.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            lblPageIncomesCaption.ForeColor = Color.Maroon;
+            lblPageIncomesCaption.ForeColor = Color.FromArgb(0, 37, 118, 8);
             lblPageIncomesCaption.Location = new Point(8, 5);
             lblPageIncomesCaption.Name = "lblPageIncomesCaption";
-            lblPageIncomesCaption.Size = new Size(1028, 26);
+            lblPageIncomesCaption.Size = new Size(1063, 26);
             lblPageIncomesCaption.TabIndex = 0;
             lblPageIncomesCaption.Text = "Доходы";
             // 
@@ -1484,7 +1519,7 @@
             flowLayoutPanel8.Location = new Point(8, 34);
             flowLayoutPanel8.Name = "flowLayoutPanel8";
             flowLayoutPanel8.Padding = new Padding(5);
-            flowLayoutPanel8.Size = new Size(1028, 40);
+            flowLayoutPanel8.Size = new Size(1063, 40);
             flowLayoutPanel8.TabIndex = 1;
             // 
             // btnAddIncomes
@@ -1557,7 +1592,7 @@
             tableLayoutPanel6.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle());
-            tableLayoutPanel6.Size = new Size(1044, 100);
+            tableLayoutPanel6.Size = new Size(1079, 100);
             tableLayoutPanel6.TabIndex = 1;
             // 
             // label4
@@ -1576,7 +1611,7 @@
             tbDetailsIncome.Multiline = true;
             tbDetailsIncome.Name = "tbDetailsIncome";
             tbDetailsIncome.ReadOnly = true;
-            tbDetailsIncome.Size = new Size(928, 90);
+            tbDetailsIncome.Size = new Size(963, 90);
             tbDetailsIncome.TabIndex = 1;
             // 
             // tpCategory
@@ -1584,7 +1619,7 @@
             tpCategory.Controls.Add(tableLayoutPanel1);
             tpCategory.Location = new Point(4, 24);
             tpCategory.Name = "tpCategory";
-            tpCategory.Size = new Size(1044, 531);
+            tpCategory.Size = new Size(1079, 531);
             tpCategory.TabIndex = 4;
             tpCategory.Text = "Категории";
             tpCategory.UseVisualStyleBackColor = true;
@@ -1604,8 +1639,8 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 106F));
-            tableLayoutPanel1.Size = new Size(1044, 531);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.Size = new Size(1079, 531);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel25
@@ -1616,7 +1651,7 @@
             tableLayoutPanel25.Controls.Add(label33, 0, 0);
             tableLayoutPanel25.Controls.Add(flowLayoutPanel13, 0, 1);
             tableLayoutPanel25.Dock = DockStyle.Fill;
-            tableLayoutPanel25.Location = new Point(522, 0);
+            tableLayoutPanel25.Location = new Point(539, 0);
             tableLayoutPanel25.Margin = new Padding(0);
             tableLayoutPanel25.Name = "tableLayoutPanel25";
             tableLayoutPanel25.Padding = new Padding(5);
@@ -1624,7 +1659,7 @@
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle());
-            tableLayoutPanel25.Size = new Size(522, 425);
+            tableLayoutPanel25.Size = new Size(540, 425);
             tableLayoutPanel25.TabIndex = 4;
             // 
             // dgwSubCategories
@@ -1643,7 +1678,7 @@
             dgwSubCategories.RowHeadersVisible = false;
             dgwSubCategories.RowHeadersWidth = 51;
             dgwSubCategories.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwSubCategories.Size = new Size(506, 337);
+            dgwSubCategories.Size = new Size(524, 337);
             dgwSubCategories.TabIndex = 3;
             dgwSubCategories.CellDoubleClick += dgwSubCategories_CellDoubleClick;
             dgwSubCategories.CellFormatting += dataGridViewSubCategories_CellFormatting;
@@ -1654,10 +1689,10 @@
             label33.AutoSize = true;
             label33.Dock = DockStyle.Fill;
             label33.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label33.ForeColor = Color.Maroon;
+            label33.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label33.Location = new Point(8, 5);
             label33.Name = "label33";
-            label33.Size = new Size(506, 26);
+            label33.Size = new Size(524, 26);
             label33.TabIndex = 0;
             label33.Text = "Подкатегории";
             // 
@@ -1670,7 +1705,7 @@
             flowLayoutPanel13.Location = new Point(8, 34);
             flowLayoutPanel13.Name = "flowLayoutPanel13";
             flowLayoutPanel13.Padding = new Padding(5);
-            flowLayoutPanel13.Size = new Size(506, 40);
+            flowLayoutPanel13.Size = new Size(524, 40);
             flowLayoutPanel13.TabIndex = 1;
             // 
             // btnAddSubCategories
@@ -1721,7 +1756,7 @@
             tableLayoutPanel24.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel24.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel24.RowStyles.Add(new RowStyle());
-            tableLayoutPanel24.Size = new Size(522, 425);
+            tableLayoutPanel24.Size = new Size(539, 425);
             tableLayoutPanel24.TabIndex = 3;
             // 
             // dgwCategorie
@@ -1740,7 +1775,7 @@
             dgwCategorie.RowHeadersVisible = false;
             dgwCategorie.RowHeadersWidth = 51;
             dgwCategorie.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwCategorie.Size = new Size(506, 337);
+            dgwCategorie.Size = new Size(523, 337);
             dgwCategorie.TabIndex = 3;
             dgwCategorie.CellDoubleClick += dgwCategorie_CellDoubleClick;
             dgwCategorie.SelectionChanged += dataGridViewCategories_SelectionChanged;
@@ -1750,10 +1785,10 @@
             label32.AutoSize = true;
             label32.Dock = DockStyle.Fill;
             label32.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label32.ForeColor = Color.Maroon;
+            label32.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label32.Location = new Point(8, 5);
             label32.Name = "label32";
-            label32.Size = new Size(506, 26);
+            label32.Size = new Size(523, 26);
             label32.TabIndex = 0;
             label32.Text = "Категории";
             // 
@@ -1766,7 +1801,7 @@
             flowLayoutPanel12.Location = new Point(8, 34);
             flowLayoutPanel12.Name = "flowLayoutPanel12";
             flowLayoutPanel12.Padding = new Padding(5);
-            flowLayoutPanel12.Size = new Size(506, 40);
+            flowLayoutPanel12.Size = new Size(523, 40);
             flowLayoutPanel12.TabIndex = 1;
             // 
             // btnAddCategories
@@ -1809,12 +1844,12 @@
             tableLayoutPanel17.Controls.Add(label8, 0, 0);
             tableLayoutPanel17.Controls.Add(tbDetailsSubCategory, 1, 0);
             tableLayoutPanel17.Dock = DockStyle.Fill;
-            tableLayoutPanel17.Location = new Point(525, 428);
+            tableLayoutPanel17.Location = new Point(542, 428);
             tableLayoutPanel17.Name = "tableLayoutPanel17";
             tableLayoutPanel17.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel17.RowCount = 1;
             tableLayoutPanel17.RowStyles.Add(new RowStyle());
-            tableLayoutPanel17.Size = new Size(516, 100);
+            tableLayoutPanel17.Size = new Size(534, 100);
             tableLayoutPanel17.TabIndex = 2;
             // 
             // label8
@@ -1834,7 +1869,7 @@
             tbDetailsSubCategory.Multiline = true;
             tbDetailsSubCategory.Name = "tbDetailsSubCategory";
             tbDetailsSubCategory.ReadOnly = true;
-            tbDetailsSubCategory.Size = new Size(400, 92);
+            tbDetailsSubCategory.Size = new Size(418, 92);
             tbDetailsSubCategory.TabIndex = 1;
             // 
             // tableLayoutPanel16
@@ -1850,7 +1885,7 @@
             tableLayoutPanel16.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel16.RowCount = 1;
             tableLayoutPanel16.RowStyles.Add(new RowStyle());
-            tableLayoutPanel16.Size = new Size(516, 100);
+            tableLayoutPanel16.Size = new Size(533, 100);
             tableLayoutPanel16.TabIndex = 1;
             // 
             // label1
@@ -1870,7 +1905,7 @@
             tbDetailsCategory.Multiline = true;
             tbDetailsCategory.Name = "tbDetailsCategory";
             tbDetailsCategory.ReadOnly = true;
-            tbDetailsCategory.Size = new Size(400, 92);
+            tbDetailsCategory.Size = new Size(417, 92);
             tbDetailsCategory.TabIndex = 1;
             // 
             // tpSource
@@ -1879,7 +1914,7 @@
             tpSource.Controls.Add(tableLayoutPanel9);
             tpSource.Location = new Point(4, 24);
             tpSource.Name = "tpSource";
-            tpSource.Size = new Size(1044, 531);
+            tpSource.Size = new Size(1079, 531);
             tpSource.TabIndex = 5;
             tpSource.Text = "Источники";
             tpSource.UseVisualStyleBackColor = true;
@@ -1899,7 +1934,7 @@
             tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel21.RowStyles.Add(new RowStyle());
-            tableLayoutPanel21.Size = new Size(1044, 431);
+            tableLayoutPanel21.Size = new Size(1079, 431);
             tableLayoutPanel21.TabIndex = 3;
             // 
             // dgwSource
@@ -1918,7 +1953,7 @@
             dgwSource.RowHeadersVisible = false;
             dgwSource.RowHeadersWidth = 51;
             dgwSource.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwSource.Size = new Size(1028, 343);
+            dgwSource.Size = new Size(1063, 343);
             dgwSource.TabIndex = 3;
             dgwSource.CellDoubleClick += dgwSource_CellDoubleClick;
             dgwSource.SelectionChanged += dataGridViewSources_SelectionChanged;
@@ -1928,10 +1963,10 @@
             label22.AutoSize = true;
             label22.Dock = DockStyle.Fill;
             label22.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label22.ForeColor = Color.Maroon;
+            label22.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label22.Location = new Point(8, 5);
             label22.Name = "label22";
-            label22.Size = new Size(1028, 26);
+            label22.Size = new Size(1063, 26);
             label22.TabIndex = 0;
             label22.Text = "Источники";
             // 
@@ -1944,7 +1979,7 @@
             flowLayoutPanel9.Location = new Point(8, 34);
             flowLayoutPanel9.Name = "flowLayoutPanel9";
             flowLayoutPanel9.Padding = new Padding(5);
-            flowLayoutPanel9.Size = new Size(1028, 40);
+            flowLayoutPanel9.Size = new Size(1063, 40);
             flowLayoutPanel9.TabIndex = 1;
             // 
             // btnAddSources
@@ -1992,7 +2027,7 @@
             tableLayoutPanel9.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel9.RowCount = 1;
             tableLayoutPanel9.RowStyles.Add(new RowStyle());
-            tableLayoutPanel9.Size = new Size(1044, 100);
+            tableLayoutPanel9.Size = new Size(1079, 100);
             tableLayoutPanel9.TabIndex = 1;
             // 
             // label5
@@ -2011,7 +2046,7 @@
             tbDetailsSource.Multiline = true;
             tbDetailsSource.Name = "tbDetailsSource";
             tbDetailsSource.ReadOnly = true;
-            tbDetailsSource.Size = new Size(928, 90);
+            tbDetailsSource.Size = new Size(963, 90);
             tbDetailsSource.TabIndex = 1;
             // 
             // tpAdditionally
@@ -2020,7 +2055,7 @@
             tpAdditionally.Controls.Add(tableLayoutPanel11);
             tpAdditionally.Location = new Point(4, 24);
             tpAdditionally.Name = "tpAdditionally";
-            tpAdditionally.Size = new Size(1044, 531);
+            tpAdditionally.Size = new Size(1079, 531);
             tpAdditionally.TabIndex = 6;
             tpAdditionally.Text = "Упоминания";
             tpAdditionally.UseVisualStyleBackColor = true;
@@ -2040,7 +2075,7 @@
             tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel22.RowStyles.Add(new RowStyle());
-            tableLayoutPanel22.Size = new Size(1044, 431);
+            tableLayoutPanel22.Size = new Size(1079, 431);
             tableLayoutPanel22.TabIndex = 3;
             // 
             // dgwAdditionals
@@ -2059,7 +2094,7 @@
             dgwAdditionals.RowHeadersVisible = false;
             dgwAdditionals.RowHeadersWidth = 51;
             dgwAdditionals.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwAdditionals.Size = new Size(1028, 343);
+            dgwAdditionals.Size = new Size(1063, 343);
             dgwAdditionals.TabIndex = 3;
             dgwAdditionals.CellDoubleClick += dgwAdditionals_CellDoubleClick;
             dgwAdditionals.SelectionChanged += dataGridViewAdditionals_SelectionChanged;
@@ -2069,10 +2104,10 @@
             label29.AutoSize = true;
             label29.Dock = DockStyle.Fill;
             label29.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label29.ForeColor = Color.Maroon;
+            label29.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label29.Location = new Point(8, 5);
             label29.Name = "label29";
-            label29.Size = new Size(1028, 26);
+            label29.Size = new Size(1063, 26);
             label29.TabIndex = 0;
             label29.Text = "Упоминания";
             // 
@@ -2085,7 +2120,7 @@
             flowLayoutPanel10.Location = new Point(8, 34);
             flowLayoutPanel10.Name = "flowLayoutPanel10";
             flowLayoutPanel10.Padding = new Padding(5);
-            flowLayoutPanel10.Size = new Size(1028, 40);
+            flowLayoutPanel10.Size = new Size(1063, 40);
             flowLayoutPanel10.TabIndex = 1;
             // 
             // btnAddAdditionals
@@ -2133,7 +2168,7 @@
             tableLayoutPanel11.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel11.RowCount = 1;
             tableLayoutPanel11.RowStyles.Add(new RowStyle());
-            tableLayoutPanel11.Size = new Size(1044, 100);
+            tableLayoutPanel11.Size = new Size(1079, 100);
             tableLayoutPanel11.TabIndex = 1;
             // 
             // label6
@@ -2152,7 +2187,7 @@
             tbDetailsAdditional.Multiline = true;
             tbDetailsAdditional.Name = "tbDetailsAdditional";
             tbDetailsAdditional.ReadOnly = true;
-            tbDetailsAdditional.Size = new Size(928, 90);
+            tbDetailsAdditional.Size = new Size(963, 90);
             tbDetailsAdditional.TabIndex = 1;
             // 
             // tpCurrencies
@@ -2161,7 +2196,7 @@
             tpCurrencies.Controls.Add(tableLayoutPanel14);
             tpCurrencies.Location = new Point(4, 24);
             tpCurrencies.Name = "tpCurrencies";
-            tpCurrencies.Size = new Size(1044, 531);
+            tpCurrencies.Size = new Size(1079, 531);
             tpCurrencies.TabIndex = 7;
             tpCurrencies.Text = "Валюты";
             tpCurrencies.UseVisualStyleBackColor = true;
@@ -2181,7 +2216,7 @@
             tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel23.RowStyles.Add(new RowStyle());
-            tableLayoutPanel23.Size = new Size(1044, 431);
+            tableLayoutPanel23.Size = new Size(1079, 431);
             tableLayoutPanel23.TabIndex = 3;
             // 
             // dgwCurrencies
@@ -2200,7 +2235,7 @@
             dgwCurrencies.RowHeadersVisible = false;
             dgwCurrencies.RowHeadersWidth = 51;
             dgwCurrencies.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwCurrencies.Size = new Size(1028, 343);
+            dgwCurrencies.Size = new Size(1063, 343);
             dgwCurrencies.TabIndex = 3;
             dgwCurrencies.CellDoubleClick += dgwCurrencies_CellDoubleClick;
             dgwCurrencies.SelectionChanged += dataGridViewCurrencies_SelectionChanged;
@@ -2210,10 +2245,10 @@
             label31.AutoSize = true;
             label31.Dock = DockStyle.Fill;
             label31.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label31.ForeColor = Color.Maroon;
+            label31.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label31.Location = new Point(8, 5);
             label31.Name = "label31";
-            label31.Size = new Size(1028, 26);
+            label31.Size = new Size(1063, 26);
             label31.TabIndex = 0;
             label31.Text = "Валюты";
             // 
@@ -2226,7 +2261,7 @@
             flowLayoutPanel11.Location = new Point(8, 34);
             flowLayoutPanel11.Name = "flowLayoutPanel11";
             flowLayoutPanel11.Padding = new Padding(5);
-            flowLayoutPanel11.Size = new Size(1028, 40);
+            flowLayoutPanel11.Size = new Size(1063, 40);
             flowLayoutPanel11.TabIndex = 1;
             // 
             // btnAddCurrency
@@ -2274,7 +2309,7 @@
             tableLayoutPanel14.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel14.RowCount = 1;
             tableLayoutPanel14.RowStyles.Add(new RowStyle());
-            tableLayoutPanel14.Size = new Size(1044, 100);
+            tableLayoutPanel14.Size = new Size(1079, 100);
             tableLayoutPanel14.TabIndex = 1;
             // 
             // label7
@@ -2293,7 +2328,7 @@
             tbDetailsCurrency.Multiline = true;
             tbDetailsCurrency.Name = "tbDetailsCurrency";
             tbDetailsCurrency.ReadOnly = true;
-            tbDetailsCurrency.Size = new Size(928, 90);
+            tbDetailsCurrency.Size = new Size(963, 90);
             tbDetailsCurrency.TabIndex = 1;
             // 
             // tpReport
@@ -2301,7 +2336,7 @@
             tpReport.Controls.Add(tableLayoutPanel26);
             tpReport.Location = new Point(4, 24);
             tpReport.Name = "tpReport";
-            tpReport.Size = new Size(1044, 531);
+            tpReport.Size = new Size(1079, 531);
             tpReport.TabIndex = 8;
             tpReport.Text = "Отчеты";
             tpReport.UseVisualStyleBackColor = true;
@@ -2333,7 +2368,7 @@
             tableLayoutPanel26.RowStyles.Add(new RowStyle());
             tableLayoutPanel26.RowStyles.Add(new RowStyle());
             tableLayoutPanel26.RowStyles.Add(new RowStyle());
-            tableLayoutPanel26.Size = new Size(1044, 531);
+            tableLayoutPanel26.Size = new Size(1079, 531);
             tableLayoutPanel26.TabIndex = 4;
             // 
             // plotView1
@@ -2342,7 +2377,7 @@
             plotView1.Location = new Point(8, 267);
             plotView1.Name = "plotView1";
             plotView1.PanCursor = Cursors.Hand;
-            plotView1.Size = new Size(1028, 260);
+            plotView1.Size = new Size(1063, 260);
             plotView1.TabIndex = 18;
             plotView1.Text = "plotView1";
             plotView1.ZoomHorizontalCursor = Cursors.SizeWE;
@@ -2354,10 +2389,10 @@
             label34.AutoSize = true;
             label34.Dock = DockStyle.Fill;
             label34.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label34.ForeColor = Color.Maroon;
+            label34.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label34.Location = new Point(8, 5);
             label34.Name = "label34";
-            label34.Size = new Size(1028, 26);
+            label34.Size = new Size(1063, 26);
             label34.TabIndex = 0;
             label34.Text = "Отчеты";
             // 
@@ -2370,7 +2405,7 @@
             filterPanel.Dock = DockStyle.Fill;
             filterPanel.Location = new Point(8, 69);
             filterPanel.Name = "filterPanel";
-            filterPanel.Size = new Size(1028, 27);
+            filterPanel.Size = new Size(1063, 27);
             filterPanel.TabIndex = 9;
             // 
             // label35
@@ -2415,7 +2450,7 @@
             pnlFilters.Dock = DockStyle.Fill;
             pnlFilters.Location = new Point(8, 102);
             pnlFilters.Name = "pnlFilters";
-            pnlFilters.Size = new Size(1028, 27);
+            pnlFilters.Size = new Size(1063, 27);
             pnlFilters.TabIndex = 10;
             pnlFilters.Visible = false;
             // 
@@ -2434,7 +2469,7 @@
             flPanel3.Dock = DockStyle.Fill;
             flPanel3.Location = new Point(8, 135);
             flPanel3.Name = "flPanel3";
-            flPanel3.Size = new Size(1028, 27);
+            flPanel3.Size = new Size(1063, 27);
             flPanel3.TabIndex = 11;
             flPanel3.Visible = false;
             // 
@@ -2453,7 +2488,7 @@
             flPanel4.Dock = DockStyle.Fill;
             flPanel4.Location = new Point(8, 168);
             flPanel4.Name = "flPanel4";
-            flPanel4.Size = new Size(1028, 27);
+            flPanel4.Size = new Size(1063, 27);
             flPanel4.TabIndex = 12;
             flPanel4.Visible = false;
             // 
@@ -2472,7 +2507,7 @@
             flPanel5.Dock = DockStyle.Fill;
             flPanel5.Location = new Point(8, 201);
             flPanel5.Name = "flPanel5";
-            flPanel5.Size = new Size(1028, 27);
+            flPanel5.Size = new Size(1063, 27);
             flPanel5.TabIndex = 13;
             flPanel5.Visible = false;
             // 
@@ -2491,7 +2526,7 @@
             flPanel6.Dock = DockStyle.Fill;
             flPanel6.Location = new Point(8, 234);
             flPanel6.Name = "flPanel6";
-            flPanel6.Size = new Size(1028, 27);
+            flPanel6.Size = new Size(1063, 27);
             flPanel6.TabIndex = 14;
             flPanel6.Visible = false;
             // 
@@ -2513,7 +2548,7 @@
             flowLayoutPanel14.Dock = DockStyle.Fill;
             flowLayoutPanel14.Location = new Point(8, 34);
             flowLayoutPanel14.Name = "flowLayoutPanel14";
-            flowLayoutPanel14.Size = new Size(1028, 29);
+            flowLayoutPanel14.Size = new Size(1063, 29);
             flowLayoutPanel14.TabIndex = 15;
             // 
             // cmbReports
@@ -2548,7 +2583,7 @@
             tpSettings.Controls.Add(tableLayoutPanel29);
             tpSettings.Location = new Point(4, 24);
             tpSettings.Name = "tpSettings";
-            tpSettings.Size = new Size(1044, 531);
+            tpSettings.Size = new Size(1079, 531);
             tpSettings.TabIndex = 9;
             tpSettings.Text = "Настройки";
             tpSettings.UseVisualStyleBackColor = true;
@@ -2568,7 +2603,7 @@
             tableLayoutPanel29.RowStyles.Add(new RowStyle());
             tableLayoutPanel29.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel29.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel29.Size = new Size(1044, 531);
+            tableLayoutPanel29.Size = new Size(1079, 531);
             tableLayoutPanel29.TabIndex = 6;
             // 
             // label11
@@ -2576,37 +2611,49 @@
             label11.AutoSize = true;
             label11.Dock = DockStyle.Fill;
             label11.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label11.ForeColor = Color.Maroon;
+            label11.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label11.Location = new Point(8, 5);
             label11.Name = "label11";
-            label11.Size = new Size(1028, 26);
+            label11.Size = new Size(1063, 26);
             label11.TabIndex = 0;
             label11.Text = "Настройки";
             // 
             // panel1
             // 
+            panel1.Controls.Add(label27);
             panel1.Controls.Add(checkBox1);
+            panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(8, 34);
             panel1.Name = "panel1";
-            panel1.Size = new Size(399, 305);
+            panel1.Size = new Size(1063, 489);
             panel1.TabIndex = 1;
+            // 
+            // label27
+            // 
+            label27.AutoSize = true;
+            label27.Location = new Point(23, 19);
+            label27.Name = "label27";
+            label27.Size = new Size(352, 15);
+            label27.TabIndex = 1;
+            label27.Text = "Пока настроек нет, запланированно под будушие обновления";
             // 
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(23, 23);
+            checkBox1.Location = new Point(23, 47);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(200, 19);
             checkBox1.TabIndex = 0;
             checkBox1.Text = "Показывать поле комментарий";
             checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBoxShowPanel_CheckedChanged;
             // 
             // tpAbout
             // 
             tpAbout.Controls.Add(tableLayoutPanel27);
             tpAbout.Location = new Point(4, 24);
             tpAbout.Name = "tpAbout";
-            tpAbout.Size = new Size(1044, 531);
+            tpAbout.Size = new Size(1079, 531);
             tpAbout.TabIndex = 10;
             tpAbout.Text = "О программе";
             tpAbout.UseVisualStyleBackColor = true;
@@ -2629,20 +2676,21 @@
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel27.Size = new Size(1044, 531);
+            tableLayoutPanel27.Size = new Size(1079, 531);
             tableLayoutPanel27.TabIndex = 5;
             // 
             // tbVersionHistory
             // 
             tbVersionHistory.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tbVersionHistory.BackColor = SystemColors.Window;
+            tbVersionHistory.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
             tbVersionHistory.Location = new Point(10, 136);
             tbVersionHistory.Margin = new Padding(5);
             tbVersionHistory.Multiline = true;
             tbVersionHistory.Name = "tbVersionHistory";
             tbVersionHistory.ReadOnly = true;
             tbVersionHistory.ScrollBars = ScrollBars.Both;
-            tbVersionHistory.Size = new Size(1024, 339);
+            tbVersionHistory.Size = new Size(1059, 339);
             tbVersionHistory.TabIndex = 6;
             tbVersionHistory.Text = resources.GetString("tbVersionHistory.Text");
             // 
@@ -2651,10 +2699,10 @@
             label10.AutoSize = true;
             label10.Dock = DockStyle.Fill;
             label10.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label10.ForeColor = Color.Maroon;
+            label10.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label10.Location = new Point(8, 5);
             label10.Name = "label10";
-            label10.Size = new Size(1028, 26);
+            label10.Size = new Size(1063, 26);
             label10.TabIndex = 0;
             label10.Text = "О программе";
             // 
@@ -2671,7 +2719,7 @@
             tableLayoutPanel28.Name = "tableLayoutPanel28";
             tableLayoutPanel28.RowCount = 1;
             tableLayoutPanel28.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel28.Size = new Size(1034, 100);
+            tableLayoutPanel28.Size = new Size(1069, 100);
             tableLayoutPanel28.TabIndex = 4;
             // 
             // tbAbout
@@ -2684,14 +2732,14 @@
             tbAbout.Name = "tbAbout";
             tbAbout.ReadOnly = true;
             tbAbout.ScrollBars = ScrollBars.Both;
-            tbAbout.Size = new Size(930, 90);
+            tbAbout.Size = new Size(965, 90);
             tbAbout.TabIndex = 6;
             tbAbout.Text = resources.GetString("tbAbout.Text");
             // 
             // pictureBox1
             // 
             pictureBox1.Dock = DockStyle.Fill;
-            pictureBox1.Image = Properties.Resources.logo;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.Location = new Point(3, 3);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(88, 94);
@@ -2703,23 +2751,34 @@
             // flowLayoutPanel18
             // 
             flowLayoutPanel18.Controls.Add(button2);
+            flowLayoutPanel18.Controls.Add(button4);
             flowLayoutPanel18.Dock = DockStyle.Fill;
             flowLayoutPanel18.Location = new Point(8, 483);
             flowLayoutPanel18.Name = "flowLayoutPanel18";
             flowLayoutPanel18.Padding = new Padding(5);
             flowLayoutPanel18.RightToLeft = RightToLeft.Yes;
-            flowLayoutPanel18.Size = new Size(1028, 40);
+            flowLayoutPanel18.Size = new Size(1063, 40);
             flowLayoutPanel18.TabIndex = 7;
             // 
             // button2
             // 
-            button2.Location = new Point(881, 8);
+            button2.Location = new Point(900, 8);
             button2.Name = "button2";
-            button2.Size = new Size(134, 23);
+            button2.Size = new Size(150, 23);
             button2.TabIndex = 0;
             button2.Text = "Обновить";
             button2.UseVisualStyleBackColor = true;
             button2.Click += CheckForUpdatesButton_Click;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(744, 8);
+            button4.Name = "button4";
+            button4.Size = new Size(150, 23);
+            button4.TabIndex = 1;
+            button4.Text = "Отправить отзыв";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // tpDebtGiven
             // 
@@ -2727,7 +2786,7 @@
             tpDebtGiven.Controls.Add(tableLayoutPanel31);
             tpDebtGiven.Location = new Point(4, 24);
             tpDebtGiven.Name = "tpDebtGiven";
-            tpDebtGiven.Size = new Size(1044, 531);
+            tpDebtGiven.Size = new Size(1079, 531);
             tpDebtGiven.TabIndex = 11;
             tpDebtGiven.Text = "Долги мне";
             tpDebtGiven.UseVisualStyleBackColor = true;
@@ -2747,7 +2806,7 @@
             tableLayoutPanel33.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel33.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel33.RowStyles.Add(new RowStyle());
-            tableLayoutPanel33.Size = new Size(1044, 431);
+            tableLayoutPanel33.Size = new Size(1079, 431);
             tableLayoutPanel33.TabIndex = 4;
             // 
             // dgwGivenDebts
@@ -2766,7 +2825,7 @@
             dgwGivenDebts.RowHeadersVisible = false;
             dgwGivenDebts.RowHeadersWidth = 51;
             dgwGivenDebts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwGivenDebts.Size = new Size(1028, 343);
+            dgwGivenDebts.Size = new Size(1063, 343);
             dgwGivenDebts.TabIndex = 3;
             dgwGivenDebts.CellDoubleClick += dgwGivenDebts_CellDoubleClick;
             dgwGivenDebts.CellFormatting += dgwGivenDebts_CellFormatting;
@@ -2777,10 +2836,10 @@
             lblGivenDebtsTotal.AutoSize = true;
             lblGivenDebtsTotal.Dock = DockStyle.Fill;
             lblGivenDebtsTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            lblGivenDebtsTotal.ForeColor = Color.Maroon;
+            lblGivenDebtsTotal.ForeColor = Color.FromArgb(0, 37, 118, 8);
             lblGivenDebtsTotal.Location = new Point(8, 5);
             lblGivenDebtsTotal.Name = "lblGivenDebtsTotal";
-            lblGivenDebtsTotal.Size = new Size(1028, 26);
+            lblGivenDebtsTotal.Size = new Size(1063, 26);
             lblGivenDebtsTotal.TabIndex = 0;
             lblGivenDebtsTotal.Text = "Долги выданные";
             // 
@@ -2796,7 +2855,7 @@
             flowLayoutPanel15.Location = new Point(8, 34);
             flowLayoutPanel15.Name = "flowLayoutPanel15";
             flowLayoutPanel15.Padding = new Padding(5);
-            flowLayoutPanel15.Size = new Size(1028, 40);
+            flowLayoutPanel15.Size = new Size(1063, 40);
             flowLayoutPanel15.TabIndex = 1;
             // 
             // btnAddGivenDebt
@@ -2872,7 +2931,7 @@
             tableLayoutPanel31.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel31.RowCount = 1;
             tableLayoutPanel31.RowStyles.Add(new RowStyle());
-            tableLayoutPanel31.Size = new Size(1044, 100);
+            tableLayoutPanel31.Size = new Size(1079, 100);
             tableLayoutPanel31.TabIndex = 2;
             // 
             // label15
@@ -2891,7 +2950,7 @@
             tbDetailsGivenDebts.Multiline = true;
             tbDetailsGivenDebts.Name = "tbDetailsGivenDebts";
             tbDetailsGivenDebts.ReadOnly = true;
-            tbDetailsGivenDebts.Size = new Size(928, 90);
+            tbDetailsGivenDebts.Size = new Size(963, 90);
             tbDetailsGivenDebts.TabIndex = 1;
             // 
             // tpDebtReceived
@@ -2900,7 +2959,7 @@
             tpDebtReceived.Controls.Add(tableLayoutPanel32);
             tpDebtReceived.Location = new Point(4, 24);
             tpDebtReceived.Name = "tpDebtReceived";
-            tpDebtReceived.Size = new Size(1044, 531);
+            tpDebtReceived.Size = new Size(1079, 531);
             tpDebtReceived.TabIndex = 12;
             tpDebtReceived.Text = "Долги мои";
             tpDebtReceived.UseVisualStyleBackColor = true;
@@ -2920,7 +2979,7 @@
             tableLayoutPanel34.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel34.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel34.RowStyles.Add(new RowStyle());
-            tableLayoutPanel34.Size = new Size(1044, 431);
+            tableLayoutPanel34.Size = new Size(1079, 431);
             tableLayoutPanel34.TabIndex = 4;
             // 
             // dgwReceivedDebts
@@ -2939,7 +2998,7 @@
             dgwReceivedDebts.RowHeadersVisible = false;
             dgwReceivedDebts.RowHeadersWidth = 51;
             dgwReceivedDebts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwReceivedDebts.Size = new Size(1028, 343);
+            dgwReceivedDebts.Size = new Size(1063, 343);
             dgwReceivedDebts.TabIndex = 3;
             dgwReceivedDebts.CellDoubleClick += dgwReceivedDebts_CellDoubleClick;
             dgwReceivedDebts.CellFormatting += dgwReceivedDebts_CellFormatting;
@@ -2950,10 +3009,10 @@
             lblReceivedDebtsTotal.AutoSize = true;
             lblReceivedDebtsTotal.Dock = DockStyle.Fill;
             lblReceivedDebtsTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            lblReceivedDebtsTotal.ForeColor = Color.Maroon;
+            lblReceivedDebtsTotal.ForeColor = Color.FromArgb(0, 37, 118, 8);
             lblReceivedDebtsTotal.Location = new Point(8, 5);
             lblReceivedDebtsTotal.Name = "lblReceivedDebtsTotal";
-            lblReceivedDebtsTotal.Size = new Size(1028, 26);
+            lblReceivedDebtsTotal.Size = new Size(1063, 26);
             lblReceivedDebtsTotal.TabIndex = 0;
             lblReceivedDebtsTotal.Text = "Долги полученные";
             // 
@@ -2969,7 +3028,7 @@
             flowLayoutPanel16.Location = new Point(8, 34);
             flowLayoutPanel16.Name = "flowLayoutPanel16";
             flowLayoutPanel16.Padding = new Padding(5);
-            flowLayoutPanel16.Size = new Size(1028, 40);
+            flowLayoutPanel16.Size = new Size(1063, 40);
             flowLayoutPanel16.TabIndex = 1;
             // 
             // btnAddReceivedDebt
@@ -3045,7 +3104,7 @@
             tableLayoutPanel32.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel32.RowCount = 1;
             tableLayoutPanel32.RowStyles.Add(new RowStyle());
-            tableLayoutPanel32.Size = new Size(1044, 100);
+            tableLayoutPanel32.Size = new Size(1079, 100);
             tableLayoutPanel32.TabIndex = 2;
             // 
             // label17
@@ -3064,7 +3123,7 @@
             tbDetailsReceivedDebts.Multiline = true;
             tbDetailsReceivedDebts.Name = "tbDetailsReceivedDebts";
             tbDetailsReceivedDebts.ReadOnly = true;
-            tbDetailsReceivedDebts.Size = new Size(928, 90);
+            tbDetailsReceivedDebts.Size = new Size(963, 90);
             tbDetailsReceivedDebts.TabIndex = 1;
             // 
             // tbCounterparties
@@ -3073,7 +3132,7 @@
             tbCounterparties.Controls.Add(tableLayoutPanel35);
             tbCounterparties.Location = new Point(4, 24);
             tbCounterparties.Name = "tbCounterparties";
-            tbCounterparties.Size = new Size(1044, 531);
+            tbCounterparties.Size = new Size(1079, 531);
             tbCounterparties.TabIndex = 13;
             tbCounterparties.Text = "Контрагенты";
             tbCounterparties.UseVisualStyleBackColor = true;
@@ -3093,7 +3152,7 @@
             tableLayoutPanel36.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel36.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel36.RowStyles.Add(new RowStyle());
-            tableLayoutPanel36.Size = new Size(1044, 431);
+            tableLayoutPanel36.Size = new Size(1079, 431);
             tableLayoutPanel36.TabIndex = 4;
             // 
             // dgwCounterparties
@@ -3112,7 +3171,7 @@
             dgwCounterparties.RowHeadersVisible = false;
             dgwCounterparties.RowHeadersWidth = 51;
             dgwCounterparties.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwCounterparties.Size = new Size(1028, 343);
+            dgwCounterparties.Size = new Size(1063, 343);
             dgwCounterparties.TabIndex = 3;
             dgwCounterparties.CellDoubleClick += dgwCounterparties_CellDoubleClick;
             dgwCounterparties.SelectionChanged += dgwCounterparties_SelectionChanged;
@@ -3122,10 +3181,10 @@
             label24.AutoSize = true;
             label24.Dock = DockStyle.Fill;
             label24.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label24.ForeColor = Color.Maroon;
+            label24.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label24.Location = new Point(8, 5);
             label24.Name = "label24";
-            label24.Size = new Size(1028, 26);
+            label24.Size = new Size(1063, 26);
             label24.TabIndex = 0;
             label24.Text = "Контрагенты";
             // 
@@ -3138,7 +3197,7 @@
             flowLayoutPanel17.Location = new Point(8, 34);
             flowLayoutPanel17.Name = "flowLayoutPanel17";
             flowLayoutPanel17.Padding = new Padding(5);
-            flowLayoutPanel17.Size = new Size(1028, 40);
+            flowLayoutPanel17.Size = new Size(1063, 40);
             flowLayoutPanel17.TabIndex = 1;
             // 
             // btnAddCounterparties
@@ -3186,7 +3245,7 @@
             tableLayoutPanel35.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel35.RowCount = 1;
             tableLayoutPanel35.RowStyles.Add(new RowStyle());
-            tableLayoutPanel35.Size = new Size(1044, 100);
+            tableLayoutPanel35.Size = new Size(1079, 100);
             tableLayoutPanel35.TabIndex = 2;
             // 
             // label20
@@ -3205,7 +3264,7 @@
             tbDetailsCounterparties.Multiline = true;
             tbDetailsCounterparties.Name = "tbDetailsCounterparties";
             tbDetailsCounterparties.ReadOnly = true;
-            tbDetailsCounterparties.Size = new Size(928, 90);
+            tbDetailsCounterparties.Size = new Size(963, 90);
             tbDetailsCounterparties.TabIndex = 1;
             // 
             // tbGoals
@@ -3214,7 +3273,7 @@
             tbGoals.Controls.Add(tableLayoutPanel37);
             tbGoals.Location = new Point(4, 24);
             tbGoals.Name = "tbGoals";
-            tbGoals.Size = new Size(1044, 531);
+            tbGoals.Size = new Size(1079, 531);
             tbGoals.TabIndex = 14;
             tbGoals.Text = "Цели";
             tbGoals.UseVisualStyleBackColor = true;
@@ -3234,7 +3293,7 @@
             tableLayoutPanel38.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel38.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel38.RowStyles.Add(new RowStyle());
-            tableLayoutPanel38.Size = new Size(1044, 431);
+            tableLayoutPanel38.Size = new Size(1079, 431);
             tableLayoutPanel38.TabIndex = 5;
             // 
             // dgwGoals
@@ -3253,7 +3312,7 @@
             dgwGoals.RowHeadersVisible = false;
             dgwGoals.RowHeadersWidth = 51;
             dgwGoals.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwGoals.Size = new Size(1028, 343);
+            dgwGoals.Size = new Size(1063, 343);
             dgwGoals.TabIndex = 3;
             dgwGoals.CellDoubleClick += dgvGoals_CellDoubleClick;
             dgwGoals.CellFormatting += dgvGoals_CellFormatting;
@@ -3264,10 +3323,10 @@
             label26.AutoSize = true;
             label26.Dock = DockStyle.Fill;
             label26.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label26.ForeColor = Color.Maroon;
+            label26.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label26.Location = new Point(8, 5);
             label26.Name = "label26";
-            label26.Size = new Size(1028, 26);
+            label26.Size = new Size(1063, 26);
             label26.TabIndex = 0;
             label26.Text = "Цели";
             // 
@@ -3284,7 +3343,7 @@
             flowLayoutPanel1.Location = new Point(8, 34);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(5);
-            flowLayoutPanel1.Size = new Size(1028, 40);
+            flowLayoutPanel1.Size = new Size(1063, 40);
             flowLayoutPanel1.TabIndex = 1;
             // 
             // btnAddGoal
@@ -3369,7 +3428,7 @@
             tableLayoutPanel37.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel37.RowCount = 1;
             tableLayoutPanel37.RowStyles.Add(new RowStyle());
-            tableLayoutPanel37.Size = new Size(1044, 100);
+            tableLayoutPanel37.Size = new Size(1079, 100);
             tableLayoutPanel37.TabIndex = 3;
             // 
             // label25
@@ -3388,14 +3447,155 @@
             tbDetailsGoal.Multiline = true;
             tbDetailsGoal.Name = "tbDetailsGoal";
             tbDetailsGoal.ReadOnly = true;
-            tbDetailsGoal.Size = new Size(928, 90);
+            tbDetailsGoal.Size = new Size(963, 90);
             tbDetailsGoal.TabIndex = 1;
+            // 
+            // tbMeasurements
+            // 
+            tbMeasurements.Controls.Add(tableLayoutPanel40);
+            tbMeasurements.Controls.Add(tableLayoutPanel39);
+            tbMeasurements.Location = new Point(4, 24);
+            tbMeasurements.Name = "tbMeasurements";
+            tbMeasurements.Size = new Size(1079, 531);
+            tbMeasurements.TabIndex = 15;
+            tbMeasurements.Text = "Единицы";
+            tbMeasurements.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel40
+            // 
+            tableLayoutPanel40.ColumnCount = 1;
+            tableLayoutPanel40.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel40.Controls.Add(dgwMeasurement, 0, 2);
+            tableLayoutPanel40.Controls.Add(label42, 0, 0);
+            tableLayoutPanel40.Controls.Add(flowLayoutPanel19, 0, 1);
+            tableLayoutPanel40.Dock = DockStyle.Fill;
+            tableLayoutPanel40.Location = new Point(0, 0);
+            tableLayoutPanel40.Name = "tableLayoutPanel40";
+            tableLayoutPanel40.Padding = new Padding(5);
+            tableLayoutPanel40.RowCount = 3;
+            tableLayoutPanel40.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
+            tableLayoutPanel40.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
+            tableLayoutPanel40.RowStyles.Add(new RowStyle());
+            tableLayoutPanel40.Size = new Size(1079, 431);
+            tableLayoutPanel40.TabIndex = 4;
+            // 
+            // dgwMeasurement
+            // 
+            dgwMeasurement.AllowUserToAddRows = false;
+            dgwMeasurement.AllowUserToDeleteRows = false;
+            dgwMeasurement.AllowUserToOrderColumns = true;
+            dgwMeasurement.AllowUserToResizeRows = false;
+            dgwMeasurement.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgwMeasurement.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgwMeasurement.ContextMenuStrip = contextMenu;
+            dgwMeasurement.EditMode = DataGridViewEditMode.EditProgrammatically;
+            dgwMeasurement.Location = new Point(8, 80);
+            dgwMeasurement.MultiSelect = false;
+            dgwMeasurement.Name = "dgwMeasurement";
+            dgwMeasurement.RowHeadersVisible = false;
+            dgwMeasurement.RowHeadersWidth = 51;
+            dgwMeasurement.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgwMeasurement.Size = new Size(1063, 343);
+            dgwMeasurement.TabIndex = 3;
+            dgwMeasurement.CellDoubleClick += dgwMeasurementUnits_CellDoubleClick;
+            dgwMeasurement.SelectionChanged += dgwMeasurementUnits_SelectionChanged;
+            // 
+            // label42
+            // 
+            label42.AutoSize = true;
+            label42.Dock = DockStyle.Fill;
+            label42.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label42.ForeColor = Color.FromArgb(0, 37, 118, 8);
+            label42.Location = new Point(8, 5);
+            label42.Name = "label42";
+            label42.Size = new Size(1063, 26);
+            label42.TabIndex = 0;
+            label42.Text = "Единицы";
+            // 
+            // flowLayoutPanel19
+            // 
+            flowLayoutPanel19.Controls.Add(btnAddMeasurement);
+            flowLayoutPanel19.Controls.Add(btnEditMeasurement);
+            flowLayoutPanel19.Controls.Add(btnDeleteMeasurement);
+            flowLayoutPanel19.Dock = DockStyle.Fill;
+            flowLayoutPanel19.Location = new Point(8, 34);
+            flowLayoutPanel19.Name = "flowLayoutPanel19";
+            flowLayoutPanel19.Padding = new Padding(5);
+            flowLayoutPanel19.Size = new Size(1063, 40);
+            flowLayoutPanel19.TabIndex = 1;
+            // 
+            // btnAddMeasurement
+            // 
+            btnAddMeasurement.Image = Properties.Resources.PlusIcon;
+            btnAddMeasurement.Location = new Point(8, 8);
+            btnAddMeasurement.Name = "btnAddMeasurement";
+            btnAddMeasurement.Size = new Size(104, 23);
+            btnAddMeasurement.TabIndex = 0;
+            btnAddMeasurement.Text = "Добавить";
+            btnAddMeasurement.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnAddMeasurement.UseVisualStyleBackColor = true;
+            btnAddMeasurement.Click += btnAddMeasurementUnit_Click;
+            // 
+            // btnEditMeasurement
+            // 
+            btnEditMeasurement.Image = Properties.Resources.EditIcon;
+            btnEditMeasurement.Location = new Point(118, 8);
+            btnEditMeasurement.Name = "btnEditMeasurement";
+            btnEditMeasurement.Size = new Size(23, 23);
+            btnEditMeasurement.TabIndex = 1;
+            btnEditMeasurement.UseVisualStyleBackColor = true;
+            btnEditMeasurement.Click += btnEditMeasurementUnit_Click;
+            // 
+            // btnDeleteMeasurement
+            // 
+            btnDeleteMeasurement.Image = Properties.Resources.MinusIcon;
+            btnDeleteMeasurement.Location = new Point(147, 8);
+            btnDeleteMeasurement.Name = "btnDeleteMeasurement";
+            btnDeleteMeasurement.Size = new Size(23, 23);
+            btnDeleteMeasurement.TabIndex = 2;
+            btnDeleteMeasurement.UseVisualStyleBackColor = true;
+            btnDeleteMeasurement.Click += btnDeleteMeasurementUnit_Click;
+            // 
+            // tableLayoutPanel39
+            // 
+            tableLayoutPanel39.ColumnCount = 2;
+            tableLayoutPanel39.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
+            tableLayoutPanel39.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel39.Controls.Add(label41, 0, 0);
+            tableLayoutPanel39.Controls.Add(tbDetailsMeasurement, 1, 0);
+            tableLayoutPanel39.Dock = DockStyle.Bottom;
+            tableLayoutPanel39.Location = new Point(0, 431);
+            tableLayoutPanel39.Name = "tableLayoutPanel39";
+            tableLayoutPanel39.Padding = new Padding(5, 5, 5, 0);
+            tableLayoutPanel39.RowCount = 1;
+            tableLayoutPanel39.RowStyles.Add(new RowStyle());
+            tableLayoutPanel39.Size = new Size(1079, 100);
+            tableLayoutPanel39.TabIndex = 2;
+            // 
+            // label41
+            // 
+            label41.AutoSize = true;
+            label41.Location = new Point(8, 5);
+            label41.Name = "label41";
+            label41.Size = new Size(87, 15);
+            label41.TabIndex = 0;
+            label41.Text = "Комментарий:";
+            // 
+            // tbDetailsMeasurement
+            // 
+            tbDetailsMeasurement.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tbDetailsMeasurement.Location = new Point(108, 8);
+            tbDetailsMeasurement.Multiline = true;
+            tbDetailsMeasurement.Name = "tbDetailsMeasurement";
+            tbDetailsMeasurement.ReadOnly = true;
+            tbDetailsMeasurement.Size = new Size(963, 90);
+            tbDetailsMeasurement.TabIndex = 1;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1213, 559);
+            ClientSize = new Size(1253, 559);
             Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(3, 2, 3, 2);
@@ -3546,6 +3746,13 @@
             flowLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel37.ResumeLayout(false);
             tableLayoutPanel37.PerformLayout();
+            tbMeasurements.ResumeLayout(false);
+            tableLayoutPanel40.ResumeLayout(false);
+            tableLayoutPanel40.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgwMeasurement).EndInit();
+            flowLayoutPanel19.ResumeLayout(false);
+            tableLayoutPanel39.ResumeLayout(false);
+            tableLayoutPanel39.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -3624,9 +3831,6 @@
         private TableLayoutPanel tableLayoutPanel6;
         private Label label4;
         private TableLayoutPanel tableLayoutPanel1;
-        private TableLayoutPanel tableLayoutPanel16;
-        private Label label1;
-        private TextBox tbDetailsCategory;
         private TableLayoutPanel tableLayoutPanel9;
         private Label label5;
         private TextBox tbDetailsSource;
@@ -3787,5 +3991,21 @@
         private TextBox tbDetailsGoal;
         private FlowLayoutPanel flowLayoutPanel18;
         private Button button2;
+        private Label label27;
+        private TableLayoutPanel tableLayoutPanel16;
+        private Label label1;
+        private TextBox tbDetailsCategory;
+        private Button button4;
+        private TabPage tbMeasurements;
+        private TableLayoutPanel tableLayoutPanel40;
+        private DataGridView dgwMeasurement;
+        private Label label42;
+        private FlowLayoutPanel flowLayoutPanel19;
+        private Button btnAddMeasurement;
+        private Button btnEditMeasurement;
+        private Button btnDeleteMeasurement;
+        private TableLayoutPanel tableLayoutPanel39;
+        private Label label41;
+        private TextBox tbDetailsMeasurement;
     }
 }

@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -13,9 +12,10 @@ using K_Accounting.Reports;
 using K_Accounting.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Newtonsoft.Json;
 using OxyPlot;
 using OxyPlot.WindowsForms;
+using ComboBox = System.Windows.Forms.ComboBox;
+using Control = System.Windows.Forms.Control;
 using VersionChecker = K_Accounting.Utilities.VersionChecker;
 
 namespace K_Accounting
@@ -39,6 +39,7 @@ namespace K_Accounting
         private Debt _selectedReceivedDebt;
         private Counterparty _selectedCounterparties;
         private Goal _selectedGoal;
+        private MeasurementUnit _selectedMeasurement;
 
         private AppSettings _settings;
 
@@ -71,7 +72,10 @@ namespace K_Accounting
             InitializeDataGridViews();
 
             InitializeGoalFilter();
+
             InitializeDebtFilters();
+
+            LoadPanelState();
 
             // инициализируем базу данных
             InitializeDatabase();
@@ -102,6 +106,7 @@ namespace K_Accounting
             LoadGivenDebts();
             LoadReceivedDebts();
             LoadCounterparties();
+            LoadMeasurementUnits();
 
             // визуально убираем ярлыки закладок на пейджконтрол
             tcPage.Appearance = TabAppearance.FlatButtons;
@@ -140,11 +145,22 @@ namespace K_Accounting
             // Удалить следующие строки после реализации главной страницы
             tvMenuPanel.Nodes.RemoveAt(0);
             tvMenuPanel_AfterSelect(this, new TreeViewEventArgs(tvMenuPanel.Nodes[0]));
-            // пока не реализованна страница настроек удаляем ссылку на нее
-            // Удалить следующие строки после реализации страницы настроек
-            tvMenuPanel.Nodes.RemoveAt(6);
+            // пока не реализованна печать скрываем кнопки 
+            // Удалить следующие строки после реализации печати
+            btnPrintAccounts.Visible = false;
+            btnPrintExpenses.Visible = false;
+            btnPrintIncomes.Visible = false;
+            button3.Visible = false;
+            button12.Visible = false;
+            button13.Visible = false;
+            btnPrintGoal.Visible = false;
 
         }
+
+
+
+
+
 
         #region MainFom
         /// <summary>Заполение комбобоксов месяцев и лет.</summary>
@@ -219,13 +235,6 @@ namespace K_Accounting
             // Примените здесь другие ваши настройки...
         }
 
-        // Пример кнопки для изменения темы ИСПОЛЬЗОВАНИЕ НАСТРОЕК
-        private void btnToggleTheme_Click(object sender, EventArgs e)
-        {
-            _settings.Theme = _settings.Theme == "Light" ? "Dark" : "Light";
-            ApplyApplicationSettings();
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Сохранение состояния окна
@@ -247,6 +256,7 @@ namespace K_Accounting
             _settings.SelectedGoalFilter = cmbGoalFilter.SelectedItem?.ToString() ?? "Все";
             _settings.SelectedGivenDebtFilter = (int)cmbGivenDebtStatusFilter.SelectedValue;
             _settings.SelectedReceivedDebtFilter = (int)cmbReceivedDebtStatusFilter.SelectedValue;
+            _settings.IsPanelVisible = checkBox1.Checked;
 
             SettingsManager.SaveSettings(_settings);
 
@@ -340,10 +350,11 @@ namespace K_Accounting
             {
                 CreateColumn("colDate", "Дата", "Date", "dd.MM.yyyy HH:mm"),
                 CreateColumn("colAmount", "Сумма", "Amount", "N2", DataGridViewContentAlignment.MiddleRight),
-                CreateColumn("colQuantity", "Кол-во", "Quantity", "N2", DataGridViewContentAlignment.MiddleRight),
                 CreateColumn("colAccount", "Счет", "Account.Name"),
                 CreateColumn("colCategory", "Категория", "Category.Name"),
                 CreateColumn("colSubCategory", "Подкатегория", "SubCategory.Name"),
+                CreateColumn("colQuantity", "Кол-во", "Quantity", "N2", DataGridViewContentAlignment.MiddleRight),
+                CreateColumn("colMeasurementUnit", "Единица", "MeasurementUnit.Name"),
                 CreateColumn("colAdditional", "Упоминания", "Additional.Name"),
                 CreateColumn("colComment", "Комментарий", "Comment")
             });
@@ -367,6 +378,7 @@ namespace K_Accounting
             {
                 CreateColumn("colName", "Название", "Name"),
                 CreateColumn("colCategory", "Категория", "Category.Name"),
+                CreateColumn("colMeasurementUnit", "Единица", "MeasurementUnit.Name"),
                 CreateColumn("colComment", "Комментарий", "Comment")
             });
 
@@ -430,6 +442,12 @@ namespace K_Accounting
                 CreateColumn("colStatus", "Статус", "Status"),
                 CreateColumn("colComment", "Комментарий", "Comment")
             });
+
+            InitializeGrid(dgwMeasurement, "MeasurementUnits", new List<DataGridViewColumn>
+            {
+                CreateColumn("colName", "Название", "Name"),
+                CreateColumn("colSymbol", "Символ", "Symbol")
+            });
         }
 
         private DataGridViewColumn CreateColumn(string name, string header, string dataProperty, string format = null,
@@ -463,15 +481,10 @@ namespace K_Accounting
                 grid.Columns.AddRange(columns.ToArray());
             }
 
-            // Настройка последнего столбца
-            var lastColumn = grid.Columns[grid.Columns.Count - 1];
-            lastColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            SettingsManager.LoadGridSettings(grid);
 
             // Загрузка настроек
             grid.ColumnHeaderMouseClick += Grid_ColumnHeaderMouseClick;
-            SettingsManager.LoadGridSettings(grid);
-
-            // Настройка обработчиков событий
             grid.ColumnDisplayIndexChanged += (s, e) => SettingsManager.SaveGridSettings(grid);
             grid.ColumnWidthChanged += (s, e) => SettingsManager.SaveGridSettings(grid);
             grid.ColumnHeaderMouseClick += (s, e) =>
@@ -561,6 +574,46 @@ namespace K_Accounting
                 _settings.SelectedReceivedDebtFilter = (int)cmbReceivedDebtStatusFilter.SelectedValue;
                 LoadReceivedDebts();
             };
+        }
+
+        private void LoadPanelState()
+        {
+            bool isPanelVisible = SettingsManager.LoadPanelVisibility();
+
+            checkBox1.Checked = isPanelVisible;
+            tableLayoutPanel2.Visible = isPanelVisible;
+            tableLayoutPanel3.Visible = isPanelVisible;
+            tableLayoutPanel6.Visible = isPanelVisible;
+            tableLayoutPanel16.Visible = isPanelVisible;
+            tableLayoutPanel17.Visible = isPanelVisible;
+            tableLayoutPanel9.Visible = isPanelVisible;
+            tableLayoutPanel11.Visible = isPanelVisible;
+            tableLayoutPanel14.Visible = isPanelVisible;
+            tableLayoutPanel31.Visible = isPanelVisible;
+            tableLayoutPanel32.Visible = isPanelVisible;
+            tableLayoutPanel35.Visible = isPanelVisible;
+            tableLayoutPanel37.Visible = isPanelVisible;
+            tableLayoutPanel39.Visible = isPanelVisible;
+        }
+
+        private void checkBoxShowPanel_CheckedChanged(object sender, EventArgs e)
+        {
+            var isPanelVisible = checkBox1.Checked;
+            tableLayoutPanel2.Visible = isPanelVisible;
+            tableLayoutPanel2.Visible = isPanelVisible;
+            tableLayoutPanel3.Visible = isPanelVisible;
+            tableLayoutPanel6.Visible = isPanelVisible;
+            tableLayoutPanel16.Visible = isPanelVisible;
+            tableLayoutPanel17.Visible = isPanelVisible;
+            tableLayoutPanel9.Visible = isPanelVisible;
+            tableLayoutPanel11.Visible = isPanelVisible;
+            tableLayoutPanel14.Visible = isPanelVisible;
+            tableLayoutPanel31.Visible = isPanelVisible;
+            tableLayoutPanel32.Visible = isPanelVisible;
+            tableLayoutPanel35.Visible = isPanelVisible;
+            tableLayoutPanel37.Visible = isPanelVisible;
+            tableLayoutPanel39.Visible = isPanelVisible;
+            SettingsManager.SavePanelVisibility(checkBox1.Checked);
         }
 
         #endregion
@@ -868,6 +921,9 @@ namespace K_Accounting
                 case 7: // Валюты
                     LoadCurrencies();
                     break;
+                case 15: // Единицы
+                    LoadMeasurementUnits();
+                    break;
                 case 8: // Отчеты
                     break;
                 case 9: // Настройки
@@ -906,25 +962,34 @@ namespace K_Accounting
             var dgv = menu.SourceControl as DataGridView;
             if (dgv == null) return;
 
-            menu.Items.Clear();
-
-            var hitTest = GetHitTestInfo(dgv);
-
-            if (hitTest.Type == DataGridViewHitTestType.ColumnHeader)
+            try
             {
-                // Сохраняем индекс столбца при открытии меню
-                Point clientPoint = dgv.PointToClient(Cursor.Position);
-                var hitTest1 = dgv.HitTest(clientPoint.X, clientPoint.Y);
-                menu.Tag = hitTest1.ColumnIndex; // Сохраняем индекс в Tag меню
+                menu.Items.Clear();
 
-                CreateColumnVisibilityMenu(menu, dgv);
-                AddShowAllColumnsItem(menu, dgv);
-                menu.Closing += Menu_Closing;
+                var hitTest = GetHitTestInfo(dgv);
+
+                if (hitTest.Type == DataGridViewHitTestType.ColumnHeader)
+                {
+                    // Сохраняем индекс столбца при открытии меню
+                    Point clientPoint = dgv.PointToClient(Cursor.Position);
+                    var hitTest1 = dgv.HitTest(clientPoint.X, clientPoint.Y);
+                    menu.Tag = hitTest1.ColumnIndex; // Сохраняем индекс в Tag меню
+
+                    CreateColumnVisibilityMenu(menu, dgv);
+                    AddShowAllColumnsItem(menu, dgv);
+                    //menu.Closing += Menu_Closing;
+                }
+                else
+                {
+                    CreateMainContextMenu(menu, dgv);
+                    //menu.Closing -= Menu_Closing;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                CreateMainContextMenu(menu, dgv);
-                menu.Closing -= Menu_Closing;
+                Logger.Log(ex);
+                e.Cancel = true; // Отменяем открытие меню при ошибке
+                MessageBox.Show("Ошибка при создании меню: " + ex.Message);
             }
         }
 
@@ -945,6 +1010,8 @@ namespace K_Accounting
 
         private ToolStripMenuItem CreateColumnMenuItem(DataGridViewColumn column)
         {
+            if (column == null) return null;
+
             var menuItem = new ToolStripMenuItem(column.HeaderText)
             {
                 Checked = column.Visible,
@@ -1041,10 +1108,11 @@ namespace K_Accounting
                 "Accounts_colComment" => 120,
                 "Expenses_colDate" => 120,
                 "Expenses_colAmount" => 120,
-                "Expenses_colQuantity" => 120,
                 "Expenses_colAccount" => 120,
                 "Expenses_colCategory" => 120,
                 "Expenses_colSubCategory" => 120,
+                "Expenses_colQuantity" => 120,
+                "Expenses_colMeasurementUnit" => 80,
                 "Expenses_colAdditional" => 120,
                 "Expenses_colComment" => 120,
                 "Incomes_colDate" => 120,
@@ -1056,6 +1124,7 @@ namespace K_Accounting
                 "Categories_colComment" => 120,
                 "SubCategories_colName" => 120,
                 "SubCategories_colCategory" => 120,
+                "SubCategories_colMeasurementUnit" => 80,
                 "SubCategories_colComment" => 120,
                 "Additionals_colName" => 120,
                 "Additionals_colComment" => 120,
@@ -1089,6 +1158,9 @@ namespace K_Accounting
                 "Goals_colProgress" => 80,
                 "Goals_colStatus" => 100,
                 "Goals_colComment" => 200,
+                "MeasurementUnits_colName" => 180,
+                "MeasurementUnits_colSymbol" => 100,
+                "MeasurementUnits_colComment" => 250,
                 _ => 200
             };
         }
@@ -1103,12 +1175,13 @@ namespace K_Accounting
                 "Accounts_colComment" => 3,
                 "Expenses_colDate" => 0,
                 "Expenses_colAmount" => 1,
-                "Expenses_colQuantity" => 2,
-                "Expenses_colAccount" => 3,
-                "Expenses_colCategory" => 4,
-                "Expenses_colSubCategory" => 5,
-                "Expenses_colAdditional" => 6,
-                "Expenses_colComment" => 7,
+                "Expenses_colAccount" => 2,
+                "Expenses_colCategory" => 3,
+                "Expenses_colSubCategory" => 4,
+                "Expenses_colQuantity" => 5,
+                "Expenses_colMeasurementUnit" => 6,
+                "Expenses_colAdditional" => 7,
+                "Expenses_colComment" => 8,
                 "Incomes_colDate" => 0,
                 "Incomes_colAmount" => 1,
                 "Incomes_colAccount" => 2,
@@ -1118,7 +1191,8 @@ namespace K_Accounting
                 "Categories_colComment" => 1,
                 "SubCategories_colName" => 0,
                 "SubCategories_colCategory" => 1,
-                "SubCategories_colComment" => 2,
+                "SubCategories_colMeasurementUnit" => 2,
+                "SubCategories_colComment" => 3,
                 "Additionals_colName" => 0,
                 "Additionals_colComment" => 1,
                 "Source_colName" => 0,
@@ -1152,6 +1226,9 @@ namespace K_Accounting
                 "Goals_colProgress" => 5,
                 "Goals_colStatus" => 6,
                 "Goals_colComment" => 7,
+                "MeasurementUnits_colName" => 0,
+                "MeasurementUnits_colSymbol" => 1,
+                "MeasurementUnits_colComment" => 2,
                 _ => 0
             };
         }
@@ -1231,6 +1308,7 @@ namespace K_Accounting
             "ReceivedDebts" => () => btnAddReceivedDebt_Click(null, EventArgs.Empty),
             "Counterparties" => () => btnAddCounterparties_Click(null, EventArgs.Empty),
             "Goals" => () => btnAddGoal_Click(null, EventArgs.Empty),
+            "MeasurementUnits" => () => btnAddMeasurementUnit_Click(null, EventArgs.Empty),
             _ => null
         };
 
@@ -1248,6 +1326,7 @@ namespace K_Accounting
             "ReceivedDebts" => () => btnEditReceivedDebt_Click(null, EventArgs.Empty),
             "Counterparties" => () => btnEditCounterparties_Click(null, EventArgs.Empty),
             "Goals" => () => btnEditGoal_Click(null, EventArgs.Empty),
+            "MeasurementUnits" => () => btnEditMeasurementUnit_Click(null, EventArgs.Empty),
             _ => null
         };
 
@@ -1265,6 +1344,7 @@ namespace K_Accounting
             "ReceivedDebts" => () => btnDeleteReceivedDebt_Click(null, EventArgs.Empty),
             "Counterparties" => () => btnDeleteCounterparties_Click(null, EventArgs.Empty),
             "Goals" => () => btnDeleteGoal_Click(null, EventArgs.Empty),
+            "MeasurementUnits" => () => btnDeleteMeasurementUnit_Click(null, EventArgs.Empty),
             _ => null
         };
 
@@ -1309,7 +1389,7 @@ namespace K_Accounting
                 menu.Items.Add(item);
             }
 
-            if (dgv.Name == "Goals")  //ваотвсаолдтвадлявмлдячьсдячьсдяьсдячьсюдячьсяьсдяччьсячсьюбячьсюбячьсюбячьсюбячьсбюячьсябючьсябючсьячбючс
+            if (dgv.Name == "Goals")
             {
                 menu.Items.Add(new ToolStripSeparator());
 
@@ -1518,6 +1598,7 @@ namespace K_Accounting
                     .Include(e => e.Category)
                     .Include(e => e.SubCategory)
                     .Include(e => e.Additional)
+                    .Include(s => s.MeasurementUnit)
                     .Where(e => !e.IsDeleted);
 
                 if (selectedMonth > 0)
@@ -1605,6 +1686,13 @@ namespace K_Accounting
                 e.Value = _context.Additionals
                     .Find(expense?.AdditionalId)?
                     .Name ?? "Дополнение удалено";
+            }
+
+            // Обработка единиц измерения
+            if (dgwExpenses.Columns[e.ColumnIndex].Name == "colMeasurementUnit" && e.Value == null)
+            {
+                e.Value = expense?.MeasurementUnit?.Name ?? "БЕИ";
+                e.FormattingApplied = true;
             }
         }
 
@@ -2052,6 +2140,7 @@ namespace K_Accounting
 
                 var query = _context.SubCategories
                     .Include(s => s.Category)
+                    .Include(s => s.MeasurementUnit)
                     .Where(s => !s.IsDeleted);
 
                 if (categoryId.HasValue)
@@ -2097,10 +2186,20 @@ namespace K_Accounting
 
         private void dataGridViewSubCategories_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.ColumnIndex == dgwSubCategories.Columns["colCategory"].Index)
+            var grid = sender as DataGridView;
+
+            var subCat = grid.Rows[e.RowIndex].DataBoundItem as SubCategory;
+
+            if (e.ColumnIndex == grid.Columns["colCategory"].Index)
             {
-                var subCat = dgwSubCategories.Rows[e.RowIndex].DataBoundItem as SubCategory;
                 e.Value = subCat?.Category?.Name ?? "Без категории";
+            }
+
+            if (grid.Columns[e.ColumnIndex].Name == "colMeasurementUnit")
+            {
+                e.Value = subCat?.MeasurementUnit?.Name ??
+                        (subCat?.RequireQuantity == true ? "Не указана" : "БЕИ");
+                e.FormattingApplied = true;
             }
         }
 
@@ -2911,6 +3010,125 @@ namespace K_Accounting
 
         #endregion
 
+        #region Единицы измерения (MeasurementUnit)
+        private void LoadMeasurementUnits()
+        {
+            try
+            {
+                var units = _context.MeasurementUnits
+                    .Where(u => !u.IsDeleted)
+                    .ToList();
+
+                dgwMeasurement.DataSource = units;
+                GridSorter.InitializeGrid(dgwMeasurement, units.Cast<object>().ToList());
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                MessageBox.Show($"Ошибка загрузки единиц: {ex.Message}");
+            }
+        }
+
+        private void dgwMeasurementUnits_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgwMeasurement.CurrentCell == null) return;
+            _selectedMeasurement = dgwMeasurement.CurrentRow?.DataBoundItem as MeasurementUnit;
+            btnEditMeasurement.Enabled = _selectedMeasurement != null;
+            btnDeleteMeasurement.Enabled = _selectedMeasurement != null;
+        }
+
+        private void dgwMeasurementUnits_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && dgwMeasurement.CurrentRow != null)
+            {
+                dgwMeasurement.CurrentCell = dgwMeasurement.Rows[e.RowIndex].Cells[0];
+                btnEditMeasurement.PerformClick();
+            }
+        }
+
+        private void btnAddMeasurementUnit_Click(object sender, EventArgs e)
+        {
+            using (var form = new AddEditMeasurementUnitForm(_context))
+            {
+                form.IsEditMode = false;
+                if (form.ShowDialog() == DialogResult.OK && form.SavedUnitId.HasValue)
+                {
+                    LoadMeasurementUnits();
+
+                    var targetRow = dgwMeasurement.Rows
+                        .Cast<DataGridViewRow>()
+                        .FirstOrDefault(row =>
+                            (row.DataBoundItem as MeasurementUnit)?.Id == form.SavedUnitId.Value);
+
+                    if (targetRow != null)
+                    {
+                        dgwMeasurement.CurrentCell = targetRow.Cells[0];
+                        _selectedMeasurement = targetRow.DataBoundItem as MeasurementUnit;
+                    }
+                }
+            }
+        }
+
+        private void btnEditMeasurementUnit_Click(object sender, EventArgs e)
+        {
+            if (_selectedMeasurement == null || _selectedMeasurement.IsDeleted) return;
+            int selectedId = _selectedMeasurement.Id;
+
+            using (var form = new AddEditMeasurementUnitForm(_selectedMeasurement, _context))
+            {
+                form.IsEditMode = true;
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    _context.Entry(_selectedMeasurement).Reload();
+                    LoadMeasurementUnits();
+
+                    var targetRow = dgwMeasurement.Rows
+                        .Cast<DataGridViewRow>()
+                        .FirstOrDefault(row =>
+                            (row.DataBoundItem as MeasurementUnit)?.Id == selectedId);
+
+                    if (targetRow != null)
+                    {
+                        dgwMeasurement.CurrentCell = targetRow.Cells[0];
+                        _selectedMeasurement = targetRow.DataBoundItem as MeasurementUnit;
+                    }
+                }
+            }
+        }
+
+        private void btnDeleteMeasurementUnit_Click(object sender, EventArgs e)
+        {
+            if (_selectedMeasurement == null) return;
+
+            var result = MessageBox.Show(
+                $"Удалить единицу измерения {_selectedMeasurement.Name}?",
+                "Подтверждение удаления",
+                MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    _selectedMeasurement.IsDeleted = true;
+                    _context.SaveChanges();
+                    LoadMeasurementUnits();
+
+                    if (dgwMeasurement.Rows.Count > 0)
+                    {
+                        int newIndex = Math.Min(dgwMeasurement.Rows.Count - 1, dgwMeasurement.CurrentRow.Index);
+                        dgwMeasurement.CurrentCell = dgwMeasurement.Rows[newIndex].Cells[0];
+                        _selectedMeasurement = dgwMeasurement.CurrentRow?.DataBoundItem as MeasurementUnit;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(ex);
+                    MessageBox.Show($"Ошибка удаления: {ex.Message}");
+                }
+            }
+        }
+        #endregion
+
         #region Контрагенты (Counterparties)
         private void LoadCounterparties()
         {
@@ -3685,7 +3903,22 @@ namespace K_Accounting
             }
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string dbVersion = GetDatabaseVersion();
+            FeedbackSender.OpenEmailClient(dbVersion);
+        }
+
+        private string GetDatabaseVersion()
+        {
+            using var db = new AppDbContext();
+            var lastMigration = db.Database.GetAppliedMigrations().LastOrDefault();
+            return lastMigration != null
+                ? ExtractVersionFromMigration(lastMigration).ToString("D8") // Формат: 20231015
+                : "0.0.0"; // Для новой БД
+        }
         #endregion
+
     }
 }
 

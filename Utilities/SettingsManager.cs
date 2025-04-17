@@ -133,5 +133,25 @@ namespace K_Accounting.Utilities
                 : new SortSettings();
         }
 
+        public static void SavePanelVisibility(bool isVisible)
+        {
+            try
+            {
+                var settings = LoadSettings();
+                settings.IsPanelVisible = isVisible;
+                SaveSettings(settings);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                Debug.WriteLine($"Error saving panel visibility: {ex.Message}");
+            }
+        }
+
+        public static bool LoadPanelVisibility()
+        {
+            var settings = LoadSettings();
+            return settings.IsPanelVisible;
+        }
     }
 }

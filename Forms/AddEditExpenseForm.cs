@@ -13,6 +13,9 @@ namespace K_Accounting.Forms
         private Expense _expense;
         private decimal _originalAmount;
         private int _originalAccountId;
+
+        private MeasurementUnit _selectedMeasurementUnit;
+
         private bool _isEditMode;
         public bool isEditMode
         {
@@ -118,6 +121,14 @@ namespace K_Accounting.Forms
             cmbAdditional.DropDownStyle = ComboBoxStyle.DropDown; // Добавить
 
             cmbCategory_SelectedIndexChanged(null, EventArgs.Empty);
+
+            cmbMeasurement.DataSource = _context.MeasurementUnits
+                .Where(u => !u.IsDeleted)
+                .ToList();
+            cmbMeasurement.DisplayMember = "Name";
+            cmbMeasurement.ValueMember = "Id";
+            cmbMeasurement.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbMeasurement.AutoCompleteSource = AutoCompleteSource.ListItems;
         }
 
         private void LoadExpenseData()
@@ -161,6 +172,11 @@ namespace K_Accounting.Forms
 
                 // Принудительно вызываем проверку видимости
                 cmbSubCategory_SelectedIndexChanged(null, EventArgs.Empty);
+
+                if (_expense.MeasurementUnitId != null)
+                    cmbMeasurement.SelectedValue = _expense.MeasurementUnitId;
+                else
+                    LoadDefaultMeasurementUnit();
             }
             catch (Exception ex)
             {
@@ -178,6 +194,13 @@ namespace K_Accounting.Forms
                     IsAutoUnit = true
                 };
             }
+        }
+
+        private void LoadDefaultMeasurementUnit()
+        {
+            var subCategory = cmbSubCategory.SelectedItem as SubCategory;
+            if (subCategory?.MeasurementUnitId != null)
+                cmbMeasurement.SelectedValue = subCategory.MeasurementUnitId;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -213,6 +236,7 @@ namespace K_Accounting.Forms
                         _expense.AdditionalId = (int)cmbAdditional.SelectedValue;
                         _expense.Comment = txtComment.Text;
                         _expense.IsTemplate = chkIsTemplate.Checked;
+                        _expense.MeasurementUnitId = (int)cmbMeasurement.SelectedValue;
 
                         // Новая: Сохранение количества
                         _expense.Quantity = requireQuantity ? numQuantity.Value : 1;
@@ -231,6 +255,7 @@ namespace K_Accounting.Forms
                             AdditionalId = (int)cmbAdditional.SelectedValue,
                             Comment = txtComment.Text,
                             IsTemplate = chkIsTemplate.Checked,
+                            MeasurementUnitId = (int)cmbMeasurement.SelectedValue,
 
                             // Новая: Инициализация количества
                             Quantity = requireQuantity ? numQuantity.Value : 1,
@@ -311,6 +336,12 @@ namespace K_Accounting.Forms
             if (cmbCategory.SelectedItem != null && cmbSubCategory.SelectedItem == null)
             {
                 MessageBox.Show("Выберите подкатегорию");
+                return false;
+            }
+
+            if (numQuantity.Visible && cmbMeasurement.SelectedValue == null)
+            {
+                MessageBox.Show("Выберите единицу измерения");
                 return false;
             }
 
@@ -530,13 +561,36 @@ namespace K_Accounting.Forms
 
             // Новая: Установка значения по умолчанию
             if (!showQuantity) numQuantity.Value = 1;
+
+            LoadDefaultMeasurementUnit();
         }
 
         private void ShowQuantity(bool show)
         {
             lblQuantity.Visible = show;
             numQuantity.Visible = show;
+            lblMeasurement.Visible = show;
+            cmbMeasurement.Visible = show;
+            btnNewMeasurement.Visible = show;
 
+        }
+
+        private void btnNewMeasurement_Click(object sender, EventArgs e)
+        {
+            using (var form = new AddEditMeasurementUnitForm(_context))
+            {
+                form.DataUpdated += (s, args) =>
+                {
+                    // Обновляем список единиц измерения
+                    cmbMeasurement.DataSource = _context.MeasurementUnits
+                        .Where(u => !u.IsDeleted)
+                        .ToList();
+
+                    if (form.SavedUnitId.HasValue)
+                        cmbMeasurement.SelectedValue = form.SavedUnitId.Value;
+                };
+                form.ShowDialog();
+            }
         }
 
         private void cmbSubCategory_SelectedIndexChanged(object sender, EventArgs e)

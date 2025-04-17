@@ -24,7 +24,7 @@
 	  
 	<SignAssembly>False</SignAssembly>
 	  
-	<ApplicationIcon>AppIco.ico</ApplicationIcon>
+	<ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="AppIco.ico" />
+    <Content Include="favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,7 +11,7 @@ namespace K_Accounting.Data
     public class AppDbContext : DbContext
     {
 
-        public const int CurrentDbVersion = 4; // Увеличивать при изменениях
+        public const int CurrentDbVersion = 1; // Увеличивать при изменениях
 
         // Таблицы в базе данных
         public DbSet<DbVersion> DbVersions { get; set; }
@@ -27,6 +27,7 @@ namespace K_Accounting.Data
         public DbSet<DebtPayment> DebtPayments { get; set; }
         public DbSet<Counterparty> Counterparties { get; set; }
         public DbSet<Goal> Goals { get; set; }
+        public DbSet<MeasurementUnit> MeasurementUnits { get; set; }
 
         // Настройка подключения к базе SQLite
 
@@ -158,6 +159,16 @@ namespace K_Accounting.Data
                     .HasForeignKey(x => x.CurrencyId)
                     .OnDelete(DeleteBehavior.Restrict); // Запрещаем удаление валюты с целями
             });
+
+            modelBuilder.Entity<MeasurementUnit>().HasData(
+                new MeasurementUnit
+                {
+                    Id = 1,
+                    Name = "БЕИ",
+                    Symbol = "",
+                    CreatedAt = new DateTime(2024, 1, 1) // Фиксированная дата
+                }
+            );
         }
 
         // Автоматическое "мягкое удаление" - пометка IsDeleted вместо реального удаления

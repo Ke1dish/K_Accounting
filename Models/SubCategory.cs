@@ -29,5 +29,10 @@ namespace K_Accounting.Models
 
         public bool InheritQuantityRequirement { get; set; } // вторая версия базы данных, добавление "Количества"
 
+        public int? MeasurementUnitId { get; set; }  // четвертая версия базы данных, добавление "единиц измерения"
+
+        [ForeignKey("MeasurementUnitId")]
+        public virtual MeasurementUnit MeasurementUnit { get; set; }  // четвертая версия базы данных, добавление "единиц измерения"
+
     }
 }

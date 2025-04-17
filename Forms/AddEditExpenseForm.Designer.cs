@@ -33,6 +33,7 @@
             btnOk = new Button();
             btnAdd = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
+            btnNewMeasurement = new Button();
             chkIsTemplate = new CheckBox();
             txtComment = new TextBox();
             label2 = new Label();
@@ -54,6 +55,8 @@
             btnNewSubcategory = new Button();
             numQuantity = new NumericUpDown();
             lblQuantity = new Label();
+            cmbMeasurement = new ComboBox();
+            lblMeasurement = new Label();
             flowLayoutPanel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numAmount).BeginInit();
@@ -67,7 +70,7 @@
             flowLayoutPanel1.Controls.Add(btnAdd);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new Point(0, 321);
+            flowLayoutPanel1.Location = new Point(0, 355);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(5);
             flowLayoutPanel1.Size = new Size(384, 40);
@@ -109,32 +112,35 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 32F));
-            tableLayoutPanel1.Controls.Add(chkIsTemplate, 1, 7);
-            tableLayoutPanel1.Controls.Add(txtComment, 1, 8);
-            tableLayoutPanel1.Controls.Add(label2, 0, 8);
-            tableLayoutPanel1.Controls.Add(btnNewAdditional, 2, 6);
-            tableLayoutPanel1.Controls.Add(cmbAdditional, 1, 6);
-            tableLayoutPanel1.Controls.Add(label100, 0, 6);
-            tableLayoutPanel1.Controls.Add(cmbSubCategory, 1, 5);
-            tableLayoutPanel1.Controls.Add(label9, 0, 5);
-            tableLayoutPanel1.Controls.Add(btnNewCategory, 2, 4);
-            tableLayoutPanel1.Controls.Add(cmbCategory, 1, 4);
-            tableLayoutPanel1.Controls.Add(label8, 0, 4);
-            tableLayoutPanel1.Controls.Add(btnNewAccount, 2, 2);
-            tableLayoutPanel1.Controls.Add(cmbAccount, 1, 2);
-            tableLayoutPanel1.Controls.Add(label7, 0, 2);
-            tableLayoutPanel1.Controls.Add(numAmount, 1, 1);
-            tableLayoutPanel1.Controls.Add(label6, 0, 1);
+            tableLayoutPanel1.Controls.Add(btnNewMeasurement, 2, 6);
+            tableLayoutPanel1.Controls.Add(chkIsTemplate, 1, 8);
+            tableLayoutPanel1.Controls.Add(txtComment, 1, 9);
+            tableLayoutPanel1.Controls.Add(label2, 0, 9);
+            tableLayoutPanel1.Controls.Add(btnNewAdditional, 2, 7);
+            tableLayoutPanel1.Controls.Add(cmbAdditional, 1, 7);
+            tableLayoutPanel1.Controls.Add(label100, 0, 7);
+            tableLayoutPanel1.Controls.Add(cmbSubCategory, 1, 3);
+            tableLayoutPanel1.Controls.Add(label9, 0, 3);
+            tableLayoutPanel1.Controls.Add(btnNewCategory, 2, 2);
+            tableLayoutPanel1.Controls.Add(cmbCategory, 1, 2);
+            tableLayoutPanel1.Controls.Add(label8, 0, 2);
+            tableLayoutPanel1.Controls.Add(btnNewAccount, 2, 1);
+            tableLayoutPanel1.Controls.Add(cmbAccount, 1, 1);
+            tableLayoutPanel1.Controls.Add(label7, 0, 1);
+            tableLayoutPanel1.Controls.Add(numAmount, 1, 4);
+            tableLayoutPanel1.Controls.Add(label6, 0, 4);
             tableLayoutPanel1.Controls.Add(dtpDate, 1, 0);
             tableLayoutPanel1.Controls.Add(label5, 0, 0);
-            tableLayoutPanel1.Controls.Add(btnNewSubcategory, 2, 5);
-            tableLayoutPanel1.Controls.Add(numQuantity, 1, 3);
-            tableLayoutPanel1.Controls.Add(lblQuantity, 0, 3);
+            tableLayoutPanel1.Controls.Add(btnNewSubcategory, 2, 3);
+            tableLayoutPanel1.Controls.Add(numQuantity, 1, 5);
+            tableLayoutPanel1.Controls.Add(lblQuantity, 0, 5);
+            tableLayoutPanel1.Controls.Add(cmbMeasurement, 1, 6);
+            tableLayoutPanel1.Controls.Add(lblMeasurement, 0, 6);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.Padding = new Padding(10);
-            tableLayoutPanel1.RowCount = 9;
+            tableLayoutPanel1.RowCount = 10;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
@@ -144,14 +150,27 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(384, 321);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Size = new Size(384, 355);
             tableLayoutPanel1.TabIndex = 0;
+            // 
+            // btnNewMeasurement
+            // 
+            btnNewMeasurement.Dock = DockStyle.Fill;
+            btnNewMeasurement.Location = new Point(344, 187);
+            btnNewMeasurement.Name = "btnNewMeasurement";
+            btnNewMeasurement.Size = new Size(27, 23);
+            btnNewMeasurement.TabIndex = 62;
+            btnNewMeasurement.Text = "...";
+            btnNewMeasurement.UseVisualStyleBackColor = true;
+            btnNewMeasurement.Click += btnNewMeasurement_Click;
             // 
             // chkIsTemplate
             // 
             chkIsTemplate.AutoSize = true;
             tableLayoutPanel1.SetColumnSpan(chkIsTemplate, 2);
-            chkIsTemplate.Location = new Point(145, 216);
+            chkIsTemplate.Location = new Point(145, 245);
             chkIsTemplate.Name = "chkIsTemplate";
             chkIsTemplate.Size = new Size(170, 19);
             chkIsTemplate.TabIndex = 10;
@@ -162,16 +181,16 @@
             // 
             tableLayoutPanel1.SetColumnSpan(txtComment, 2);
             txtComment.Dock = DockStyle.Fill;
-            txtComment.Location = new Point(145, 241);
+            txtComment.Location = new Point(145, 270);
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
-            txtComment.Size = new Size(226, 67);
+            txtComment.Size = new Size(226, 72);
             txtComment.TabIndex = 11;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(13, 238);
+            label2.Location = new Point(13, 267);
             label2.Name = "label2";
             label2.Size = new Size(84, 15);
             label2.TabIndex = 57;
@@ -180,7 +199,7 @@
             // btnNewAdditional
             // 
             btnNewAdditional.Dock = DockStyle.Fill;
-            btnNewAdditional.Location = new Point(344, 187);
+            btnNewAdditional.Location = new Point(344, 216);
             btnNewAdditional.Name = "btnNewAdditional";
             btnNewAdditional.Size = new Size(27, 23);
             btnNewAdditional.TabIndex = 9;
@@ -192,7 +211,7 @@
             // 
             cmbAdditional.Dock = DockStyle.Fill;
             cmbAdditional.FormattingEnabled = true;
-            cmbAdditional.Location = new Point(145, 187);
+            cmbAdditional.Location = new Point(145, 216);
             cmbAdditional.Name = "cmbAdditional";
             cmbAdditional.Size = new Size(193, 23);
             cmbAdditional.TabIndex = 8;
@@ -200,7 +219,7 @@
             // label100
             // 
             label100.AutoSize = true;
-            label100.Location = new Point(13, 184);
+            label100.Location = new Point(13, 213);
             label100.Name = "label100";
             label100.Size = new Size(77, 15);
             label100.TabIndex = 54;
@@ -210,7 +229,7 @@
             // 
             cmbSubCategory.Dock = DockStyle.Fill;
             cmbSubCategory.FormattingEnabled = true;
-            cmbSubCategory.Location = new Point(145, 158);
+            cmbSubCategory.Location = new Point(145, 100);
             cmbSubCategory.Name = "cmbSubCategory";
             cmbSubCategory.Size = new Size(193, 23);
             cmbSubCategory.TabIndex = 6;
@@ -219,7 +238,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(13, 155);
+            label9.Location = new Point(13, 97);
             label9.Name = "label9";
             label9.Size = new Size(84, 15);
             label9.TabIndex = 51;
@@ -228,7 +247,7 @@
             // btnNewCategory
             // 
             btnNewCategory.Dock = DockStyle.Fill;
-            btnNewCategory.Location = new Point(344, 129);
+            btnNewCategory.Location = new Point(344, 71);
             btnNewCategory.Name = "btnNewCategory";
             btnNewCategory.Size = new Size(27, 23);
             btnNewCategory.TabIndex = 5;
@@ -240,7 +259,7 @@
             // 
             cmbCategory.Dock = DockStyle.Fill;
             cmbCategory.FormattingEnabled = true;
-            cmbCategory.Location = new Point(145, 129);
+            cmbCategory.Location = new Point(145, 71);
             cmbCategory.Name = "cmbCategory";
             cmbCategory.Size = new Size(193, 23);
             cmbCategory.TabIndex = 4;
@@ -249,7 +268,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(13, 126);
+            label8.Location = new Point(13, 68);
             label8.Name = "label8";
             label8.Size = new Size(63, 15);
             label8.TabIndex = 48;
@@ -258,7 +277,7 @@
             // btnNewAccount
             // 
             btnNewAccount.Dock = DockStyle.Fill;
-            btnNewAccount.Location = new Point(344, 71);
+            btnNewAccount.Location = new Point(344, 42);
             btnNewAccount.Name = "btnNewAccount";
             btnNewAccount.Size = new Size(27, 23);
             btnNewAccount.TabIndex = 3;
@@ -270,7 +289,7 @@
             // 
             cmbAccount.Dock = DockStyle.Fill;
             cmbAccount.FormattingEnabled = true;
-            cmbAccount.Location = new Point(145, 71);
+            cmbAccount.Location = new Point(145, 42);
             cmbAccount.Name = "cmbAccount";
             cmbAccount.Size = new Size(193, 23);
             cmbAccount.TabIndex = 2;
@@ -278,7 +297,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(13, 68);
+            label7.Location = new Point(13, 39);
             label7.Name = "label7";
             label7.Size = new Size(33, 15);
             label7.TabIndex = 45;
@@ -289,7 +308,7 @@
             tableLayoutPanel1.SetColumnSpan(numAmount, 2);
             numAmount.DecimalPlaces = 2;
             numAmount.Dock = DockStyle.Fill;
-            numAmount.Location = new Point(145, 42);
+            numAmount.Location = new Point(145, 129);
             numAmount.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numAmount.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numAmount.Name = "numAmount";
@@ -300,7 +319,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(13, 39);
+            label6.Location = new Point(13, 126);
             label6.Name = "label6";
             label6.Size = new Size(45, 15);
             label6.TabIndex = 33;
@@ -327,7 +346,7 @@
             // btnNewSubcategory
             // 
             btnNewSubcategory.Dock = DockStyle.Fill;
-            btnNewSubcategory.Location = new Point(344, 158);
+            btnNewSubcategory.Location = new Point(344, 100);
             btnNewSubcategory.Name = "btnNewSubcategory";
             btnNewSubcategory.Size = new Size(27, 23);
             btnNewSubcategory.TabIndex = 7;
@@ -339,7 +358,7 @@
             // 
             tableLayoutPanel1.SetColumnSpan(numQuantity, 2);
             numQuantity.Dock = DockStyle.Fill;
-            numQuantity.Location = new Point(145, 100);
+            numQuantity.Location = new Point(145, 158);
             numQuantity.Name = "numQuantity";
             numQuantity.Size = new Size(226, 23);
             numQuantity.TabIndex = 58;
@@ -347,11 +366,29 @@
             // lblQuantity
             // 
             lblQuantity.AutoSize = true;
-            lblQuantity.Location = new Point(13, 97);
+            lblQuantity.Location = new Point(13, 155);
             lblQuantity.Name = "lblQuantity";
             lblQuantity.Size = new Size(72, 15);
             lblQuantity.TabIndex = 59;
             lblQuantity.Text = "Количество";
+            // 
+            // cmbMeasurement
+            // 
+            cmbMeasurement.Dock = DockStyle.Fill;
+            cmbMeasurement.FormattingEnabled = true;
+            cmbMeasurement.Location = new Point(145, 187);
+            cmbMeasurement.Name = "cmbMeasurement";
+            cmbMeasurement.Size = new Size(193, 23);
+            cmbMeasurement.TabIndex = 60;
+            // 
+            // lblMeasurement
+            // 
+            lblMeasurement.AutoSize = true;
+            lblMeasurement.Location = new Point(13, 184);
+            lblMeasurement.Name = "lblMeasurement";
+            lblMeasurement.Size = new Size(116, 15);
+            lblMeasurement.TabIndex = 61;
+            lblMeasurement.Text = "Единица измерения";
             // 
             // AddEditExpenseForm
             // 
@@ -359,7 +396,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new Size(384, 361);
+            ClientSize = new Size(384, 395);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(flowLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -402,5 +439,8 @@
         private CheckBox chkIsTemplate;
         private NumericUpDown numQuantity;
         private Label lblQuantity;
+        private Button btnNewMeasurement;
+        private ComboBox cmbMeasurement;
+        private Label lblMeasurement;
     }
 }

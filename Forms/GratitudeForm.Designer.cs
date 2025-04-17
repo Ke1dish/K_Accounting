@@ -42,7 +42,7 @@
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
-            textBox1.Size = new Size(384, 281);
+            textBox1.Size = new Size(366, 431);
             textBox1.TabIndex = 0;
             textBox1.TabStop = false;
             textBox1.Text = resources.GetString("textBox1.Text");
@@ -52,16 +52,16 @@
             flowLayoutPanel1.Controls.Add(btnOk);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new Point(0, 241);
+            flowLayoutPanel1.Location = new Point(0, 391);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(5);
-            flowLayoutPanel1.Size = new Size(384, 40);
+            flowLayoutPanel1.Size = new Size(366, 40);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // btnOk
             // 
             btnOk.DialogResult = DialogResult.OK;
-            btnOk.Location = new Point(296, 8);
+            btnOk.Location = new Point(278, 8);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(75, 23);
             btnOk.TabIndex = 0;
@@ -73,7 +73,7 @@
             AcceptButton = btnOk;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(384, 281);
+            ClientSize = new Size(366, 431);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(textBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;

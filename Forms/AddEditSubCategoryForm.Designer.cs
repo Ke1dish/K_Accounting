@@ -33,9 +33,12 @@
             btnCancel = new Button();
             btnOk = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
+            btnNewMeasurement = new Button();
+            cmbMeasurement = new ComboBox();
+            label4 = new Label();
             label3 = new Label();
             txtComment = new TextBox();
-            label2 = new Label();
+            lblMeasurement = new Label();
             txtName = new TextBox();
             label1 = new Label();
             cmbCategory = new ComboBox();
@@ -89,9 +92,12 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 32F));
+            tableLayoutPanel1.Controls.Add(btnNewMeasurement, 2, 4);
+            tableLayoutPanel1.Controls.Add(cmbMeasurement, 1, 4);
+            tableLayoutPanel1.Controls.Add(label4, 0, 5);
             tableLayoutPanel1.Controls.Add(label3, 0, 1);
-            tableLayoutPanel1.Controls.Add(txtComment, 1, 4);
-            tableLayoutPanel1.Controls.Add(label2, 0, 4);
+            tableLayoutPanel1.Controls.Add(txtComment, 1, 5);
+            tableLayoutPanel1.Controls.Add(lblMeasurement, 0, 4);
             tableLayoutPanel1.Controls.Add(txtName, 1, 0);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(cmbCategory, 1, 1);
@@ -104,14 +110,46 @@
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.Padding = new Padding(10);
-            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowCount = 6;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(384, 221);
             tableLayoutPanel1.TabIndex = 0;
+            // 
+            // btnNewMeasurement
+            // 
+            btnNewMeasurement.Dock = DockStyle.Fill;
+            btnNewMeasurement.Location = new Point(344, 127);
+            btnNewMeasurement.Margin = new Padding(3, 2, 3, 2);
+            btnNewMeasurement.Name = "btnNewMeasurement";
+            btnNewMeasurement.Size = new Size(27, 23);
+            btnNewMeasurement.TabIndex = 19;
+            btnNewMeasurement.Text = "...";
+            btnNewMeasurement.UseVisualStyleBackColor = true;
+            btnNewMeasurement.Click += btnNewMeasurement_Click;
+            // 
+            // cmbMeasurement
+            // 
+            cmbMeasurement.Dock = DockStyle.Fill;
+            cmbMeasurement.FormattingEnabled = true;
+            cmbMeasurement.Location = new Point(145, 127);
+            cmbMeasurement.Margin = new Padding(3, 2, 3, 2);
+            cmbMeasurement.Name = "cmbMeasurement";
+            cmbMeasurement.Size = new Size(193, 23);
+            cmbMeasurement.TabIndex = 18;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(13, 152);
+            label4.Name = "label4";
+            label4.Size = new Size(84, 15);
+            label4.TabIndex = 17;
+            label4.Text = "Комментарий";
             // 
             // label3
             // 
@@ -126,20 +164,20 @@
             // 
             tableLayoutPanel1.SetColumnSpan(txtComment, 2);
             txtComment.Dock = DockStyle.Fill;
-            txtComment.Location = new Point(145, 128);
+            txtComment.Location = new Point(145, 155);
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
-            txtComment.Size = new Size(226, 91);
+            txtComment.Size = new Size(226, 53);
             txtComment.TabIndex = 3;
             // 
-            // label2
+            // lblMeasurement
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(13, 125);
-            label2.Name = "label2";
-            label2.Size = new Size(84, 15);
-            label2.TabIndex = 10;
-            label2.Text = "Комментарий";
+            lblMeasurement.AutoSize = true;
+            lblMeasurement.Location = new Point(13, 125);
+            lblMeasurement.Name = "lblMeasurement";
+            lblMeasurement.Size = new Size(119, 15);
+            lblMeasurement.TabIndex = 10;
+            lblMeasurement.Text = "Единицы измерения";
             // 
             // txtName
             // 
@@ -202,6 +240,7 @@
             cbDemandQuantity.TabIndex = 14;
             cbDemandQuantity.Text = "Требовать количество";
             cbDemandQuantity.UseVisualStyleBackColor = true;
+            cbDemandQuantity.CheckedChanged += cbDemandQuantity_CheckedChanged;
             // 
             // pbDemandQuantityInfo
             // 
@@ -262,7 +301,7 @@
         private TableLayoutPanel tableLayoutPanel1;
         private Label label3;
         private TextBox txtComment;
-        private Label label2;
+        private Label lblMeasurement;
         private TextBox txtName;
         private Label label1;
         private ComboBox cmbCategory;
@@ -272,5 +311,8 @@
         private ToolTip toolTip1;
         private PictureBox pbDemandQuantityInfo;
         private PictureBox pbQuantityRequirementInheritedInfo;
+        private Button btnNewMeasurement;
+        private ComboBox cmbMeasurement;
+        private Label label4;
     }
 }

@@ -45,5 +45,8 @@ namespace K_Accounting.Models
         [Precision(9, 3)]
         public decimal Quantity { get; set; } = 1;  // вторая версия базы данных, добавление "Количества"
         public bool IsAutoUnit { get; set; } = true;  // вторая версия базы данных, добавление "Количества"
+        public int MeasurementUnitId { get; set; }  // четвертая версия базы данных, добавление "единиц измерения"
+                [ForeignKey("MeasurementUnitId")]
+        public virtual MeasurementUnit MeasurementUnit { get; set; }  // четвертая версия базы данных, добавление "единиц измерения"
     }
 }

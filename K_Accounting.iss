@@ -1,10 +1,10 @@
 [Setup]
 AppName=Мои финансы
-AppVersion=1.0
+AppVersion=1.25.4.17
 DefaultDirName={autopf}\Мои финансы
 DefaultGroupName=Мои финансы
 OutputBaseFilename=K_Accounting_Setup
-OutputDir=C:\Users\Keldish\source\repos\Ke1dish\K_Accounting\bin\Release\net8.0-windows\win-x64\Instal
+OutputDir=C:\Users\Keldish\source\repos\Ke1dish\K_Accounting\Instal
 ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 Compression=lzma2

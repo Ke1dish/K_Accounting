@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace K_Accounting.Data.Migrations
+namespace K_Accounting.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250410053106_AddGoals")]
-    partial class AddGoals
+    [Migration("20250414114652_InitialFixed")]
+    partial class InitialFixed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -413,6 +413,9 @@ namespace K_Accounting.Data.Migrations
                     b.Property<bool>("IsTemplate")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("MeasurementUnitId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("Quantity")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(9, 3)
@@ -433,6 +436,8 @@ namespace K_Accounting.Data.Migrations
                     b.HasIndex("AdditionalId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("MeasurementUnitId");
 
                     b.HasIndex("SubCategoryId");
 
@@ -548,6 +553,48 @@ namespace K_Accounting.Data.Migrations
                     b.ToTable("Incomes");
                 });
 
+            modelBuilder.Entity("K_Accounting.Models.MeasurementUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MeasurementUnits");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 4, 14, 11, 46, 52, 401, DateTimeKind.Utc).AddTicks(2545),
+                            IsDeleted = false,
+                            Name = "БЕИ",
+                            Symbol = ""
+                        });
+                });
+
             modelBuilder.Entity("K_Accounting.Models.Source", b =>
                 {
                     b.Property<int>("Id")
@@ -604,6 +651,9 @@ namespace K_Accounting.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MeasurementUnitId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -619,6 +669,8 @@ namespace K_Accounting.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("MeasurementUnitId");
 
                     b.ToTable("SubCategories");
                 });
@@ -684,6 +736,12 @@ namespace K_Accounting.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("K_Accounting.Models.MeasurementUnit", "MeasurementUnit")
+                        .WithMany()
+                        .HasForeignKey("MeasurementUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("K_Accounting.Models.SubCategory", "SubCategory")
                         .WithMany()
                         .HasForeignKey("SubCategoryId")
@@ -695,6 +753,8 @@ namespace K_Accounting.Data.Migrations
                     b.Navigation("Additional");
 
                     b.Navigation("Category");
+
+                    b.Navigation("MeasurementUnit");
 
                     b.Navigation("SubCategory");
                 });
@@ -736,7 +796,13 @@ namespace K_Accounting.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("K_Accounting.Models.MeasurementUnit", "MeasurementUnit")
+                        .WithMany()
+                        .HasForeignKey("MeasurementUnitId");
+
                     b.Navigation("Category");
+
+                    b.Navigation("MeasurementUnit");
                 });
 
             modelBuilder.Entity("Debt", b =>

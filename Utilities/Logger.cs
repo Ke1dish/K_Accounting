@@ -25,13 +25,13 @@ namespace K_Accounting.Utilities
         //    MessageBox.Show("Ошибка ХХХХХХХХХ. Лог записан.");
         //}
 
-        private static readonly string LogPath = Path.Combine(
+        public static readonly string LogPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "K_Accounting",
             "error_log.txt"
         );
 
-        private static readonly object LockObject = new object();
+        public static readonly object LockObject = new object();
 
         // Автоматическое получение имени метода
         public static void Log(Exception ex)

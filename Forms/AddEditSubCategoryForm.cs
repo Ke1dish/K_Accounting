@@ -32,6 +32,10 @@ namespace K_Accounting.Forms
 
         private readonly int? _preselectedCategoryId;
 
+        private List<MeasurementUnit> _measurementUnits;
+
+        private MeasurementUnit _selectedMeasurementUnit;
+
         private string toolTipText = "Здесь будет подсказка\n" +
         "Здесь будет подсказка\n" +
         "Здесь будет подсказка";
@@ -42,6 +46,7 @@ namespace K_Accounting.Forms
             _context = context;
             _preselectedCategoryId = categoryId;
             LoadCategories();
+            LoadMeasurementUnits();
             txtName.Focus();
             toolTip1.SetToolTip(pbDemandQuantityInfo, toolTipText);
             toolTip1.SetToolTip(pbQuantityRequirementInheritedInfo, toolTipText);
@@ -85,12 +90,41 @@ namespace K_Accounting.Forms
             }
         }
 
+        private void LoadMeasurementUnits()
+        {
+            try
+            {
+                _measurementUnits = _context.MeasurementUnits
+                    .Where(u => !u.IsDeleted)
+                    .OrderBy(u => u.Name)
+                    .ToList();
+
+                cmbMeasurement.DataSource = _measurementUnits;
+                cmbMeasurement.DisplayMember = "Name";
+                cmbMeasurement.ValueMember = "Id";
+                cmbMeasurement.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cmbMeasurement.AutoCompleteSource = AutoCompleteSource.ListItems;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                MessageBox.Show($"Ошибка загрузки единиц измерения: {ex.Message}");
+            }
+        }
+
         private void LoadSubCategoryData()
         {
             txtName.Text = _subCategory.Name;
             cmbCategory.SelectedValue = _subCategory.CategoryId;
             txtComment.Text = _subCategory.Comment;
             cmbCategory.Text = ((Category)cmbCategory.SelectedItem)?.Name;
+            UpdateQuantityControls();
+            cmbMeasurement.SelectedValue = _subCategory.MeasurementUnitId;
+            UpdateQuantityControls();
+        }
+
+        private void cbDemandQuantity_CheckedChanged(object sender, EventArgs e)
+        {
             UpdateQuantityControls();
         }
 
@@ -140,6 +174,16 @@ namespace K_Accounting.Forms
                 return false;
             }
 
+            //if ((cbDemandQuantity.Checked || (category?.RequireQuantity == true)))
+            if (cbDemandQuantity.Checked )
+                {
+                    if (cmbMeasurement.SelectedValue == null)
+                {
+                    MessageBox.Show("Выберите единицу измерения");
+                    return false;
+                }
+            }
+
             return true;
         }
 
@@ -155,6 +199,7 @@ namespace K_Accounting.Forms
                     _subCategory.Name = txtName.Text.Trim();
                     _subCategory.CategoryId = (int)cmbCategory.SelectedValue;
                     _subCategory.Comment = txtComment.Text.Trim();
+                    _subCategory.MeasurementUnitId = (int?)cmbMeasurement.SelectedValue;
 
                     if (_subCategory.RequireQuantity)
                     {
@@ -176,7 +221,8 @@ namespace K_Accounting.Forms
                     {
                         Comment = txtComment.Text.Trim(),
                         InheritQuantityRequirement = category.RequireQuantity,
-                        RequireQuantity = category.RequireQuantity ? true : cbDemandQuantity.Checked
+                        RequireQuantity = category.RequireQuantity ? true : cbDemandQuantity.Checked,
+                        MeasurementUnitId = (int?)cmbMeasurement.SelectedValue
                     };
                     _context.SubCategories.Add(_subCategory);
                 }
@@ -233,6 +279,22 @@ namespace K_Accounting.Forms
             }
         }
 
+        private void btnNewMeasurement_Click(object sender, EventArgs e)
+        {
+            using (var form = new AddEditMeasurementUnitForm(_context))
+            {
+                form.DataUpdated += (s, args) =>
+                {
+                    LoadMeasurementUnits();
+                    if (form.SavedUnitId.HasValue)
+                    {
+                        cmbMeasurement.SelectedValue = form.SavedUnitId.Value;
+                    }
+                };
+                form.ShowDialog();
+            }
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
@@ -254,10 +316,13 @@ namespace K_Accounting.Forms
             var category = cmbCategory.SelectedItem as Category;
             if (category == null) return;
 
+            bool showMeasurement = false;
+
             if (category.RequireQuantity)
             {
                 txtQuantityRequirementInherited.Visible = true;
                 pbQuantityRequirementInheritedInfo.Visible = true;
+                showMeasurement = true;
                 cbDemandQuantity.Visible = false;
                 pbDemandQuantityInfo.Visible = false;
                 if (_subCategory != null)
@@ -270,6 +335,7 @@ namespace K_Accounting.Forms
             {
                 txtQuantityRequirementInherited.Visible = false;
                 pbQuantityRequirementInheritedInfo.Visible = false;
+                showMeasurement = cbDemandQuantity.Checked;
                 pbDemandQuantityInfo.Visible = true;
                 cbDemandQuantity.Visible = true;
                 if (_subCategory != null)
@@ -278,8 +344,18 @@ namespace K_Accounting.Forms
                     _subCategory.InheritQuantityRequirement = false;
                 }
             }
+
+            lblMeasurement.Visible = showMeasurement;
+            cmbMeasurement.Visible = showMeasurement;
+            btnNewMeasurement.Visible = showMeasurement;
+
+            if (showMeasurement)
+            {
+                if (_subCategory?.MeasurementUnitId != null)
+                {
+                    cmbMeasurement.SelectedValue = _subCategory.MeasurementUnitId;
+                }
+            }
         }
-
-
     }
 }

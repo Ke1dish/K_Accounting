@@ -12,14 +12,14 @@ namespace K_Accounting.Utilities
 {
     public static class VersionChecker
     {
-        private const string VersionUrl = "https://raw.githubusercontent.com/Ke1dish/K_Accounting/main/version.json";
+        private const string VersionUrl = "https://github.com/Ke1dish/K_Accounting/releases/download/K_Accounting/version.json";
 
         public static bool IsUpdateAvailable(out string newVersion, out string changelog, out string downloadUrl)
         {
             newVersion = null;
             changelog = null;
             downloadUrl = null;
-
+            
             try
             {
                 using var client = new WebClient();

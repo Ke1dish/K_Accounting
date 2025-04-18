@@ -38,8 +38,8 @@
             txtName = new TextBox();
             label1 = new Label();
             cbRequireQuantity = new CheckBox();
-            toolTip1 = new ToolTip(components);
             pbRequireQuantityInfo = new PictureBox();
+            toolTip1 = new ToolTip(components);
             flowLayoutPanel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbRequireQuantityInfo).BeginInit();
@@ -109,7 +109,7 @@
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
             txtComment.Size = new Size(225, 98);
-            txtComment.TabIndex = 1;
+            txtComment.TabIndex = 2;
             // 
             // label2
             // 
@@ -145,18 +145,9 @@
             cbRequireQuantity.Location = new Point(146, 42);
             cbRequireQuantity.Name = "cbRequireQuantity";
             cbRequireQuantity.Size = new Size(193, 23);
-            cbRequireQuantity.TabIndex = 11;
+            cbRequireQuantity.TabIndex = 1;
             cbRequireQuantity.Text = "Требовать количество";
             cbRequireQuantity.UseVisualStyleBackColor = true;
-            // 
-            // toolTip1
-            // 
-            toolTip1.AutoPopDelay = 5000;
-            toolTip1.InitialDelay = 500;
-            toolTip1.IsBalloon = true;
-            toolTip1.ReshowDelay = 500;
-            toolTip1.ToolTipIcon = ToolTipIcon.Info;
-            toolTip1.ToolTipTitle = "Информация";
             // 
             // pbRequireQuantityInfo
             // 
@@ -167,6 +158,15 @@
             pbRequireQuantityInfo.SizeMode = PictureBoxSizeMode.CenterImage;
             pbRequireQuantityInfo.TabIndex = 12;
             pbRequireQuantityInfo.TabStop = false;
+            // 
+            // toolTip1
+            // 
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 500;
+            toolTip1.IsBalloon = true;
+            toolTip1.ReshowDelay = 500;
+            toolTip1.ToolTipIcon = ToolTipIcon.Info;
+            toolTip1.ToolTipTitle = "Информация";
             // 
             // AddEditCategoryForm
             // 

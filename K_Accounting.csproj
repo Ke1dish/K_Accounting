@@ -28,6 +28,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Instal\**" />
+    <Compile Remove="Licenses\**" />
+    <EmbeddedResource Remove="Instal\**" />
+    <EmbeddedResource Remove="Licenses\**" />
+    <None Remove="Instal\**" />
+    <None Remove="Licenses\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="C:\Users\Keldish\.nuget\packages\nlog.config\4.7.15\contentFiles\any\any\NLog.config" />
   </ItemGroup>
 

@@ -39,7 +39,7 @@
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(5);
             flowLayoutPanel1.Size = new Size(384, 40);
-            flowLayoutPanel1.TabIndex = 2;
+            flowLayoutPanel1.TabIndex = 1;
             // 
             // btnCancel
             // 
@@ -80,7 +80,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(384, 77);
-            tableLayoutPanel1.TabIndex = 3;
+            tableLayoutPanel1.TabIndex = 0;
             // 
             // txtSymbol
             // 
@@ -89,7 +89,7 @@
             txtSymbol.Location = new Point(145, 42);
             txtSymbol.Name = "txtSymbol";
             txtSymbol.Size = new Size(226, 23);
-            txtSymbol.TabIndex = 3;
+            txtSymbol.TabIndex = 1;
             // 
             // label5
             // 

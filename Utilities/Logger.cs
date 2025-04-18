@@ -52,10 +52,12 @@ namespace K_Accounting.Utilities
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(LogPath));
 
-                    string logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] " +
+                    string logEntry = "----------------------------------------\n" + 
+                                      $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] " +
                                       $"Метод: {methodName}\n" +
                                       $"Ошибка: {ex.Message}\n" +
                                       $"Stack Trace:\n{ex.StackTrace}\n" +
+                                      $"Полный текст исключения:\n{ex.ToString()}\n" + 
                                       "----------------------------------------\n";
 
                     File.AppendAllText(LogPath, logEntry);

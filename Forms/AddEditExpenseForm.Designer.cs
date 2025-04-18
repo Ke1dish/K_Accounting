@@ -78,6 +78,7 @@
             // 
             // btnCancel
             // 
+            btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.Location = new Point(296, 8);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
@@ -88,6 +89,7 @@
             // 
             // btnOk
             // 
+            btnOk.DialogResult = DialogResult.OK;
             btnOk.Location = new Point(215, 8);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(75, 23);
@@ -161,7 +163,7 @@
             btnNewMeasurement.Location = new Point(344, 187);
             btnNewMeasurement.Name = "btnNewMeasurement";
             btnNewMeasurement.Size = new Size(27, 23);
-            btnNewMeasurement.TabIndex = 62;
+            btnNewMeasurement.TabIndex = 10;
             btnNewMeasurement.Text = "...";
             btnNewMeasurement.UseVisualStyleBackColor = true;
             btnNewMeasurement.Click += btnNewMeasurement_Click;
@@ -173,7 +175,7 @@
             chkIsTemplate.Location = new Point(145, 245);
             chkIsTemplate.Name = "chkIsTemplate";
             chkIsTemplate.Size = new Size(170, 19);
-            chkIsTemplate.TabIndex = 10;
+            chkIsTemplate.TabIndex = 13;
             chkIsTemplate.Text = "использовать как шаблон";
             chkIsTemplate.UseVisualStyleBackColor = true;
             // 
@@ -185,7 +187,7 @@
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
             txtComment.Size = new Size(226, 72);
-            txtComment.TabIndex = 11;
+            txtComment.TabIndex = 14;
             // 
             // label2
             // 
@@ -202,7 +204,7 @@
             btnNewAdditional.Location = new Point(344, 216);
             btnNewAdditional.Name = "btnNewAdditional";
             btnNewAdditional.Size = new Size(27, 23);
-            btnNewAdditional.TabIndex = 9;
+            btnNewAdditional.TabIndex = 12;
             btnNewAdditional.Text = "...";
             btnNewAdditional.UseVisualStyleBackColor = true;
             btnNewAdditional.Click += btnNewAdditional_Click;
@@ -214,7 +216,7 @@
             cmbAdditional.Location = new Point(145, 216);
             cmbAdditional.Name = "cmbAdditional";
             cmbAdditional.Size = new Size(193, 23);
-            cmbAdditional.TabIndex = 8;
+            cmbAdditional.TabIndex = 11;
             // 
             // label100
             // 
@@ -232,7 +234,7 @@
             cmbSubCategory.Location = new Point(145, 100);
             cmbSubCategory.Name = "cmbSubCategory";
             cmbSubCategory.Size = new Size(193, 23);
-            cmbSubCategory.TabIndex = 6;
+            cmbSubCategory.TabIndex = 5;
             cmbSubCategory.SelectedIndexChanged += cmbSubCategory_SelectedIndexChanged;
             // 
             // label9
@@ -250,7 +252,7 @@
             btnNewCategory.Location = new Point(344, 71);
             btnNewCategory.Name = "btnNewCategory";
             btnNewCategory.Size = new Size(27, 23);
-            btnNewCategory.TabIndex = 5;
+            btnNewCategory.TabIndex = 4;
             btnNewCategory.Text = "...";
             btnNewCategory.UseVisualStyleBackColor = true;
             btnNewCategory.Click += btnNewCategory_Click;
@@ -262,7 +264,7 @@
             cmbCategory.Location = new Point(145, 71);
             cmbCategory.Name = "cmbCategory";
             cmbCategory.Size = new Size(193, 23);
-            cmbCategory.TabIndex = 4;
+            cmbCategory.TabIndex = 3;
             cmbCategory.SelectedIndexChanged += cmbCategory_SelectedIndexChanged;
             // 
             // label8
@@ -280,7 +282,7 @@
             btnNewAccount.Location = new Point(344, 42);
             btnNewAccount.Name = "btnNewAccount";
             btnNewAccount.Size = new Size(27, 23);
-            btnNewAccount.TabIndex = 3;
+            btnNewAccount.TabIndex = 2;
             btnNewAccount.Text = "...";
             btnNewAccount.UseVisualStyleBackColor = true;
             btnNewAccount.Click += btnNewAccount_Click;
@@ -292,7 +294,7 @@
             cmbAccount.Location = new Point(145, 42);
             cmbAccount.Name = "cmbAccount";
             cmbAccount.Size = new Size(193, 23);
-            cmbAccount.TabIndex = 2;
+            cmbAccount.TabIndex = 1;
             // 
             // label7
             // 
@@ -313,7 +315,7 @@
             numAmount.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             numAmount.Name = "numAmount";
             numAmount.Size = new Size(226, 23);
-            numAmount.TabIndex = 1;
+            numAmount.TabIndex = 7;
             numAmount.Value = new decimal(new int[] { 1, 0, 0, 131072 });
             // 
             // label6
@@ -349,7 +351,7 @@
             btnNewSubcategory.Location = new Point(344, 100);
             btnNewSubcategory.Name = "btnNewSubcategory";
             btnNewSubcategory.Size = new Size(27, 23);
-            btnNewSubcategory.TabIndex = 7;
+            btnNewSubcategory.TabIndex = 6;
             btnNewSubcategory.Text = "...";
             btnNewSubcategory.UseVisualStyleBackColor = true;
             btnNewSubcategory.Click += btnNewSubcategory_Click;
@@ -361,7 +363,7 @@
             numQuantity.Location = new Point(145, 158);
             numQuantity.Name = "numQuantity";
             numQuantity.Size = new Size(226, 23);
-            numQuantity.TabIndex = 58;
+            numQuantity.TabIndex = 8;
             // 
             // lblQuantity
             // 
@@ -379,7 +381,7 @@
             cmbMeasurement.Location = new Point(145, 187);
             cmbMeasurement.Name = "cmbMeasurement";
             cmbMeasurement.Size = new Size(193, 23);
-            cmbMeasurement.TabIndex = 60;
+            cmbMeasurement.TabIndex = 9;
             // 
             // lblMeasurement
             // 
@@ -400,9 +402,11 @@
             Controls.Add(tableLayoutPanel1);
             Controls.Add(flowLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            KeyPreview = true;
             Name = "AddEditExpenseForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "AddEditExpenseForm";
+            KeyDown += AddEditExpenseForm_KeyDown;
             flowLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();

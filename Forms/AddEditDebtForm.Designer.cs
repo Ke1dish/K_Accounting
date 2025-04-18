@@ -237,7 +237,7 @@
             cmbStatus.Location = new Point(123, 158);
             cmbStatus.Name = "cmbStatus";
             cmbStatus.Size = new Size(248, 23);
-            cmbStatus.TabIndex = 6;
+            cmbStatus.TabIndex = 7;
             // 
             // label7
             // 
@@ -257,7 +257,7 @@
             txtComment.Name = "txtComment";
             txtComment.ScrollBars = ScrollBars.Vertical;
             txtComment.Size = new Size(248, 101);
-            txtComment.TabIndex = 7;
+            txtComment.TabIndex = 8;
             // 
             // cmbCounterparty
             // 
@@ -266,10 +266,12 @@
             cmbCounterparty.Location = new Point(123, 129);
             cmbCounterparty.Name = "cmbCounterparty";
             cmbCounterparty.Size = new Size(215, 23);
-            cmbCounterparty.TabIndex = 9;
+            cmbCounterparty.TabIndex = 5;
             // 
             // AddEditDebtForm
             // 
+            AcceptButton = btnOk;
+            CancelButton = btnCancel;
             ClientSize = new Size(384, 341);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(flowLayoutPanel1);

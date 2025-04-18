@@ -138,15 +138,25 @@ namespace K_Accounting.Forms
 
         private bool ValidateForm()
         {
-            if (cmbAccount.SelectedItem == null)
+            if (cmbAccount.SelectedValue == null || !(cmbAccount.SelectedValue is int accountId))
             {
-                MessageBox.Show("Выберите счет");
+                MessageBox.Show("Выберите счёт");
                 return false;
             }
 
-            if (cmbCounterparty.SelectedItem == null)
+            if (cmbCounterparty.SelectedValue == null || !(cmbCounterparty.SelectedValue is int counterpartyId))
             {
                 MessageBox.Show("Укажите контрагента");
+                return false;
+            }
+
+            // Проверка существования счёта и контрагента в базе
+            var accountExists = _context.Accounts.Any(a => a.Id == accountId && !a.IsDeleted);
+            var counterpartyExists = _context.Counterparties.Any(c => c.Id == counterpartyId && !c.IsDeleted);
+
+            if (!accountExists || !counterpartyExists)
+            {
+                MessageBox.Show("Выбранные счёт или контрагент не найдены или удалены");
                 return false;
             }
 
@@ -163,57 +173,130 @@ namespace K_Accounting.Forms
         {
             if (!ValidateForm()) return;
 
-            try
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                var account = (Account)cmbAccount.SelectedItem;
-                var originalAmount = _isEditMode ?
-                    _context.Debts.AsNoTracking().First(d => d.Id == _debt.Id).InitialAmount : 0;
-
-                // Проверка баланса для выданных долгов
-                if (_debt.Type == DebtType.Given &&
-                    account.Balance < _debt.InitialAmount)
+                try
                 {
-                    MessageBox.Show("Недостаточно средств на счете для выдачи долга!");
-                    return;
-                }
+                    var accountId = (int)cmbAccount.SelectedValue;
+                    var counterpartyId = (int)cmbCounterparty.SelectedValue;
+                    var initialAmount = numAmount.Value;
 
-                using (var transaction = _context.Database.BeginTransaction())
-                {
-                    // Корректировка баланса при редактировании
+                    // Загрузка текущего счёта
+                    var account = _context.Accounts.Find(accountId);
+
+                    // Для редактирования: загрузка старого долга
                     if (_isEditMode)
                     {
-                        var oldAccount = _context.Accounts.Find(_debt.AccountId);
-                        oldAccount.Balance += _debt.Type == DebtType.Given
-                            ? originalAmount
-                            : -originalAmount;
+                        var oldDebt = _context.Debts
+                            .Include(d => d.Account)
+                            .First(d => d.Id == _debt.Id);
+
+                        // Возврат старой суммы на предыдущий счёт
+                        if (oldDebt.Type == DebtType.Given)
+                            oldDebt.Account.Balance += oldDebt.InitialAmount;
+                        else
+                            oldDebt.Account.Balance -= oldDebt.InitialAmount;
                     }
 
-                    // Обновление баланса нового счета
-                    account.Balance += _debt.Type == DebtType.Given
-                        ? -_debt.InitialAmount
-                        : _debt.InitialAmount;
+                    // Обновление данных долга
+                    _debt.AccountId = accountId;
+                    _debt.CounterpartyId = counterpartyId;
+                    _debt.InitialAmount = initialAmount;
+                    _debt.RemainingAmount = initialAmount;
+                    _debt.LoanDate = dtpLoanDate.Value;
+                    _debt.DueDate = dtpDueDate.Value;
+                    _debt.Status = (DebtStatus)cmbStatus.SelectedItem;
+                    _debt.Comment = txtComment.Text;
+
+                    // Корректировка баланса
+                    if (_debt.Type == DebtType.Given)
+                        account.Balance -= initialAmount;
+                    else
+                        account.Balance += initialAmount;
+
+                    // Проверка отрицательного баланса для выданных долгов
+                    if (_debt.Type == DebtType.Given && account.Balance < 0)
+                    {
+                        MessageBox.Show("Недостаточно средств на счете");
+                        transaction.Rollback();
+                        return;
+                    }
 
                     // Сохранение изменений
                     if (!_isEditMode)
                         _context.Debts.Add(_debt);
-                    else
-                        _context.Entry(_debt).State = EntityState.Modified;
 
                     _context.SaveChanges();
-                    SavedDebtId = _debt.Id;
                     transaction.Commit();
-                }
 
-                SavedDebtId = _debt.Id;
-                DataUpdated?.Invoke(this, EventArgs.Empty);
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                    SavedDebtId = _debt.Id;
+                    DataUpdated?.Invoke(this, EventArgs.Empty);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show($"Ошибка: {ex.InnerException?.Message ?? ex.Message}");
+                }
             }
         }
+
+        //private void btnOk_Click(object sender, EventArgs e)
+        //{
+        //    if (!ValidateForm()) return;
+
+        //    try
+        //    {
+        //        var account = (Account)cmbAccount.SelectedItem;
+        //        var originalAmount = _isEditMode ?
+        //            _context.Debts.AsNoTracking().First(d => d.Id == _debt.Id).InitialAmount : 0;
+
+        //        // Проверка баланса для выданных долгов
+        //        if (_debt.Type == DebtType.Given &&
+        //            account.Balance < _debt.InitialAmount)
+        //        {
+        //            MessageBox.Show("Недостаточно средств на счете для выдачи долга!");
+        //            return;
+        //        }
+
+        //        using (var transaction = _context.Database.BeginTransaction())
+        //        {
+        //            // Корректировка баланса при редактировании
+        //            if (_isEditMode)
+        //            {
+        //                var oldAccount = _context.Accounts.Find(_debt.AccountId);
+        //                oldAccount.Balance += _debt.Type == DebtType.Given
+        //                    ? originalAmount
+        //                    : -originalAmount;
+        //            }
+
+        //            // Обновление баланса нового счета
+        //            account.Balance += _debt.Type == DebtType.Given
+        //                ? -_debt.InitialAmount
+        //                : _debt.InitialAmount;
+
+        //            // Сохранение изменений
+        //            if (!_isEditMode)
+        //                _context.Debts.Add(_debt);
+        //            else
+        //                _context.Entry(_debt).State = EntityState.Modified;
+
+        //            _context.SaveChanges();
+        //            SavedDebtId = _debt.Id;
+        //            transaction.Commit();
+        //        }
+
+        //        SavedDebtId = _debt.Id;
+        //        DataUpdated?.Invoke(this, EventArgs.Empty);
+        //        DialogResult = DialogResult.OK;
+        //        Close();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+        //    }
+        //}
 
         private void btnCancel_Click(object sender, EventArgs e)
         {

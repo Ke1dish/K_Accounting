@@ -127,7 +127,7 @@
             btnNewMeasurement.Margin = new Padding(3, 2, 3, 2);
             btnNewMeasurement.Name = "btnNewMeasurement";
             btnNewMeasurement.Size = new Size(27, 23);
-            btnNewMeasurement.TabIndex = 19;
+            btnNewMeasurement.TabIndex = 5;
             btnNewMeasurement.Text = "...";
             btnNewMeasurement.UseVisualStyleBackColor = true;
             btnNewMeasurement.Click += btnNewMeasurement_Click;
@@ -140,7 +140,7 @@
             cmbMeasurement.Margin = new Padding(3, 2, 3, 2);
             cmbMeasurement.Name = "cmbMeasurement";
             cmbMeasurement.Size = new Size(193, 23);
-            cmbMeasurement.TabIndex = 18;
+            cmbMeasurement.TabIndex = 4;
             // 
             // label4
             // 
@@ -168,7 +168,7 @@
             txtComment.Multiline = true;
             txtComment.Name = "txtComment";
             txtComment.Size = new Size(226, 53);
-            txtComment.TabIndex = 3;
+            txtComment.TabIndex = 6;
             // 
             // lblMeasurement
             // 
@@ -237,7 +237,7 @@
             cbDemandQuantity.Location = new Point(145, 69);
             cbDemandQuantity.Name = "cbDemandQuantity";
             cbDemandQuantity.Size = new Size(193, 23);
-            cbDemandQuantity.TabIndex = 14;
+            cbDemandQuantity.TabIndex = 3;
             cbDemandQuantity.Text = "Требовать количество";
             cbDemandQuantity.UseVisualStyleBackColor = true;
             cbDemandQuantity.CheckedChanged += cbDemandQuantity_CheckedChanged;

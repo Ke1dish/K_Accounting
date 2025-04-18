@@ -54,6 +54,8 @@ namespace K_Accounting.Forms
             _expense = context.Expenses
                 .Include(e => e.Account)
                 .Include(e => e.Category)
+                .Include(e => e.SubCategory)
+                .Include(e => e.Additional)
                 .FirstOrDefault(e => e.Id == template.Id);
 
             if (_expense == null)
@@ -277,11 +279,6 @@ namespace K_Accounting.Forms
 
                     _context.SaveChanges();
 
-
-                    ////////var test = _context.Expenses.Find(_expense.Id);
-                    ////////Debug.WriteLine($"Проверка значения: {test.Amount}"); // Совпадает ли с ожидаемым?
-
-
                     transaction.Commit();
                     _context.Entry(_expense).Reload(); // Важно!
                     DataUpdated?.Invoke(this, EventArgs.Empty);
@@ -300,11 +297,6 @@ namespace K_Accounting.Forms
 
         private bool ValidateForm()
         {
-            if (cmbAccount.SelectedItem == null)
-            {
-                MessageBox.Show("Выберите счет");
-                return false;
-            }
 
             if (numAmount.Value <= 0)
             {
@@ -312,34 +304,29 @@ namespace K_Accounting.Forms
                 return false;
             }
 
-            if (cmbSubCategory.SelectedItem == null)
-            {
-                MessageBox.Show("Выберите подкатегорию");
-                return false;
-            }
-
-            if (cmbCategory.SelectedItem == null)
-            {
-                MessageBox.Show("Необходимо выбрать категорию");
-                return false;
-            }
-
-            // Проверка соответствия введенного текста существующим значениям
-            if (cmbAccount.SelectedItem == null ||
-                cmbAccount.Text != ((Account)cmbAccount.SelectedItem).Name)
+            // Проверка счета
+            if (cmbAccount.SelectedValue == null || !(cmbAccount.SelectedItem is Account))
             {
                 MessageBox.Show("Выберите существующий счет из списка");
                 return false;
             }
 
-            // Проверка наличия подкатегории только если есть категория
-            if (cmbCategory.SelectedItem != null && cmbSubCategory.SelectedItem == null)
+            // Проверка категории
+            if (cmbCategory.SelectedValue == null || !(cmbCategory.SelectedItem is Category))
             {
-                MessageBox.Show("Выберите подкатегорию");
+                MessageBox.Show("Выберите существующую категорию из списка");
                 return false;
             }
 
-            if (numQuantity.Visible && cmbMeasurement.SelectedValue == null)
+            // Проверка подкатегории
+            if (cmbSubCategory.SelectedValue == null || !(cmbSubCategory.SelectedItem is SubCategory))
+            {
+                MessageBox.Show("Выберите существующую подкатегорию из списка");
+                return false;
+            }
+
+            // Проверка единицы измерения (если требуется)
+            if (cmbMeasurement.Visible && (cmbMeasurement.SelectedValue == null || !(cmbMeasurement.SelectedItem is MeasurementUnit)))
             {
                 MessageBox.Show("Выберите единицу измерения");
                 return false;
@@ -466,47 +453,61 @@ namespace K_Accounting.Forms
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (SaveExpense())
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                NotifyDataUpdated(); // Уведомляем сразу после сохранения
-                ResetFormFields();
-                MessageBox.Show("Расход добавлен. Можно добавить следующий.");
-            }
-        }
-
-        private bool SaveExpense()
-        {
-            try
-            {
-                var expense = new Expense
+                try
                 {
-                    Date = dtpDate.Value,
-                    Amount = numAmount.Value,
-                    AccountId = (int)cmbAccount.SelectedValue,
-                    CategoryId = (int)cmbCategory.SelectedValue,
-                    SubCategoryId = (int)cmbSubCategory.SelectedValue,
-                    AdditionalId = (int)cmbAdditional.SelectedValue,
-                    Comment = txtComment.Text,
-                    IsTemplate = chkIsTemplate.Checked
-                };
+                    if (!ValidateForm())
+                    {
+                        transaction.Rollback();
+                        return;
+                    }
 
-                // Списание средств
-                var account = _context.Accounts.Find(expense.AccountId);
-                account.Balance -= expense.Amount;
+                    // Создание новой сущности
+                    var expense = new Expense
+                    {
+                        Date = dtpDate.Value,
+                        Amount = numAmount.Value,
+                        AccountId = (int)cmbAccount.SelectedValue,
+                        CategoryId = (int)cmbCategory.SelectedValue,
+                        SubCategoryId = (int)cmbSubCategory.SelectedValue,
+                        AdditionalId = (int)cmbAdditional.SelectedValue,
+                        Comment = txtComment.Text,
+                        IsTemplate = chkIsTemplate.Checked,
+                        MeasurementUnitId = (int)cmbMeasurement.SelectedValue,
+                        Quantity = numQuantity.Value,
+                        IsAutoUnit = (numQuantity.Value == 1) || !numQuantity.Visible
+                    };
 
-                _context.Expenses.Add(expense);
-                _context.SaveChanges();
-                _context.Entry(_expense).Reload(); // Важно!                                //****
-                DataUpdated?.Invoke(this, EventArgs.Empty);                                 //**** возможно лишнее
+                    // Списание средств
+                    var account = _context.Accounts.Find(expense.AccountId);
+                    account.Balance -= expense.Amount;
 
-                _context.ChangeTracker.Entries().Where(e => e.Entity != null).ToList().ForEach(e => e.Reload());
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log(ex);
-                MessageBox.Show($"Ошибка: {ex.Message}");
-                return false;
+                    if (account.Balance < 0)
+                    {
+                        MessageBox.Show("Недостаточно средств на счете");
+                        transaction.Rollback();
+                        return;
+                    }
+
+                    _context.Expenses.Add(expense);
+                    _context.SaveChanges();
+                    transaction.Commit();
+
+                    // Сброс полей и обновление данных
+                    ResetFormFields();
+                    _context.Entry(account).Reload(); // Обновляем состояние счета
+                    NotifyDataUpdated();
+
+                    MessageBox.Show("Расход добавлен. Можно добавить следующий.");
+                    dtpDate.Focus();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Logger.Log(ex);
+                    MessageBox.Show($"Ошибка: {ex.InnerException?.Message ?? ex.Message}");
+                }
             }
         }
 
@@ -595,60 +596,6 @@ namespace K_Accounting.Forms
 
         private void cmbSubCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //// Старая логика загрузки подкатегорий
-            //if (cmbCategory.SelectedItem is Category selectedCategory)
-            //{
-            //    cmbSubCategory.Text = "";
-            //    var subCategories = _context.SubCategories
-            //        .Where(s => s.CategoryId == selectedCategory.Id && !s.IsDeleted)
-            //        .ToList();
-
-            //    cmbSubCategory.DataSource = subCategories;
-            //    cmbSubCategory.DisplayMember = "Name";
-            //    cmbSubCategory.ValueMember = "Id";
-
-            //    cmbSubCategory.AutoCompleteCustomSource.Clear();
-            //    cmbSubCategory.AutoCompleteCustomSource.AddRange(
-            //        subCategories.Select(c => c.Name).ToArray()
-            //    );
-            //}
-            //else
-            //{
-            //    cmbSubCategory.DataSource = null;
-            //}
-
-            //// Новая логика управления количеством
-            //var subCategory = cmbSubCategory.SelectedItem as SubCategory;
-            //if (subCategory != null)
-            //{
-            //    // Проверяем требования к количеству
-            //    bool requireQuantity = subCategory.RequireQuantity;
-
-            //    // Если включено наследование - проверяем категорию
-            //    if (subCategory.InheritQuantityRequirement)
-            //    {
-            //        var category = _context.Categories
-            //            .FirstOrDefault(c => c.Id == subCategory.CategoryId);
-            //        requireQuantity = category?.RequireQuantity ?? false;
-            //    }
-
-            //    // Управляем видимостью элементов
-            //    numQuantity.Visible = requireQuantity;
-            //    lblQuantity.Visible = requireQuantity;
-
-            //    // Устанавливаем значение по умолчанию если не требуется
-            //    if (!requireQuantity)
-            //    {
-            //        numQuantity.Value = 1;
-            //        _expense.IsAutoUnit = true; // Если используется при редактировании
-            //    }
-            //}
-            //else
-            //{
-            //    // Скрываем если подкатегория не выбрана
-            //    numQuantity.Visible = false;
-            //    lblQuantity.Visible = false;
-            //}
             // Обработка видимости поля количества
             var subCategory = cmbSubCategory.SelectedItem as SubCategory;
             bool requireQuantity = false;
@@ -677,6 +624,15 @@ namespace K_Accounting.Forms
             else if (_expense != null) // Для редактирования
             {
                 _expense.IsAutoUnit = (numQuantity.Value == 1) && !requireQuantity;
+            }
+        }
+
+        private void AddEditExpenseForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.Enter)
+            {
+                btnAdd.PerformClick(); // Вызов клика по кнопке "Добавить"
+                e.Handled = true; // Предотвращаем дальнейшую обработку
             }
         }
     }

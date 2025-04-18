@@ -62,7 +62,7 @@
             btnCancel.Location = new Point(296, 8);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
-            btnCancel.TabIndex = 0;
+            btnCancel.TabIndex = 1;
             btnCancel.Text = "Отмена";
             btnCancel.Click += btnCancel_Click;
             // 
@@ -71,7 +71,7 @@
             btnOk.Location = new Point(215, 8);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(75, 23);
-            btnOk.TabIndex = 1;
+            btnOk.TabIndex = 0;
             btnOk.Text = "Ок";
             btnOk.Click += btnOk_Click;
             // 
@@ -138,7 +138,7 @@
             txtTitle.Location = new Point(135, 13);
             txtTitle.Name = "txtTitle";
             txtTitle.Size = new Size(236, 23);
-            txtTitle.TabIndex = 1;
+            txtTitle.TabIndex = 0;
             // 
             // label2
             // 
@@ -157,7 +157,7 @@
             numTargetAmount.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numTargetAmount.Name = "numTargetAmount";
             numTargetAmount.Size = new Size(236, 23);
-            numTargetAmount.TabIndex = 3;
+            numTargetAmount.TabIndex = 1;
             // 
             // label3
             // 
@@ -173,14 +173,14 @@
             cmbCurrency.Location = new Point(135, 71);
             cmbCurrency.Name = "cmbCurrency";
             cmbCurrency.Size = new Size(203, 23);
-            cmbCurrency.TabIndex = 5;
+            cmbCurrency.TabIndex = 2;
             // 
             // btnNewCurrency
             // 
             btnNewCurrency.Location = new Point(344, 71);
             btnNewCurrency.Name = "btnNewCurrency";
             btnNewCurrency.Size = new Size(27, 23);
-            btnNewCurrency.TabIndex = 6;
+            btnNewCurrency.TabIndex = 3;
             btnNewCurrency.Text = "...";
             btnNewCurrency.Click += btnNewCurrency_Click;
             // 
@@ -200,7 +200,7 @@
             dtpTargetDate.Location = new Point(135, 100);
             dtpTargetDate.Name = "dtpTargetDate";
             dtpTargetDate.Size = new Size(236, 23);
-            dtpTargetDate.TabIndex = 8;
+            dtpTargetDate.TabIndex = 4;
             // 
             // label5
             // 
@@ -220,7 +220,7 @@
             numCurrentAmount.Name = "numCurrentAmount";
             numCurrentAmount.ReadOnly = true;
             numCurrentAmount.Size = new Size(236, 23);
-            numCurrentAmount.TabIndex = 10;
+            numCurrentAmount.TabIndex = 5;
             // 
             // label6
             // 
@@ -238,7 +238,7 @@
             cmbStatus.Location = new Point(135, 158);
             cmbStatus.Name = "cmbStatus";
             cmbStatus.Size = new Size(236, 23);
-            cmbStatus.TabIndex = 12;
+            cmbStatus.TabIndex = 6;
             // 
             // label7
             // 
@@ -255,7 +255,7 @@
             dtpReminderDate.Location = new Point(135, 187);
             dtpReminderDate.Name = "dtpReminderDate";
             dtpReminderDate.Size = new Size(200, 23);
-            dtpReminderDate.TabIndex = 14;
+            dtpReminderDate.TabIndex = 8;
             // 
             // chkReminder
             // 
@@ -265,7 +265,7 @@
             chkReminder.Location = new Point(344, 187);
             chkReminder.Name = "chkReminder";
             chkReminder.Size = new Size(27, 23);
-            chkReminder.TabIndex = 15;
+            chkReminder.TabIndex = 7;
             chkReminder.Click += chkReminder_CheckedChanged;
             // 
             // txtComment
@@ -277,7 +277,7 @@
             txtComment.Name = "txtComment";
             txtComment.ScrollBars = ScrollBars.Vertical;
             txtComment.Size = new Size(236, 87);
-            txtComment.TabIndex = 16;
+            txtComment.TabIndex = 9;
             // 
             // AddEditGoalsForm
             // 

@@ -40,9 +40,9 @@
             TreeNode treeNode9 = new TreeNode("Категории", 2, 2);
             TreeNode treeNode10 = new TreeNode("Источники", 1, 1);
             TreeNode treeNode11 = new TreeNode("Упоминания", 10, 10);
-            TreeNode treeNode12 = new TreeNode("Контрагенты");
+            TreeNode treeNode12 = new TreeNode("Контрагенты", 15, 15);
             TreeNode treeNode13 = new TreeNode("Валюты", 3, 3);
-            TreeNode treeNode14 = new TreeNode("Единицы");
+            TreeNode treeNode14 = new TreeNode("Единицы", 14, 14);
             TreeNode treeNode15 = new TreeNode("Справочники", 2, 2, new TreeNode[] { treeNode9, treeNode10, treeNode11, treeNode12, treeNode13, treeNode14 });
             TreeNode treeNode16 = new TreeNode("Отчеты", 6, 6);
             TreeNode treeNode17 = new TreeNode("Настройки", 4, 4);
@@ -960,7 +960,9 @@
             treeNode11.SelectedImageIndex = 10;
             treeNode11.Tag = "6";
             treeNode11.Text = "Упоминания";
+            treeNode12.ImageIndex = 15;
             treeNode12.Name = "tnCounterparties";
+            treeNode12.SelectedImageIndex = 15;
             treeNode12.Tag = "13";
             treeNode12.Text = "Контрагенты";
             treeNode13.ImageIndex = 3;
@@ -968,7 +970,9 @@
             treeNode13.SelectedImageIndex = 3;
             treeNode13.Tag = "7";
             treeNode13.Text = "Валюты";
+            treeNode14.ImageIndex = 14;
             treeNode14.Name = "tnMeasurements";
+            treeNode14.SelectedImageIndex = 14;
             treeNode14.Tag = "15";
             treeNode14.Text = "Единицы";
             treeNode15.ImageIndex = 2;
@@ -1017,6 +1021,8 @@
             imageList1.Images.SetKeyName(11, "debt.png");
             imageList1.Images.SetKeyName(12, "target.png");
             imageList1.Images.SetKeyName(13, "time-to-pay.png");
+            imageList1.Images.SetKeyName(14, "Measurement.png");
+            imageList1.Images.SetKeyName(15, "meeting-room.png");
             // 
             // tcPage
             // 
@@ -1218,7 +1224,7 @@
             // 
             contextMenu.ImageScalingSize = new Size(20, 20);
             contextMenu.Name = "contextMenu";
-            contextMenu.Size = new Size(181, 26);
+            contextMenu.Size = new Size(61, 4);
             contextMenu.Closing += Menu_Closing;
             contextMenu.Opening += contextMenu_Opening;
             // 

@@ -40,5 +40,15 @@
 
         public bool IsPanelVisible { get; set; } = true;
 
+        public class WidgetSettings
+        {
+            public string DisplayName { get; set; }
+            public bool IsVisible { get; set; }
+            public int OrderIndex { get; set; }
+        }
+
+        public Dictionary<string, List<WidgetSettings>> PanelWidgetsSettings { get; set; }
+            = new Dictionary<string, List<WidgetSettings>>();
+
     }
 }

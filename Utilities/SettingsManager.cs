@@ -2,6 +2,7 @@
 using K_Accounting.Models;
 using System.Windows.Forms;
 using System.Diagnostics;
+using static K_Accounting.Models.AppSettings;
 
 namespace K_Accounting.Utilities
 {
@@ -152,6 +153,78 @@ namespace K_Accounting.Utilities
         {
             var settings = LoadSettings();
             return settings.IsPanelVisible;
+        }
+
+        public static void SavePanelWidgetsSettings(FlowLayoutPanel panel, CheckedListBox listBox)
+        {
+            try
+            {
+                var settings = LoadSettings();
+                var widgetSettings = new List<WidgetSettings>();
+
+                foreach (var item in listBox.Items.Cast<WidgetItem>())
+                {
+                    widgetSettings.Add(new WidgetSettings
+                    {
+                        DisplayName = item.DisplayText,
+                        IsVisible = item.Widget.Visible,
+                        OrderIndex = panel.Controls.GetChildIndex(item.Widget)
+                    });
+                }
+
+                settings.PanelWidgetsSettings[panel.Name] = widgetSettings;
+                SaveSettings(settings);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                Debug.WriteLine($"Error saving panel widgets settings: {ex.Message}");
+            }
+        }
+
+        public static void LoadPanelWidgetsSettings(FlowLayoutPanel panel, CheckedListBox listBox)
+        {
+            var settings = LoadSettings();
+            if (!settings.PanelWidgetsSettings.TryGetValue(panel.Name, out var widgetSettings))
+                return;
+
+            panel.SuspendLayout();
+            listBox.BeginUpdate();
+
+            try
+            {
+                listBox.Items.Clear();
+                var controls = panel.Controls.Cast<System.Windows.Forms.Control>().ToList();
+
+                var orderedControls = controls
+                    .OrderBy(c => widgetSettings
+                        .FirstOrDefault(ws => ws.DisplayName == c.Tag?.ToString())?.OrderIndex ?? int.MaxValue)
+                    .ToList();
+
+                panel.Controls.Clear();
+                panel.Controls.AddRange(orderedControls.ToArray());
+
+                foreach (var setting in widgetSettings.OrderBy(ws => ws.OrderIndex))
+                {
+                    var control = orderedControls
+                        .FirstOrDefault(c => c.Tag?.ToString() == setting.DisplayName);
+
+                    if (control == null) continue;
+
+                    listBox.Items.Add(new WidgetItem
+                    {
+                        Widget = control,
+                        DisplayText = setting.DisplayName
+                    }, setting.IsVisible);
+
+                    control.Visible = setting.IsVisible;
+                }
+            }
+            finally
+            {
+                panel.ResumeLayout(true);
+                listBox.EndUpdate();
+            }
         }
     }
 }

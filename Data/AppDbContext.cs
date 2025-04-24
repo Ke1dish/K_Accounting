@@ -164,7 +164,7 @@ namespace K_Accounting.Data
                 new MeasurementUnit
                 {
                     Id = 1,
-                    Name = "БЕИ",
+                    Name = "БЕИ",                                                               ///:::::::::::::::::::::::::::::::::
                     Symbol = "",
                     CreatedAt = new DateTime(2024, 1, 1) // Фиксированная дата
                 }

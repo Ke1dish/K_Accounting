@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.25.4.17",
-    "url": "https://github.com/Ke1dish/K_Accounting/releases/download/v1.0.0/MyAppInstaller.exe",
-    "changelog": "Первая версия приложения!"
+    "version": "1.25.4.18",
+    "url": "https://github.com/Ke1dish/K_Accounting/releases/download/K_Accounting/K_Accounting_Setup.exe",
+    "changelog": "18.04.2025 (v.1.25.4.18) - Исправлены ошибки FOREIGN KEY constraint failed в формах Долги и Расходы. Ошибки возникли при неаккуратном добавлении контрагентов и единиц измерения. Также исправлена последовательность перебора полей ввода по клавише «Tab». 👍 Благодарю пользователя wedernikowa1984 за обратную связь !!! 👍"
 }

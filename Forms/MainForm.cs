@@ -1,21 +1,25 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 using K_Accounting.Data;
 using K_Accounting.Extensions;
 using K_Accounting.Forms;
 using K_Accounting.Models;
 using K_Accounting.Reports;
 using K_Accounting.Utilities;
+using K_Accounting.Widgets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using OxyPlot;
 using OxyPlot.WindowsForms;
 using ComboBox = System.Windows.Forms.ComboBox;
 using Control = System.Windows.Forms.Control;
+using MethodInvoker = System.Windows.Forms.MethodInvoker;
 using VersionChecker = K_Accounting.Utilities.VersionChecker;
 
 namespace K_Accounting
@@ -65,6 +69,7 @@ namespace K_Accounting
             dbPath = Path.Combine(appFolder, "budget.db");
 
             InitializeComponent();
+            InitializeMainPage();
 
             _settings = SettingsManager.LoadSettings();
 
@@ -143,8 +148,8 @@ namespace K_Accounting
 
             // пока не реализованна главная страница удаляем ссылку на нее и при старте переходим на страницу "счета"
             // Удалить следующие строки после реализации главной страницы
-            tvMenuPanel.Nodes.RemoveAt(0);
-            tvMenuPanel_AfterSelect(this, new TreeViewEventArgs(tvMenuPanel.Nodes[0]));
+            //tvMenuPanel.Nodes.RemoveAt(0);
+            //tvMenuPanel_AfterSelect(this, new TreeViewEventArgs(tvMenuPanel.Nodes[0]));
             // пока не реализованна печать скрываем кнопки 
             // Удалить следующие строки после реализации печати
             btnPrintAccounts.Visible = false;
@@ -162,18 +167,21 @@ namespace K_Accounting
 
 
 
-        #region MainFom
+        #region MainForm
         /// <summary>Заполение комбобоксов месяцев и лет.</summary>
         private void MainForm_Load(object sender, EventArgs e)
         {
             // Загрузка настроек
             _settings = SettingsManager.LoadSettings();
 
+            SettingsManager.LoadPanelWidgetsSettings(flowLayoutPanel20, checkedListBox1);
+
             // Восстановление положения и размера
             RestoreWindowPosition();
 
             // Восстановление других настроек
             ApplyApplicationSettings();
+            UpdateWidgets();
         }
 
         private IEnumerable<Control> GetAllControls(Control control)
@@ -259,6 +267,8 @@ namespace K_Accounting
             _settings.IsPanelVisible = checkBox1.Checked;
 
             SettingsManager.SaveSettings(_settings);
+
+            SettingsManager.SavePanelWidgetsSettings(flowLayoutPanel20, checkedListBox1);
 
             // Сохраняем настройки всех гридов
             foreach (var grid in GetAllControls(this).OfType<DataGridView>())
@@ -827,6 +837,9 @@ namespace K_Accounting
             // Вызов метода для предзаполнения валют
             DataSeeder.SeedCurrency(db);
 
+            // Вызов метода для предзаполнения единиц измерения
+            DataSeeder.SeedMeasurement(db);
+
             db.SaveChanges();
         }
 
@@ -885,7 +898,7 @@ namespace K_Accounting
             switch (tcPage.SelectedIndex)
             {
                 case 0: // Счета
-                    LoadAccounts();
+                    UpdateWidgets();
                     break;
                 case 1: // Счета
                     LoadAccounts();
@@ -977,12 +990,12 @@ namespace K_Accounting
 
                     CreateColumnVisibilityMenu(menu, dgv);
                     AddShowAllColumnsItem(menu, dgv);
-                    //menu.Closing += Menu_Closing;
+                    menu.Closing += Menu_Closing;
                 }
                 else
                 {
                     CreateMainContextMenu(menu, dgv);
-                    //menu.Closing -= Menu_Closing;
+                    menu.Closing -= Menu_Closing;
                 }
             }
             catch (Exception ex)
@@ -1425,6 +1438,422 @@ namespace K_Accounting
         }
         #endregion
 
+        #region Главная (Main)
+        private void InitializeMainPage()
+        {
+            checkedListBox1.Items.Clear();
+            foreach (System.Windows.Forms.Control control in flowLayoutPanel20.Controls)
+            {
+                checkedListBox1.Items.Add(new WidgetItem
+                {
+                    Widget = control,
+                    DisplayText = control.Tag?.ToString() ?? $"Элемент {flowLayoutPanel20.Controls.IndexOf(control) + 1}"
+                },
+                control.Visible);
+            }
+
+            btnUp.Click += (s, e) => MoveItem(-1);
+            btnDown.Click += (s, e) => MoveItem(1);
+        }
+
+        private void MoveItem(int direction)
+        {
+            if (checkedListBox1.SelectedIndex == -1) return;
+
+            int oldIndex = checkedListBox1.SelectedIndex;
+            int newIndex = oldIndex + direction;
+
+            if (newIndex < 0 || newIndex >= checkedListBox1.Items.Count) return;
+
+            var item = (WidgetItem)checkedListBox1.Items[oldIndex];
+            bool wasChecked = checkedListBox1.GetItemChecked(oldIndex);
+
+            checkedListBox1.Items.RemoveAt(oldIndex);
+            checkedListBox1.Items.Insert(newIndex, item);
+            checkedListBox1.SetItemChecked(newIndex, wasChecked);
+            checkedListBox1.SelectedIndex = newIndex;
+
+            // Было: item.Widget
+            flowLayoutPanel20.Controls.SetChildIndex(item.Widget, newIndex);
+            SettingsManager.SaveSettings(_settings);
+        }
+
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            var item = (WidgetItem)checkedListBox1.Items[e.Index];
+            item.Widget.Visible = (e.NewValue == CheckState.Checked); // Было: Widget
+        }
+
+        private void UpdateWidgets()
+        {
+            try
+            {
+                if (accountPanel.Visible) UpdateAccountWidget();
+                if (additionalPanel.Visible) UpdateAdditionalWidget();
+                //if (budgetPanel.Visible) UpdateBudgetWidget();
+                if (profitPanel.Visible) UpdateProfitWidget();
+                if (expensePanel.Visible) UpdateExpenseWidget();
+                if (incomePanel.Visible) UpdateIncomeWidget();
+                if (goalPanel.Visible) UpdateGoalWidget();
+                if (debtPanel.Visible) UpdateDebtWidget();
+                //if (progressPanel.Visible) UpdateProgressWidget();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка обновления виджетов: {ex.Message}");
+            }
+        }
+
+        private void UpdateAccountWidget()
+        {
+            try
+            {
+                // Получаем данные
+                var data = AccountWidgetModel.GetData();
+
+                // Форматируем значения
+                var culture = CultureInfo.CurrentCulture; // или конкретная культура
+
+                // Общий баланс
+                lblTotalBalance.Text = "Счета - " + data.TotalBalance.ToString("C2", culture);
+
+                // Вчерашние операции
+                lblYesterdayIncome.Text = FormatCurrency(data.YesterdayIncome, "0.00");
+                lblYesterdayExpense.Text = FormatCurrency(data.YesterdayExpense, "0.00");
+
+                // Сегодняшние операции
+                lblTodayIncome.Text = FormatCurrency(data.TodayIncome, "0.00");
+                lblTodayExpense.Text = FormatCurrency(data.TodayExpense, "0.00");
+
+                // Визуальное выделение
+                lblTodayIncome.ForeColor = data.TodayIncome > 0
+                    ? Color.Green
+                    : SystemColors.ControlText;
+
+                lblTodayExpense.ForeColor = data.TodayExpense > 0
+                    ? Color.Red
+                    : SystemColors.ControlText;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                HandleDatabaseError(dbEx);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Account Widget Error: {ex.Message}");
+            }
+        }
+
+        private string FormatCurrency(decimal amount, string defaultValue = "—")
+        {
+            return amount > 0
+                ? amount.ToString("C2", CultureInfo.CurrentCulture)
+                : defaultValue;
+        }
+
+        private void HandleDatabaseError(DbUpdateException ex)
+        {
+            var errorMessage = new StringBuilder();
+            errorMessage.AppendLine("Database Error!");
+            errorMessage.AppendLine(ex.Message);
+
+            if (ex.InnerException != null)
+            {
+                errorMessage.AppendLine("Inner exception:");
+                errorMessage.AppendLine(ex.InnerException.Message);
+            }
+
+            MessageBox.Show(errorMessage.ToString());
+        }
+
+        private void UpdateAdditionalWidget()
+        {
+            try
+            {
+                var data = AdditionalWidget.GetData();
+
+                // Массив контролов для удобной обработки
+                var controls = new[]
+                {
+                    (lblAdditional1Name, lblAdditional1Value),
+                    (lblAdditional2Name, lblAdditional2Value),
+                    (lblAdditional3Name, lblAdditional3Value)
+                };
+
+                for (int i = 0; i < controls.Length; i++)
+                {
+                    var (nameControl, valueControl) = controls[i];
+
+                    if (data.TopAdditionals.Count > i)
+                    {
+                        var item = data.TopAdditionals[i];
+                        nameControl.Text = item.Name;
+                        valueControl.Text = item.TotalAmount.ToString("C2");
+
+                        // Показываем строку
+                        nameControl.Visible = true;
+                        valueControl.Visible = true;
+                    }
+                    else
+                    {
+                        // Скрываем пустые строки
+                        nameControl.Visible = false;
+                        valueControl.Visible = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка обновления упоминаний: {ex.Message}");
+                // Скрываем все при ошибке
+                lblAdditional1Name.Visible = lblAdditional1Value.Visible = false;
+                lblAdditional2Name.Visible = lblAdditional2Value.Visible = false;
+                lblAdditional3Name.Visible = lblAdditional3Value.Visible = false;
+            }
+        }
+
+        private void UpdateIncomeWidget()
+        {
+            try
+            {
+                var data = IncomeWidget.GetData();
+
+                var controls = new[]
+                {
+                    (lblIncome1Name, lblIncome1Value),
+                    (lblIncome2Name, lblIncome2Value),
+                    (lblIncome3Name, lblIncome3Value)
+                };
+
+                for (int i = 0; i < controls.Length; i++)
+                {
+                    var (nameLabel, valueLabel) = controls[i];
+
+                    if (data.TopSources.Count > i)
+                    {
+                        var source = data.TopSources[i];
+                        nameLabel.Text = source.Name;
+                        valueLabel.Text = source.TotalAmount.ToString("C2");
+                        nameLabel.Visible = true;
+                        valueLabel.Visible = true;
+                    }
+                    else
+                    {
+                        nameLabel.Visible = false;
+                        valueLabel.Visible = false;
+                    }
+                }
+
+                // Скрываем заголовки при отсутствии данных
+                bool anyData = data.TopSources.Any();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки приходов: {ex.Message}");
+                lblIncome1Name.Visible = lblIncome1Value.Visible = false;
+                lblIncome2Name.Visible = lblIncome2Value.Visible = false;
+                lblIncome3Name.Visible = lblIncome3Value.Visible = false;
+            }
+        }
+
+        private void UpdateExpenseWidget()
+        {
+            try
+            {
+                var data = ExpenseWidget.GetData();
+
+                var expenseControls = new[]
+                {
+            (lblExpense1Name, lblExpense1Value),
+            (lblExpense2Name, lblExpense2Value),
+            (lblExpense3Name, lblExpense3Value)
+        };
+
+                for (int i = 0; i < expenseControls.Length; i++)
+                {
+                    var (nameLabel, valueLabel) = expenseControls[i];
+
+                    if (data.TopCategories.Count > i)
+                    {
+                        var category = data.TopCategories[i];
+                        nameLabel.Text = category.CategoryName;
+                        valueLabel.Text = category.TotalAmount.ToString("C2");
+                        nameLabel.Visible = true;
+                        valueLabel.Visible = true;
+                    }
+                    else
+                    {
+                        nameLabel.Visible = false;
+                        valueLabel.Visible = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки расходов: {ex.Message}");
+                lblExpense1Name.Visible = lblExpense1Value.Visible = false;
+                lblExpense2Name.Visible = lblExpense2Value.Visible = false;
+                lblExpense3Name.Visible = lblExpense3Value.Visible = false;
+            }
+        }
+
+        private void UpdateProfitWidget()
+        {
+            try
+            {
+                var data = ProfitWidget.GetData();
+
+                // Приходы
+                lblTotalIncome.Text = data.CurrentMonthIncome.ToString("N2");
+                lblIncomeChange.Text = FormatPercent(data.IncomeChangePercent);
+
+                // Расходы
+                lblTotalExpense.Text = data.CurrentMonthExpense.ToString("N2");
+                lblExpenseChange.Text = FormatPercent(data.ExpenseChangePercent);
+
+                // Даты
+                lblBestDay.Text = FormatDate(data.BestDay);
+                lblWorstDay.Text = FormatDate(data.WorstDay);
+            }
+            catch (Exception ex)
+            {
+                ResetProfitWidget();
+                MessageBox.Show($"Ошибка обновления статистики: {ex.Message}");
+            }
+        }
+
+        // Вспомогательные методы
+        private string FormatPercent(decimal percent)
+        {
+            return percent == 0 ? "0.0%" : $"{percent:+#0.0;-#0.0;0.0}%";
+        }
+
+        private string FormatDate(DateTime? date)
+        {
+            return date?.ToString("dd.MM.yyyy") ?? "00.00.0000";
+        }
+
+        private void ResetProfitWidget()
+        {
+            lblTotalIncome.Text = "0,00";
+            lblIncomeChange.Text = "0,0%";
+            lblTotalExpense.Text = "0,00";
+            lblExpenseChange.Text = "0,0%";
+            lblBestDay.Text = "00.00.0000";
+            lblWorstDay.Text = "00.00.0000";
+        }
+
+        private void UpdateGoalWidget()
+        {
+            try
+            {
+                var data = GoalWidget.GetData();
+
+                // Обновление топ-3 целей
+                var goalControls = new[]
+                {
+            (lblGoal1Name, lblGoal1Progress),
+            (lblGoal2Name, lblGoal2Progress),
+            (lblGoal3Name, lblGoal3Progress)
+        };
+
+                for (int i = 0; i < goalControls.Length; i++)
+                {
+                    var (nameLabel, progressLabel) = goalControls[i];
+
+                    if (data.TopGoals.Count > i)
+                    {
+                        var goal = data.TopGoals[i];
+                        nameLabel.Text = goal.Goal.Title;
+                        progressLabel.Text = $"{goal.ProgressPercent}%";
+                        nameLabel.Visible = true;
+                        progressLabel.Visible = true;
+                    }
+                    else
+                    {
+                        nameLabel.Visible = false;
+                        progressLabel.Visible = false;
+                    }
+                }
+
+                // Обновление ближайшей цели
+                if (data.NearestGoal != null)
+                {
+                    lblNearestGoalName.Text = data.NearestGoal.Title;
+                    lblNearestGoalDate.Text = data.NearestGoal.TargetDate.ToString("dd.MM.yyyy");
+                    lblNearestGoalName.Visible = true;
+                    lblNearestGoalDate.Visible = true;
+                }
+                else
+                {
+                    lblNearestGoalName.Visible = false;
+                    lblNearestGoalDate.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки целей: {ex.Message}");
+                lblGoal1Name.Visible = lblGoal1Progress.Visible = false;
+                lblGoal2Name.Visible = lblGoal2Progress.Visible = false;
+                lblGoal3Name.Visible = lblGoal3Progress.Visible = false;
+                lblNearestGoalName.Visible = lblNearestGoalDate.Visible = false;
+            }
+        }
+
+        private void UpdateDebtWidget()
+        {
+            try
+            {
+                var data = DebtWidget.GetData();
+
+                // Обновление выданных долгов
+                UpdateDebtSection(
+                    data.GivenDebts,
+                    lblTotalGivenDebt,
+                    lblOverdueGivenDebt,
+                    lblNextGivenDueDate,
+                    "Выданные долги"
+                );
+
+                // Обновление полученных долгов
+                UpdateDebtSection(
+                    data.ReceivedDebts,
+                    lblTotalReceivedDebt,
+                    lblOverdueReceivedDebt,
+                    lblNextReceivedDueDate,
+                    "Полученные долги"
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки долгов: {ex.Message}");
+            }
+        }
+
+        private void UpdateDebtSection(
+            DebtWidget.DebtSummary summary,
+            Label totalLabel,
+            Label overdueLabel,
+            Label dateLabel,
+            string sectionName)
+        {
+            bool hasData = summary.TotalAmount > 0;
+
+            totalLabel.Text = hasData ? summary.TotalAmount.ToString("C2") : "0,00";
+            overdueLabel.Text = hasData ? summary.OverdueAmount.ToString("C2") : "0,00";
+            dateLabel.Text = summary.NextDueDate?.ToString("dd.MM.yyyy") ?? "н/д";
+
+            totalLabel.Visible = hasData;
+            overdueLabel.Visible = hasData;
+            dateLabel.Visible = hasData;
+
+            // Скрываем заголовки секции если нет данных
+            var headerLabel = Controls.Find($"lbl{sectionName.Replace(" ", "")}Header", true).FirstOrDefault();
+            if (headerLabel != null) headerLabel.Visible = hasData;
+        }
+
+        #endregion
+
         #region Счета (Account)
         private void LoadAccounts()
         {
@@ -1691,7 +2120,7 @@ namespace K_Accounting
             // Обработка единиц измерения
             if (dgwExpenses.Columns[e.ColumnIndex].Name == "colMeasurementUnit" && e.Value == null)
             {
-                e.Value = expense?.MeasurementUnit?.Name ?? "БЕИ";
+                e.Value = expense?.MeasurementUnit?.Name ?? "БЕИ";                                                      //:::::::::::::::::::::::::::
                 e.FormattingApplied = true;
             }
         }
@@ -2198,7 +2627,7 @@ namespace K_Accounting
             if (grid.Columns[e.ColumnIndex].Name == "colMeasurementUnit")
             {
                 e.Value = subCat?.MeasurementUnit?.Name ??
-                        (subCat?.RequireQuantity == true ? "Не указана" : "БЕИ");
+                        (subCat?.RequireQuantity == true ? "Не указана" : "БЕИ");                               //:::::::::::::::::::::::::::::::::
                 e.FormattingApplied = true;
             }
         }
@@ -3872,9 +4301,39 @@ namespace K_Accounting
 
         private async void CheckForUpdatesButton_Click(object sender, EventArgs e)
         {
+            //if (VersionChecker.IsUpdateAvailable(out var newVersion,
+            //    out var changelog,
+            //    out var downloadUrl))
+            //{
+            //    var result = MessageBox.Show(
+            //        $"Доступна новая версия {newVersion}\n\nИзменения:\n{changelog}\n\nОбновить сейчас?",
+            //        "Обновление доступно",
+            //        MessageBoxButtons.YesNo,
+            //        MessageBoxIcon.Information);
+
+            //    if (result == DialogResult.Yes)
+            //    {
+            //        try
+            //        {
+            //            Cursor = Cursors.WaitCursor;
+            //            await Updater.PerformUpdate(downloadUrl);
+            //        }
+            //        finally
+            //        {
+            //            Cursor = Cursors.Default;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("У вас установлена последняя версия", "Обновлений нет",
+            //        MessageBoxButtons.OK,
+            //        MessageBoxIcon.Information);
+            //}
+
             if (VersionChecker.IsUpdateAvailable(out var newVersion,
-                out var changelog,
-                out var downloadUrl))
+    out var changelog,
+    out var downloadUrl))
             {
                 var result = MessageBox.Show(
                     $"Доступна новая версия {newVersion}\n\nИзменения:\n{changelog}\n\nОбновить сейчас?",
@@ -3917,8 +4376,13 @@ namespace K_Accounting
                 ? ExtractVersionFromMigration(lastMigration).ToString("D8") // Формат: 20231015
                 : "0.0.0"; // Для новой БД
         }
+
         #endregion
 
+        private void label83_Click(object sender, EventArgs e)
+        {
+          
+        }
     }
 }
 

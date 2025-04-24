@@ -376,7 +376,7 @@ namespace K_Accounting.Migrations
             migrationBuilder.InsertData(
                 table: "MeasurementUnits",
                 columns: new[] { "Id", "CreatedAt", "IsDeleted", "Name", "Symbol" },
-                values: new object[] { 1, new DateTime(2025, 4, 14, 11, 46, 52, 401, DateTimeKind.Utc).AddTicks(2545), false, "БЕИ", "" });
+                values: new object[] { 1, new DateTime(2025, 4, 14, 11, 46, 52, 401, DateTimeKind.Utc).AddTicks(2545), false, "БЕИ", "" });     //:::::::
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_CurrencyId",

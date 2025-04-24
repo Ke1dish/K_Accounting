@@ -590,7 +590,7 @@ namespace K_Accounting.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2025, 4, 14, 11, 46, 52, 401, DateTimeKind.Utc).AddTicks(2545),
                             IsDeleted = false,
-                            Name = "БЕИ",
+                            Name = "БЕИ",                                   //:::::::::::::::::::::::::
                             Symbol = ""
                         });
                 });

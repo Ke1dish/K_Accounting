@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Bogus;
+﻿using Bogus;
 using K_Accounting.Data;
 using K_Accounting.Models;
+using Currency = K_Accounting.Models.Currency;
 
 namespace K_Accounting.Extensions
 {
@@ -58,8 +53,8 @@ namespace K_Accounting.Extensions
                 var category25 = new Category("Услуги") { Comment = "" }; // Услуги
                 var category26 = new Category("Хозтовары") { Comment = "" }; // Хозтовары
 
-                db.Categories.AddRange(category1,  category2,  category3,  category4,  category5,
-                                       category6,  category7,  category8,  category9,  category10,
+                db.Categories.AddRange(category1, category2, category3, category4, category5,
+                                       category6, category7, category8, category9, category10,
                                        category11, category12, category13, category14, category15,
                                        category16, category17, category18, category19, category20,
                                        category21, category22, category23, category24, category25,
@@ -530,11 +525,10 @@ namespace K_Accounting.Extensions
         {
             if (!db.Additionals.Any())
             {
-                db.Additionals.Add(new Additional
-                {
-                    Name = "Пусто",
-                    Comment = ""
-                });
+                var additional1 = new Additional() { Name = "Не выбрано", Comment = "" };
+
+                db.Additionals.AddRange(additional1);
+
                 db.SaveChanges();
             }
         }
@@ -543,13 +537,43 @@ namespace K_Accounting.Extensions
         {
             if (!db.Currencies.Any())
             {
-                db.Currencies.Add(new Currency
-                {
-                    Name = "Рубли",
-                    Symbol = "₽",
-                    Rate = 1,
-                    Comment = ""
-                });
+                var сurrencies1 = new Currency() { Name = "Рубли", Symbol = "₽", Rate = 1, Comment = "" };
+
+                db.Currencies.AddRange(сurrencies1);
+
+                db.SaveChanges();
+            }
+        }
+
+        public static void SeedMeasurement(AppDbContext db)
+        {
+            if (db.MeasurementUnits.Any() && !db.MeasurementUnits.Skip(1).Any())
+            {
+                var measurement1 = new MeasurementUnit() { Name = "Штука", Symbol = "шт." };
+                var measurement2 = new MeasurementUnit() { Name = "Литр", Symbol = "л." };
+                var measurement3 = new MeasurementUnit() { Name = "Метр", Symbol = "м." };
+                var measurement4 = new MeasurementUnit() { Name = "Упаковка", Symbol = "упк." };
+                var measurement5 = new MeasurementUnit() { Name = "Абонементы", Symbol = "абон." };
+                var measurement6 = new MeasurementUnit() { Name = "Билеты", Symbol = "бил." };
+                var measurement7 = new MeasurementUnit() { Name = "Граммы", Symbol = "г." };
+                var measurement8 = new MeasurementUnit() { Name = "Дни", Symbol = "дн." };
+                var measurement9 = new MeasurementUnit() { Name = "Киловатт - часы", Symbol = "кВт·ч." };
+                var measurement10 = new MeasurementUnit() { Name = "Километры", Symbol = "км." };
+                var measurement11 = new MeasurementUnit() { Name = "Килограммы", Symbol = "кг." };
+                var measurement12 = new MeasurementUnit() { Name = "Кубометры", Symbol = "м³." };
+                var measurement13 = new MeasurementUnit() { Name = "Миллилитры", Symbol = "мл." };
+                var measurement14 = new MeasurementUnit() { Name = "Пачки", Symbol = "пач." };
+                var measurement15 = new MeasurementUnit() { Name = "Порции", Symbol = "порц." };
+                var measurement16 = new MeasurementUnit() { Name = "Проценты", Symbol = " %." };
+                var measurement17 = new MeasurementUnit() { Name = "Квадратные метры", Symbol = "м²." };
+                var measurement18 = new MeasurementUnit() { Name = "Часы", Symbol = "ч." };
+
+                db.MeasurementUnits.AddRange(measurement1, measurement2, measurement3, measurement4,
+                                             measurement5, measurement6, measurement7, measurement8,
+                                             measurement9, measurement10, measurement11, measurement12,
+                                             measurement13, measurement14, measurement15, measurement16,
+                                             measurement17, measurement18);
+
                 db.SaveChanges();
             }
         }

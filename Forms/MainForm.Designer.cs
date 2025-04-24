@@ -29,24 +29,24 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            TreeNode treeNode1 = new TreeNode("Главная", 5, 5);
-            TreeNode treeNode2 = new TreeNode("Счета", 9, 9);
-            TreeNode treeNode3 = new TreeNode("Расходы", 8, 8);
-            TreeNode treeNode4 = new TreeNode("Приходы", 7, 7);
-            TreeNode treeNode5 = new TreeNode("Цели", 12, 12);
-            TreeNode treeNode6 = new TreeNode("Полученые", 11, 11);
-            TreeNode treeNode7 = new TreeNode("Выданные", 13, 13);
-            TreeNode treeNode8 = new TreeNode("Долги", 11, 11, new TreeNode[] { treeNode6, treeNode7 });
-            TreeNode treeNode9 = new TreeNode("Категории", 2, 2);
-            TreeNode treeNode10 = new TreeNode("Источники", 1, 1);
-            TreeNode treeNode11 = new TreeNode("Упоминания", 10, 10);
-            TreeNode treeNode12 = new TreeNode("Контрагенты", 15, 15);
-            TreeNode treeNode13 = new TreeNode("Валюты", 3, 3);
-            TreeNode treeNode14 = new TreeNode("Единицы", 14, 14);
-            TreeNode treeNode15 = new TreeNode("Справочники", 2, 2, new TreeNode[] { treeNode9, treeNode10, treeNode11, treeNode12, treeNode13, treeNode14 });
-            TreeNode treeNode16 = new TreeNode("Отчеты", 6, 6);
-            TreeNode treeNode17 = new TreeNode("Настройки", 4, 4);
-            TreeNode treeNode18 = new TreeNode("О программе", 0, 0);
+            TreeNode treeNode19 = new TreeNode("Главная", 5, 5);
+            TreeNode treeNode20 = new TreeNode("Счета", 9, 9);
+            TreeNode treeNode21 = new TreeNode("Расходы", 8, 8);
+            TreeNode treeNode22 = new TreeNode("Приходы", 7, 7);
+            TreeNode treeNode23 = new TreeNode("Цели", 12, 12);
+            TreeNode treeNode24 = new TreeNode("Полученые", 11, 11);
+            TreeNode treeNode25 = new TreeNode("Выданные", 13, 13);
+            TreeNode treeNode26 = new TreeNode("Долги", 11, 11, new TreeNode[] { treeNode24, treeNode25 });
+            TreeNode treeNode27 = new TreeNode("Категории", 2, 2);
+            TreeNode treeNode28 = new TreeNode("Источники", 1, 1);
+            TreeNode treeNode29 = new TreeNode("Упоминания", 10, 10);
+            TreeNode treeNode30 = new TreeNode("Контрагенты", 15, 15);
+            TreeNode treeNode31 = new TreeNode("Валюты", 3, 3);
+            TreeNode treeNode32 = new TreeNode("Единицы", 14, 14);
+            TreeNode treeNode33 = new TreeNode("Справочники", 2, 2, new TreeNode[] { treeNode27, treeNode28, treeNode29, treeNode30, treeNode31, treeNode32 });
+            TreeNode treeNode34 = new TreeNode("Отчеты", 6, 6);
+            TreeNode treeNode35 = new TreeNode("Настройки", 4, 4);
+            TreeNode treeNode36 = new TreeNode("О программе", 0, 0);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tableLayoutPanel5 = new TableLayoutPanel();
             label16 = new Label();
@@ -94,6 +94,148 @@
             tpStart = new TabPage();
             tableLayoutPanel30 = new TableLayoutPanel();
             label12 = new Label();
+            flowLayoutPanel20 = new FlowLayoutPanel();
+            accountPanel = new Panel();
+            tableLayoutPanel41 = new TableLayoutPanel();
+            label51 = new Label();
+            label52 = new Label();
+            lblYesterdayIncome = new Label();
+            lblYesterdayExpense = new Label();
+            lblTodayIncome = new Label();
+            lblTodayExpense = new Label();
+            pictureBox11 = new PictureBox();
+            pictureBox12 = new PictureBox();
+            pictureBox13 = new PictureBox();
+            pictureBox14 = new PictureBox();
+            flowLayoutPanel21 = new FlowLayoutPanel();
+            pictureBox2 = new PictureBox();
+            lblTotalBalance = new Label();
+            additionalPanel = new Panel();
+            tableLayoutPanel42 = new TableLayoutPanel();
+            lblAdditional1Name = new Label();
+            lblAdditional2Name = new Label();
+            lblAdditional3Name = new Label();
+            lblAdditional1Value = new Label();
+            lblAdditional2Value = new Label();
+            lblAdditional3Value = new Label();
+            flowLayoutPanel22 = new FlowLayoutPanel();
+            pictureBox3 = new PictureBox();
+            label27 = new Label();
+            budgetPanel = new Panel();
+            tableLayoutPanel43 = new TableLayoutPanel();
+            label67 = new Label();
+            label68 = new Label();
+            label69 = new Label();
+            label70 = new Label();
+            label71 = new Label();
+            label72 = new Label();
+            lblBudgetTopCategory = new Label();
+            lblBudgetLimit = new Label();
+            lblBudgetSpent = new Label();
+            lblBudgetRemaining = new Label();
+            lblBudgetProgress = new Label();
+            flowLayoutPanel23 = new FlowLayoutPanel();
+            pictureBox4 = new PictureBox();
+            label44 = new Label();
+            profitPanel = new Panel();
+            tableLayoutPanel44 = new TableLayoutPanel();
+            label78 = new Label();
+            lblTotalIncome = new Label();
+            label80 = new Label();
+            lblIncomeChange = new Label();
+            label82 = new Label();
+            lblTotalExpense = new Label();
+            label84 = new Label();
+            lblExpenseChange = new Label();
+            label86 = new Label();
+            label87 = new Label();
+            lblBestDay = new Label();
+            lblWorstDay = new Label();
+            pictureBox15 = new PictureBox();
+            pictureBox16 = new PictureBox();
+            flowLayoutPanel24 = new FlowLayoutPanel();
+            pictureBox5 = new PictureBox();
+            label45 = new Label();
+            expensePanel = new Panel();
+            tableLayoutPanel45 = new TableLayoutPanel();
+            lblExpense1Name = new Label();
+            lblExpense2Name = new Label();
+            lblExpense3Name = new Label();
+            lblExpense1Value = new Label();
+            lblExpense2Value = new Label();
+            lblExpense3Value = new Label();
+            pictureBox17 = new PictureBox();
+            pictureBox18 = new PictureBox();
+            pictureBox19 = new PictureBox();
+            flowLayoutPanel25 = new FlowLayoutPanel();
+            pictureBox6 = new PictureBox();
+            label46 = new Label();
+            incomePanel = new Panel();
+            tableLayoutPanel46 = new TableLayoutPanel();
+            lblIncome1Name = new Label();
+            lblIncome2Name = new Label();
+            lblIncome3Name = new Label();
+            lblIncome1Value = new Label();
+            lblIncome2Value = new Label();
+            lblIncome3Value = new Label();
+            pictureBox20 = new PictureBox();
+            pictureBox21 = new PictureBox();
+            pictureBox22 = new PictureBox();
+            flowLayoutPanel26 = new FlowLayoutPanel();
+            pictureBox7 = new PictureBox();
+            label47 = new Label();
+            goalPanel = new Panel();
+            tableLayoutPanel47 = new TableLayoutPanel();
+            label132 = new Label();
+            label131 = new Label();
+            label130 = new Label();
+            lblGoal1Name = new Label();
+            lblGoal2Name = new Label();
+            lblGoal3Name = new Label();
+            lblNearestGoalName = new Label();
+            lblGoal1Progress = new Label();
+            lblGoal2Progress = new Label();
+            lblGoal3Progress = new Label();
+            lblNearestGoalDate = new Label();
+            flowLayoutPanel27 = new FlowLayoutPanel();
+            pictureBox8 = new PictureBox();
+            label48 = new Label();
+            debtPanel = new Panel();
+            tableLayoutPanel48 = new TableLayoutPanel();
+            label110 = new Label();
+            label111 = new Label();
+            label112 = new Label();
+            label113 = new Label();
+            label114 = new Label();
+            label115 = new Label();
+            lblTotalGivenDebt = new Label();
+            lblOverdueGivenDebt = new Label();
+            lblNextGivenDueDate = new Label();
+            lblTotalReceivedDebt = new Label();
+            lblOverdueReceivedDebt = new Label();
+            lblNextReceivedDueDate = new Label();
+            pictureBox27 = new PictureBox();
+            pictureBox28 = new PictureBox();
+            flowLayoutPanel28 = new FlowLayoutPanel();
+            pictureBox9 = new PictureBox();
+            label49 = new Label();
+            progressPanel = new Panel();
+            tableLayoutPanel49 = new TableLayoutPanel();
+            label122 = new Label();
+            label123 = new Label();
+            label124 = new Label();
+            label125 = new Label();
+            label126 = new Label();
+            label127 = new Label();
+            label128 = new Label();
+            label129 = new Label();
+            pictureBox23 = new PictureBox();
+            pictureBox24 = new PictureBox();
+            pictureBox25 = new PictureBox();
+            pictureBox26 = new PictureBox();
+            flowLayoutPanel29 = new FlowLayoutPanel();
+            pictureBox10 = new PictureBox();
+            label50 = new Label();
             tpAccounts = new TabPage();
             tableLayoutPanel18 = new TableLayoutPanel();
             label9 = new Label();
@@ -219,8 +361,13 @@
             tableLayoutPanel29 = new TableLayoutPanel();
             label11 = new Label();
             panel1 = new Panel();
-            label27 = new Label();
+            tabControl1 = new TabControl();
+            tabPage1 = new TabPage();
             checkBox1 = new CheckBox();
+            tabPage2 = new TabPage();
+            checkedListBox1 = new CheckedListBox();
+            btnDown = new Button();
+            btnUp = new Button();
             tpAbout = new TabPage();
             tableLayoutPanel27 = new TableLayoutPanel();
             tbVersionHistory = new TextBox();
@@ -318,6 +465,61 @@
             tcPage.SuspendLayout();
             tpStart.SuspendLayout();
             tableLayoutPanel30.SuspendLayout();
+            flowLayoutPanel20.SuspendLayout();
+            accountPanel.SuspendLayout();
+            tableLayoutPanel41.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox12).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox13).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox14).BeginInit();
+            flowLayoutPanel21.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            additionalPanel.SuspendLayout();
+            tableLayoutPanel42.SuspendLayout();
+            flowLayoutPanel22.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+            budgetPanel.SuspendLayout();
+            tableLayoutPanel43.SuspendLayout();
+            flowLayoutPanel23.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+            profitPanel.SuspendLayout();
+            tableLayoutPanel44.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox15).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox16).BeginInit();
+            flowLayoutPanel24.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
+            expensePanel.SuspendLayout();
+            tableLayoutPanel45.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox17).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox18).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox19).BeginInit();
+            flowLayoutPanel25.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
+            incomePanel.SuspendLayout();
+            tableLayoutPanel46.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox20).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox21).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox22).BeginInit();
+            flowLayoutPanel26.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox7).BeginInit();
+            goalPanel.SuspendLayout();
+            tableLayoutPanel47.SuspendLayout();
+            flowLayoutPanel27.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox8).BeginInit();
+            debtPanel.SuspendLayout();
+            tableLayoutPanel48.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox27).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox28).BeginInit();
+            flowLayoutPanel28.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox9).BeginInit();
+            progressPanel.SuspendLayout();
+            tableLayoutPanel49.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox23).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox24).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox25).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox26).BeginInit();
+            flowLayoutPanel29.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).BeginInit();
             tpAccounts.SuspendLayout();
             tableLayoutPanel18.SuspendLayout();
             flowLayoutPanel3.SuspendLayout();
@@ -370,6 +572,9 @@
             tpSettings.SuspendLayout();
             tableLayoutPanel29.SuspendLayout();
             panel1.SuspendLayout();
+            tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
+            tabPage2.SuspendLayout();
             tpAbout.SuspendLayout();
             tableLayoutPanel27.SuspendLayout();
             tableLayoutPanel28.SuspendLayout();
@@ -891,8 +1096,8 @@
             // 
             splitContainer1.Panel2.Controls.Add(tcPage);
             splitContainer1.Panel2MinSize = 400;
-            splitContainer1.Size = new Size(1253, 559);
-            splitContainer1.SplitterDistance = 162;
+            splitContainer1.Size = new Size(1104, 707);
+            splitContainer1.SplitterDistance = 150;
             splitContainer1.TabIndex = 0;
             // 
             // tvMenuPanel
@@ -905,100 +1110,100 @@
             tvMenuPanel.ImageList = imageList1;
             tvMenuPanel.Location = new Point(5, 5);
             tvMenuPanel.Name = "tvMenuPanel";
-            treeNode1.ImageIndex = 5;
-            treeNode1.Name = "tnStart";
-            treeNode1.SelectedImageIndex = 5;
-            treeNode1.Tag = "0";
-            treeNode1.Text = "Главная";
-            treeNode2.ImageIndex = 9;
-            treeNode2.Name = "tnAccounts";
-            treeNode2.SelectedImageIndex = 9;
-            treeNode2.Tag = "1";
-            treeNode2.Text = "Счета";
-            treeNode3.ImageIndex = 8;
-            treeNode3.Name = "tnExpenses";
-            treeNode3.SelectedImageIndex = 8;
-            treeNode3.Tag = "2";
-            treeNode3.Text = "Расходы";
-            treeNode4.ImageIndex = 7;
-            treeNode4.Name = "tnIncome";
-            treeNode4.SelectedImageIndex = 7;
-            treeNode4.Tag = "3";
-            treeNode4.Text = "Приходы";
-            treeNode5.ImageIndex = 12;
-            treeNode5.Name = "tnGoals";
-            treeNode5.SelectedImageIndex = 12;
-            treeNode5.Tag = "14";
-            treeNode5.Text = "Цели";
-            treeNode6.ImageIndex = 11;
-            treeNode6.Name = "tnDebtReceived";
-            treeNode6.SelectedImageIndex = 11;
-            treeNode6.Tag = "12";
-            treeNode6.Text = "Полученые";
-            treeNode7.ImageIndex = 13;
-            treeNode7.Name = "tnDebtGiven";
-            treeNode7.SelectedImageIndex = 13;
-            treeNode7.Tag = "11";
-            treeNode7.Text = "Выданные";
-            treeNode8.ImageIndex = 11;
-            treeNode8.Name = "tnDebt";
-            treeNode8.SelectedImageIndex = 11;
-            treeNode8.Tag = "12";
-            treeNode8.Text = "Долги";
-            treeNode9.ImageIndex = 2;
-            treeNode9.Name = "tnCategory";
-            treeNode9.SelectedImageIndex = 2;
-            treeNode9.Tag = "4";
-            treeNode9.Text = "Категории";
-            treeNode10.ImageIndex = 1;
-            treeNode10.Name = "tnSource";
-            treeNode10.SelectedImageIndex = 1;
-            treeNode10.Tag = "5";
-            treeNode10.Text = "Источники";
-            treeNode11.ImageIndex = 10;
-            treeNode11.Name = "tnAdditionally";
-            treeNode11.SelectedImageIndex = 10;
-            treeNode11.Tag = "6";
-            treeNode11.Text = "Упоминания";
-            treeNode12.ImageIndex = 15;
-            treeNode12.Name = "tnCounterparties";
-            treeNode12.SelectedImageIndex = 15;
-            treeNode12.Tag = "13";
-            treeNode12.Text = "Контрагенты";
-            treeNode13.ImageIndex = 3;
-            treeNode13.Name = "tnCurrencies";
-            treeNode13.SelectedImageIndex = 3;
-            treeNode13.Tag = "7";
-            treeNode13.Text = "Валюты";
-            treeNode14.ImageIndex = 14;
-            treeNode14.Name = "tnMeasurements";
-            treeNode14.SelectedImageIndex = 14;
-            treeNode14.Tag = "15";
-            treeNode14.Text = "Единицы";
-            treeNode15.ImageIndex = 2;
-            treeNode15.Name = "tnDirectory";
-            treeNode15.SelectedImageIndex = 2;
-            treeNode15.Tag = "4";
-            treeNode15.Text = "Справочники";
-            treeNode16.ImageIndex = 6;
-            treeNode16.Name = "tnReports";
-            treeNode16.SelectedImageIndex = 6;
-            treeNode16.Tag = "8";
-            treeNode16.Text = "Отчеты";
-            treeNode17.ImageIndex = 4;
-            treeNode17.Name = "tnSettings";
-            treeNode17.SelectedImageIndex = 4;
-            treeNode17.Tag = "9";
-            treeNode17.Text = "Настройки";
-            treeNode18.ImageIndex = 0;
-            treeNode18.Name = "tnAbout";
-            treeNode18.SelectedImageIndex = 0;
-            treeNode18.Tag = "10";
-            treeNode18.Text = "О программе";
-            tvMenuPanel.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3, treeNode4, treeNode5, treeNode8, treeNode15, treeNode16, treeNode17, treeNode18 });
+            treeNode19.ImageIndex = 5;
+            treeNode19.Name = "tnStart";
+            treeNode19.SelectedImageIndex = 5;
+            treeNode19.Tag = "0";
+            treeNode19.Text = "Главная";
+            treeNode20.ImageIndex = 9;
+            treeNode20.Name = "tnAccounts";
+            treeNode20.SelectedImageIndex = 9;
+            treeNode20.Tag = "1";
+            treeNode20.Text = "Счета";
+            treeNode21.ImageIndex = 8;
+            treeNode21.Name = "tnExpenses";
+            treeNode21.SelectedImageIndex = 8;
+            treeNode21.Tag = "2";
+            treeNode21.Text = "Расходы";
+            treeNode22.ImageIndex = 7;
+            treeNode22.Name = "tnIncome";
+            treeNode22.SelectedImageIndex = 7;
+            treeNode22.Tag = "3";
+            treeNode22.Text = "Приходы";
+            treeNode23.ImageIndex = 12;
+            treeNode23.Name = "tnGoals";
+            treeNode23.SelectedImageIndex = 12;
+            treeNode23.Tag = "14";
+            treeNode23.Text = "Цели";
+            treeNode24.ImageIndex = 11;
+            treeNode24.Name = "tnDebtReceived";
+            treeNode24.SelectedImageIndex = 11;
+            treeNode24.Tag = "12";
+            treeNode24.Text = "Полученые";
+            treeNode25.ImageIndex = 13;
+            treeNode25.Name = "tnDebtGiven";
+            treeNode25.SelectedImageIndex = 13;
+            treeNode25.Tag = "11";
+            treeNode25.Text = "Выданные";
+            treeNode26.ImageIndex = 11;
+            treeNode26.Name = "tnDebt";
+            treeNode26.SelectedImageIndex = 11;
+            treeNode26.Tag = "12";
+            treeNode26.Text = "Долги";
+            treeNode27.ImageIndex = 2;
+            treeNode27.Name = "tnCategory";
+            treeNode27.SelectedImageIndex = 2;
+            treeNode27.Tag = "4";
+            treeNode27.Text = "Категории";
+            treeNode28.ImageIndex = 1;
+            treeNode28.Name = "tnSource";
+            treeNode28.SelectedImageIndex = 1;
+            treeNode28.Tag = "5";
+            treeNode28.Text = "Источники";
+            treeNode29.ImageIndex = 10;
+            treeNode29.Name = "tnAdditionally";
+            treeNode29.SelectedImageIndex = 10;
+            treeNode29.Tag = "6";
+            treeNode29.Text = "Упоминания";
+            treeNode30.ImageIndex = 15;
+            treeNode30.Name = "tnCounterparties";
+            treeNode30.SelectedImageIndex = 15;
+            treeNode30.Tag = "13";
+            treeNode30.Text = "Контрагенты";
+            treeNode31.ImageIndex = 3;
+            treeNode31.Name = "tnCurrencies";
+            treeNode31.SelectedImageIndex = 3;
+            treeNode31.Tag = "7";
+            treeNode31.Text = "Валюты";
+            treeNode32.ImageIndex = 14;
+            treeNode32.Name = "tnMeasurements";
+            treeNode32.SelectedImageIndex = 14;
+            treeNode32.Tag = "15";
+            treeNode32.Text = "Единицы";
+            treeNode33.ImageIndex = 2;
+            treeNode33.Name = "tnDirectory";
+            treeNode33.SelectedImageIndex = 2;
+            treeNode33.Tag = "4";
+            treeNode33.Text = "Справочники";
+            treeNode34.ImageIndex = 6;
+            treeNode34.Name = "tnReports";
+            treeNode34.SelectedImageIndex = 6;
+            treeNode34.Tag = "8";
+            treeNode34.Text = "Отчеты";
+            treeNode35.ImageIndex = 4;
+            treeNode35.Name = "tnSettings";
+            treeNode35.SelectedImageIndex = 4;
+            treeNode35.Tag = "9";
+            treeNode35.Text = "Настройки";
+            treeNode36.ImageIndex = 0;
+            treeNode36.Name = "tnAbout";
+            treeNode36.SelectedImageIndex = 0;
+            treeNode36.Tag = "10";
+            treeNode36.Text = "О программе";
+            tvMenuPanel.Nodes.AddRange(new TreeNode[] { treeNode19, treeNode20, treeNode21, treeNode22, treeNode23, treeNode26, treeNode33, treeNode34, treeNode35, treeNode36 });
             tvMenuPanel.SelectedImageIndex = 0;
             tvMenuPanel.ShowLines = false;
-            tvMenuPanel.Size = new Size(152, 549);
+            tvMenuPanel.Size = new Size(140, 697);
             tvMenuPanel.TabIndex = 0;
             tvMenuPanel.AfterSelect += tvMenuPanel_AfterSelect;
             // 
@@ -1046,7 +1251,7 @@
             tcPage.Location = new Point(0, 0);
             tcPage.Name = "tcPage";
             tcPage.SelectedIndex = 0;
-            tcPage.Size = new Size(1087, 559);
+            tcPage.Size = new Size(950, 707);
             tcPage.TabIndex = 0;
             tcPage.SelectedIndexChanged += tcPage_SelectedIndexChanged;
             // 
@@ -1056,7 +1261,7 @@
             tpStart.Location = new Point(4, 24);
             tpStart.Name = "tpStart";
             tpStart.Padding = new Padding(3);
-            tpStart.Size = new Size(1079, 531);
+            tpStart.Size = new Size(942, 679);
             tpStart.TabIndex = 0;
             tpStart.Text = "Стартовая";
             tpStart.UseVisualStyleBackColor = true;
@@ -1066,6 +1271,7 @@
             tableLayoutPanel30.ColumnCount = 1;
             tableLayoutPanel30.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel30.Controls.Add(label12, 0, 0);
+            tableLayoutPanel30.Controls.Add(flowLayoutPanel20, 0, 1);
             tableLayoutPanel30.Dock = DockStyle.Fill;
             tableLayoutPanel30.Location = new Point(3, 3);
             tableLayoutPanel30.Name = "tableLayoutPanel30";
@@ -1075,7 +1281,7 @@
             tableLayoutPanel30.RowStyles.Add(new RowStyle());
             tableLayoutPanel30.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel30.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel30.Size = new Size(1073, 525);
+            tableLayoutPanel30.Size = new Size(936, 673);
             tableLayoutPanel30.TabIndex = 7;
             // 
             // label12
@@ -1086,9 +1292,1745 @@
             label12.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label12.Location = new Point(8, 5);
             label12.Name = "label12";
-            label12.Size = new Size(1057, 26);
+            label12.Size = new Size(920, 26);
             label12.TabIndex = 0;
             label12.Text = "День недели и дата";
+            // 
+            // flowLayoutPanel20
+            // 
+            flowLayoutPanel20.Controls.Add(accountPanel);
+            flowLayoutPanel20.Controls.Add(additionalPanel);
+            flowLayoutPanel20.Controls.Add(budgetPanel);
+            flowLayoutPanel20.Controls.Add(profitPanel);
+            flowLayoutPanel20.Controls.Add(expensePanel);
+            flowLayoutPanel20.Controls.Add(incomePanel);
+            flowLayoutPanel20.Controls.Add(goalPanel);
+            flowLayoutPanel20.Controls.Add(debtPanel);
+            flowLayoutPanel20.Controls.Add(progressPanel);
+            flowLayoutPanel20.Dock = DockStyle.Fill;
+            flowLayoutPanel20.Location = new Point(8, 34);
+            flowLayoutPanel20.Name = "flowLayoutPanel20";
+            flowLayoutPanel20.Size = new Size(920, 636);
+            flowLayoutPanel20.TabIndex = 1;
+            // 
+            // accountPanel
+            // 
+            accountPanel.BorderStyle = BorderStyle.FixedSingle;
+            accountPanel.Controls.Add(tableLayoutPanel41);
+            accountPanel.Controls.Add(flowLayoutPanel21);
+            accountPanel.Location = new Point(3, 3);
+            accountPanel.Name = "accountPanel";
+            accountPanel.Size = new Size(300, 200);
+            accountPanel.TabIndex = 0;
+            accountPanel.Tag = "Счета";
+            // 
+            // tableLayoutPanel41
+            // 
+            tableLayoutPanel41.ColumnCount = 3;
+            tableLayoutPanel41.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel41.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel41.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel41.Controls.Add(label51, 0, 0);
+            tableLayoutPanel41.Controls.Add(label52, 0, 3);
+            tableLayoutPanel41.Controls.Add(lblYesterdayIncome, 2, 0);
+            tableLayoutPanel41.Controls.Add(lblYesterdayExpense, 2, 1);
+            tableLayoutPanel41.Controls.Add(lblTodayIncome, 2, 3);
+            tableLayoutPanel41.Controls.Add(lblTodayExpense, 2, 4);
+            tableLayoutPanel41.Controls.Add(pictureBox11, 1, 0);
+            tableLayoutPanel41.Controls.Add(pictureBox12, 1, 1);
+            tableLayoutPanel41.Controls.Add(pictureBox13, 1, 3);
+            tableLayoutPanel41.Controls.Add(pictureBox14, 1, 4);
+            tableLayoutPanel41.Dock = DockStyle.Fill;
+            tableLayoutPanel41.Location = new Point(0, 27);
+            tableLayoutPanel41.Name = "tableLayoutPanel41";
+            tableLayoutPanel41.RowCount = 8;
+            tableLayoutPanel41.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel41.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel41.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel41.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel41.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel41.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel41.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel41.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel41.Size = new Size(298, 171);
+            tableLayoutPanel41.TabIndex = 2;
+            // 
+            // label51
+            // 
+            label51.AutoSize = true;
+            label51.Dock = DockStyle.Left;
+            label51.Location = new Point(3, 0);
+            label51.Name = "label51";
+            label51.Size = new Size(43, 20);
+            label51.TabIndex = 0;
+            label51.Text = "Вчера:";
+            label51.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label52
+            // 
+            label52.AutoSize = true;
+            label52.Dock = DockStyle.Left;
+            label52.Location = new Point(3, 60);
+            label52.Name = "label52";
+            label52.Size = new Size(55, 20);
+            label52.TabIndex = 1;
+            label52.Text = "Сегодня:";
+            label52.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblYesterdayIncome
+            // 
+            lblYesterdayIncome.AutoSize = true;
+            lblYesterdayIncome.Dock = DockStyle.Left;
+            lblYesterdayIncome.Location = new Point(189, 0);
+            lblYesterdayIncome.Name = "lblYesterdayIncome";
+            lblYesterdayIncome.Size = new Size(44, 20);
+            lblYesterdayIncome.TabIndex = 2;
+            lblYesterdayIncome.Text = "label53";
+            lblYesterdayIncome.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblYesterdayExpense
+            // 
+            lblYesterdayExpense.AutoSize = true;
+            lblYesterdayExpense.Dock = DockStyle.Left;
+            lblYesterdayExpense.Location = new Point(189, 20);
+            lblYesterdayExpense.Name = "lblYesterdayExpense";
+            lblYesterdayExpense.Size = new Size(44, 20);
+            lblYesterdayExpense.TabIndex = 3;
+            lblYesterdayExpense.Text = "label54";
+            lblYesterdayExpense.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblTodayIncome
+            // 
+            lblTodayIncome.AutoSize = true;
+            lblTodayIncome.Dock = DockStyle.Left;
+            lblTodayIncome.Location = new Point(189, 60);
+            lblTodayIncome.Name = "lblTodayIncome";
+            lblTodayIncome.Size = new Size(44, 20);
+            lblTodayIncome.TabIndex = 4;
+            lblTodayIncome.Text = "label55";
+            lblTodayIncome.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblTodayExpense
+            // 
+            lblTodayExpense.AutoSize = true;
+            lblTodayExpense.Dock = DockStyle.Left;
+            lblTodayExpense.Location = new Point(189, 80);
+            lblTodayExpense.Name = "lblTodayExpense";
+            lblTodayExpense.Size = new Size(44, 20);
+            lblTodayExpense.TabIndex = 5;
+            lblTodayExpense.Text = "label56";
+            lblTodayExpense.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // pictureBox11
+            // 
+            pictureBox11.Location = new Point(169, 3);
+            pictureBox11.Name = "pictureBox11";
+            pictureBox11.Size = new Size(14, 14);
+            pictureBox11.TabIndex = 6;
+            pictureBox11.TabStop = false;
+            // 
+            // pictureBox12
+            // 
+            pictureBox12.Location = new Point(169, 23);
+            pictureBox12.Name = "pictureBox12";
+            pictureBox12.Size = new Size(14, 14);
+            pictureBox12.TabIndex = 7;
+            pictureBox12.TabStop = false;
+            // 
+            // pictureBox13
+            // 
+            pictureBox13.Location = new Point(169, 63);
+            pictureBox13.Name = "pictureBox13";
+            pictureBox13.Size = new Size(14, 14);
+            pictureBox13.TabIndex = 8;
+            pictureBox13.TabStop = false;
+            // 
+            // pictureBox14
+            // 
+            pictureBox14.Location = new Point(169, 83);
+            pictureBox14.Name = "pictureBox14";
+            pictureBox14.Size = new Size(14, 14);
+            pictureBox14.TabIndex = 9;
+            pictureBox14.TabStop = false;
+            // 
+            // flowLayoutPanel21
+            // 
+            flowLayoutPanel21.BackColor = Color.FromArgb(37, 118, 8);
+            flowLayoutPanel21.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel21.Controls.Add(pictureBox2);
+            flowLayoutPanel21.Controls.Add(lblTotalBalance);
+            flowLayoutPanel21.Dock = DockStyle.Top;
+            flowLayoutPanel21.Location = new Point(0, 0);
+            flowLayoutPanel21.Name = "flowLayoutPanel21";
+            flowLayoutPanel21.Padding = new Padding(3);
+            flowLayoutPanel21.Size = new Size(298, 27);
+            flowLayoutPanel21.TabIndex = 1;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.Dock = DockStyle.Bottom;
+            pictureBox2.Image = Properties.Resources.EditIcon;
+            pictureBox2.Location = new Point(6, 6);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(16, 16);
+            pictureBox2.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox2.TabIndex = 2;
+            pictureBox2.TabStop = false;
+            // 
+            // lblTotalBalance
+            // 
+            lblTotalBalance.AutoSize = true;
+            lblTotalBalance.Dock = DockStyle.Left;
+            lblTotalBalance.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            lblTotalBalance.ForeColor = Color.White;
+            lblTotalBalance.Location = new Point(28, 3);
+            lblTotalBalance.Name = "lblTotalBalance";
+            lblTotalBalance.Size = new Size(101, 22);
+            lblTotalBalance.TabIndex = 3;
+            lblTotalBalance.Text = "Счета - ХХХХ.ХХ";
+            lblTotalBalance.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // additionalPanel
+            // 
+            additionalPanel.BorderStyle = BorderStyle.FixedSingle;
+            additionalPanel.Controls.Add(tableLayoutPanel42);
+            additionalPanel.Controls.Add(flowLayoutPanel22);
+            additionalPanel.Location = new Point(309, 3);
+            additionalPanel.Name = "additionalPanel";
+            additionalPanel.Size = new Size(300, 200);
+            additionalPanel.TabIndex = 1;
+            additionalPanel.Tag = "Упоминания";
+            // 
+            // tableLayoutPanel42
+            // 
+            tableLayoutPanel42.ColumnCount = 3;
+            tableLayoutPanel42.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel42.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel42.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel42.Controls.Add(lblAdditional1Name, 0, 0);
+            tableLayoutPanel42.Controls.Add(lblAdditional2Name, 0, 1);
+            tableLayoutPanel42.Controls.Add(lblAdditional3Name, 0, 2);
+            tableLayoutPanel42.Controls.Add(lblAdditional1Value, 2, 0);
+            tableLayoutPanel42.Controls.Add(lblAdditional2Value, 2, 1);
+            tableLayoutPanel42.Controls.Add(lblAdditional3Value, 2, 2);
+            tableLayoutPanel42.Dock = DockStyle.Fill;
+            tableLayoutPanel42.Location = new Point(0, 27);
+            tableLayoutPanel42.Name = "tableLayoutPanel42";
+            tableLayoutPanel42.RowCount = 8;
+            tableLayoutPanel42.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel42.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel42.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel42.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel42.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel42.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel42.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel42.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel42.Size = new Size(298, 171);
+            tableLayoutPanel42.TabIndex = 2;
+            // 
+            // lblAdditional1Name
+            // 
+            lblAdditional1Name.AutoSize = true;
+            lblAdditional1Name.Dock = DockStyle.Left;
+            lblAdditional1Name.Location = new Point(3, 0);
+            lblAdditional1Name.Name = "lblAdditional1Name";
+            lblAdditional1Name.Size = new Size(44, 20);
+            lblAdditional1Name.TabIndex = 0;
+            lblAdditional1Name.Text = "label57";
+            lblAdditional1Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblAdditional2Name
+            // 
+            lblAdditional2Name.AutoSize = true;
+            lblAdditional2Name.Dock = DockStyle.Left;
+            lblAdditional2Name.Location = new Point(3, 20);
+            lblAdditional2Name.Name = "lblAdditional2Name";
+            lblAdditional2Name.Size = new Size(44, 20);
+            lblAdditional2Name.TabIndex = 1;
+            lblAdditional2Name.Text = "label58";
+            lblAdditional2Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblAdditional3Name
+            // 
+            lblAdditional3Name.AutoSize = true;
+            lblAdditional3Name.Dock = DockStyle.Left;
+            lblAdditional3Name.Location = new Point(3, 40);
+            lblAdditional3Name.Name = "lblAdditional3Name";
+            lblAdditional3Name.Size = new Size(44, 20);
+            lblAdditional3Name.TabIndex = 2;
+            lblAdditional3Name.Text = "label59";
+            lblAdditional3Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblAdditional1Value
+            // 
+            lblAdditional1Value.AutoSize = true;
+            lblAdditional1Value.Dock = DockStyle.Left;
+            lblAdditional1Value.Location = new Point(189, 0);
+            lblAdditional1Value.Name = "lblAdditional1Value";
+            lblAdditional1Value.Size = new Size(44, 20);
+            lblAdditional1Value.TabIndex = 5;
+            lblAdditional1Value.Text = "label62";
+            lblAdditional1Value.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblAdditional2Value
+            // 
+            lblAdditional2Value.AutoSize = true;
+            lblAdditional2Value.Dock = DockStyle.Left;
+            lblAdditional2Value.Location = new Point(189, 20);
+            lblAdditional2Value.Name = "lblAdditional2Value";
+            lblAdditional2Value.Size = new Size(44, 20);
+            lblAdditional2Value.TabIndex = 6;
+            lblAdditional2Value.Text = "label63";
+            lblAdditional2Value.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblAdditional3Value
+            // 
+            lblAdditional3Value.AutoSize = true;
+            lblAdditional3Value.Dock = DockStyle.Left;
+            lblAdditional3Value.Location = new Point(189, 40);
+            lblAdditional3Value.Name = "lblAdditional3Value";
+            lblAdditional3Value.Size = new Size(44, 20);
+            lblAdditional3Value.TabIndex = 7;
+            lblAdditional3Value.Text = "label64";
+            lblAdditional3Value.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // flowLayoutPanel22
+            // 
+            flowLayoutPanel22.BackColor = Color.FromArgb(37, 118, 8);
+            flowLayoutPanel22.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel22.Controls.Add(pictureBox3);
+            flowLayoutPanel22.Controls.Add(label27);
+            flowLayoutPanel22.Dock = DockStyle.Top;
+            flowLayoutPanel22.Location = new Point(0, 0);
+            flowLayoutPanel22.Name = "flowLayoutPanel22";
+            flowLayoutPanel22.Padding = new Padding(3);
+            flowLayoutPanel22.Size = new Size(298, 27);
+            flowLayoutPanel22.TabIndex = 1;
+            // 
+            // pictureBox3
+            // 
+            pictureBox3.Dock = DockStyle.Bottom;
+            pictureBox3.Image = Properties.Resources.EditIcon;
+            pictureBox3.Location = new Point(6, 6);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(16, 16);
+            pictureBox3.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox3.TabIndex = 2;
+            pictureBox3.TabStop = false;
+            // 
+            // label27
+            // 
+            label27.AutoSize = true;
+            label27.Dock = DockStyle.Left;
+            label27.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label27.ForeColor = Color.White;
+            label27.Location = new Point(28, 3);
+            label27.Name = "label27";
+            label27.Size = new Size(80, 22);
+            label27.TabIndex = 3;
+            label27.Text = "Упоминания";
+            label27.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // budgetPanel
+            // 
+            budgetPanel.BorderStyle = BorderStyle.FixedSingle;
+            budgetPanel.Controls.Add(tableLayoutPanel43);
+            budgetPanel.Controls.Add(flowLayoutPanel23);
+            budgetPanel.Location = new Point(615, 3);
+            budgetPanel.Name = "budgetPanel";
+            budgetPanel.Size = new Size(300, 200);
+            budgetPanel.TabIndex = 2;
+            budgetPanel.Tag = "Бюджет";
+            // 
+            // tableLayoutPanel43
+            // 
+            tableLayoutPanel43.ColumnCount = 3;
+            tableLayoutPanel43.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel43.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel43.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel43.Controls.Add(label67, 0, 0);
+            tableLayoutPanel43.Controls.Add(label68, 0, 1);
+            tableLayoutPanel43.Controls.Add(label69, 0, 2);
+            tableLayoutPanel43.Controls.Add(label70, 0, 3);
+            tableLayoutPanel43.Controls.Add(label71, 0, 5);
+            tableLayoutPanel43.Controls.Add(label72, 0, 6);
+            tableLayoutPanel43.Controls.Add(lblBudgetTopCategory, 2, 6);
+            tableLayoutPanel43.Controls.Add(lblBudgetLimit, 2, 0);
+            tableLayoutPanel43.Controls.Add(lblBudgetSpent, 2, 1);
+            tableLayoutPanel43.Controls.Add(lblBudgetRemaining, 2, 2);
+            tableLayoutPanel43.Controls.Add(lblBudgetProgress, 2, 3);
+            tableLayoutPanel43.Dock = DockStyle.Fill;
+            tableLayoutPanel43.Location = new Point(0, 27);
+            tableLayoutPanel43.Name = "tableLayoutPanel43";
+            tableLayoutPanel43.RowCount = 8;
+            tableLayoutPanel43.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel43.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel43.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel43.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel43.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel43.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel43.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel43.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel43.Size = new Size(298, 171);
+            tableLayoutPanel43.TabIndex = 2;
+            // 
+            // label67
+            // 
+            label67.AutoSize = true;
+            label67.Dock = DockStyle.Left;
+            label67.Location = new Point(3, 0);
+            label67.Name = "label67";
+            label67.Size = new Size(89, 20);
+            label67.TabIndex = 0;
+            label67.Text = "Общий лимит:";
+            label67.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label68
+            // 
+            label68.AutoSize = true;
+            label68.Dock = DockStyle.Left;
+            label68.Location = new Point(3, 20);
+            label68.Name = "label68";
+            label68.Size = new Size(71, 20);
+            label68.TabIndex = 1;
+            label68.Text = "Потрачено:";
+            label68.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label69
+            // 
+            label69.AutoSize = true;
+            label69.Dock = DockStyle.Left;
+            label69.Location = new Point(3, 40);
+            label69.Name = "label69";
+            label69.Size = new Size(54, 20);
+            label69.TabIndex = 2;
+            label69.Text = "Остаток:";
+            label69.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label70
+            // 
+            label70.AutoSize = true;
+            label70.Dock = DockStyle.Left;
+            label70.Location = new Point(3, 60);
+            label70.Name = "label70";
+            label70.Size = new Size(63, 20);
+            label70.TabIndex = 3;
+            label70.Text = "Прогресс:";
+            label70.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label71
+            // 
+            label71.AutoSize = true;
+            label71.Dock = DockStyle.Left;
+            label71.Location = new Point(3, 100);
+            label71.Name = "label71";
+            label71.Size = new Size(160, 20);
+            label71.TabIndex = 4;
+            label71.Text = "Перерасход по категориям:";
+            label71.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label72
+            // 
+            label72.AutoSize = true;
+            label72.Dock = DockStyle.Left;
+            label72.Location = new Point(3, 120);
+            label72.Name = "label72";
+            label72.Size = new Size(44, 20);
+            label72.TabIndex = 5;
+            label72.Text = "label72";
+            label72.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblBudgetTopCategory
+            // 
+            lblBudgetTopCategory.AutoSize = true;
+            lblBudgetTopCategory.Dock = DockStyle.Left;
+            lblBudgetTopCategory.Location = new Point(189, 120);
+            lblBudgetTopCategory.Name = "lblBudgetTopCategory";
+            lblBudgetTopCategory.Size = new Size(44, 20);
+            lblBudgetTopCategory.TabIndex = 6;
+            lblBudgetTopCategory.Text = "label73";
+            lblBudgetTopCategory.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblBudgetLimit
+            // 
+            lblBudgetLimit.AutoSize = true;
+            lblBudgetLimit.Dock = DockStyle.Left;
+            lblBudgetLimit.Location = new Point(189, 0);
+            lblBudgetLimit.Name = "lblBudgetLimit";
+            lblBudgetLimit.Size = new Size(44, 20);
+            lblBudgetLimit.TabIndex = 7;
+            lblBudgetLimit.Text = "label74";
+            lblBudgetLimit.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblBudgetSpent
+            // 
+            lblBudgetSpent.AutoSize = true;
+            lblBudgetSpent.Dock = DockStyle.Left;
+            lblBudgetSpent.Location = new Point(189, 20);
+            lblBudgetSpent.Name = "lblBudgetSpent";
+            lblBudgetSpent.Size = new Size(44, 20);
+            lblBudgetSpent.TabIndex = 8;
+            lblBudgetSpent.Text = "label75";
+            lblBudgetSpent.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblBudgetRemaining
+            // 
+            lblBudgetRemaining.AutoSize = true;
+            lblBudgetRemaining.Dock = DockStyle.Left;
+            lblBudgetRemaining.Location = new Point(189, 40);
+            lblBudgetRemaining.Name = "lblBudgetRemaining";
+            lblBudgetRemaining.Size = new Size(44, 20);
+            lblBudgetRemaining.TabIndex = 9;
+            lblBudgetRemaining.Text = "label76";
+            lblBudgetRemaining.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblBudgetProgress
+            // 
+            lblBudgetProgress.AutoSize = true;
+            lblBudgetProgress.Dock = DockStyle.Left;
+            lblBudgetProgress.Location = new Point(189, 60);
+            lblBudgetProgress.Name = "lblBudgetProgress";
+            lblBudgetProgress.Size = new Size(44, 20);
+            lblBudgetProgress.TabIndex = 10;
+            lblBudgetProgress.Text = "label77";
+            lblBudgetProgress.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // flowLayoutPanel23
+            // 
+            flowLayoutPanel23.BackColor = Color.FromArgb(37, 118, 8);
+            flowLayoutPanel23.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel23.Controls.Add(pictureBox4);
+            flowLayoutPanel23.Controls.Add(label44);
+            flowLayoutPanel23.Dock = DockStyle.Top;
+            flowLayoutPanel23.Location = new Point(0, 0);
+            flowLayoutPanel23.Name = "flowLayoutPanel23";
+            flowLayoutPanel23.Padding = new Padding(3);
+            flowLayoutPanel23.Size = new Size(298, 27);
+            flowLayoutPanel23.TabIndex = 1;
+            // 
+            // pictureBox4
+            // 
+            pictureBox4.Dock = DockStyle.Bottom;
+            pictureBox4.Image = Properties.Resources.EditIcon;
+            pictureBox4.Location = new Point(6, 6);
+            pictureBox4.Name = "pictureBox4";
+            pictureBox4.Size = new Size(16, 16);
+            pictureBox4.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox4.TabIndex = 2;
+            pictureBox4.TabStop = false;
+            // 
+            // label44
+            // 
+            label44.AutoSize = true;
+            label44.Dock = DockStyle.Left;
+            label44.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label44.ForeColor = Color.White;
+            label44.Location = new Point(28, 3);
+            label44.Name = "label44";
+            label44.Size = new Size(55, 22);
+            label44.TabIndex = 3;
+            label44.Text = "Бюджет";
+            label44.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // profitPanel
+            // 
+            profitPanel.BorderStyle = BorderStyle.FixedSingle;
+            profitPanel.Controls.Add(tableLayoutPanel44);
+            profitPanel.Controls.Add(flowLayoutPanel24);
+            profitPanel.Location = new Point(3, 209);
+            profitPanel.Name = "profitPanel";
+            profitPanel.Size = new Size(300, 200);
+            profitPanel.TabIndex = 3;
+            profitPanel.Tag = "Доход";
+            // 
+            // tableLayoutPanel44
+            // 
+            tableLayoutPanel44.ColumnCount = 3;
+            tableLayoutPanel44.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel44.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel44.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel44.Controls.Add(label78, 0, 0);
+            tableLayoutPanel44.Controls.Add(lblTotalIncome, 2, 0);
+            tableLayoutPanel44.Controls.Add(label80, 0, 1);
+            tableLayoutPanel44.Controls.Add(lblIncomeChange, 2, 1);
+            tableLayoutPanel44.Controls.Add(label82, 0, 2);
+            tableLayoutPanel44.Controls.Add(lblTotalExpense, 2, 2);
+            tableLayoutPanel44.Controls.Add(label84, 0, 3);
+            tableLayoutPanel44.Controls.Add(lblExpenseChange, 2, 3);
+            tableLayoutPanel44.Controls.Add(label86, 0, 5);
+            tableLayoutPanel44.Controls.Add(label87, 0, 6);
+            tableLayoutPanel44.Controls.Add(lblBestDay, 2, 5);
+            tableLayoutPanel44.Controls.Add(lblWorstDay, 2, 6);
+            tableLayoutPanel44.Controls.Add(pictureBox15, 1, 5);
+            tableLayoutPanel44.Controls.Add(pictureBox16, 1, 6);
+            tableLayoutPanel44.Dock = DockStyle.Fill;
+            tableLayoutPanel44.Location = new Point(0, 27);
+            tableLayoutPanel44.Name = "tableLayoutPanel44";
+            tableLayoutPanel44.RowCount = 8;
+            tableLayoutPanel44.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel44.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel44.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel44.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel44.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel44.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel44.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel44.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel44.Size = new Size(298, 171);
+            tableLayoutPanel44.TabIndex = 2;
+            // 
+            // label78
+            // 
+            label78.AutoSize = true;
+            label78.Dock = DockStyle.Left;
+            label78.Location = new Point(3, 0);
+            label78.Name = "label78";
+            label78.Size = new Size(58, 20);
+            label78.TabIndex = 0;
+            label78.Text = "Приходы";
+            label78.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblTotalIncome
+            // 
+            lblTotalIncome.AutoSize = true;
+            lblTotalIncome.Dock = DockStyle.Left;
+            lblTotalIncome.Location = new Point(189, 0);
+            lblTotalIncome.Name = "lblTotalIncome";
+            lblTotalIncome.Size = new Size(44, 20);
+            lblTotalIncome.TabIndex = 1;
+            lblTotalIncome.Text = "label79";
+            lblTotalIncome.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label80
+            // 
+            label80.AutoSize = true;
+            label80.Dock = DockStyle.Left;
+            label80.Location = new Point(3, 20);
+            label80.Name = "label80";
+            label80.Size = new Size(134, 20);
+            label80.TabIndex = 2;
+            label80.Text = "  с прошлым месяцем:";
+            label80.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblIncomeChange
+            // 
+            lblIncomeChange.AutoSize = true;
+            lblIncomeChange.Dock = DockStyle.Left;
+            lblIncomeChange.Location = new Point(189, 20);
+            lblIncomeChange.Name = "lblIncomeChange";
+            lblIncomeChange.Size = new Size(44, 20);
+            lblIncomeChange.TabIndex = 3;
+            lblIncomeChange.Text = "label81";
+            lblIncomeChange.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label82
+            // 
+            label82.AutoSize = true;
+            label82.Dock = DockStyle.Left;
+            label82.Location = new Point(3, 40);
+            label82.Name = "label82";
+            label82.Size = new Size(54, 20);
+            label82.TabIndex = 4;
+            label82.Text = "Расходы";
+            label82.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblTotalExpense
+            // 
+            lblTotalExpense.AutoSize = true;
+            lblTotalExpense.Dock = DockStyle.Left;
+            lblTotalExpense.Location = new Point(189, 40);
+            lblTotalExpense.Name = "lblTotalExpense";
+            lblTotalExpense.Size = new Size(44, 20);
+            lblTotalExpense.TabIndex = 5;
+            lblTotalExpense.Text = "label83";
+            lblTotalExpense.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label84
+            // 
+            label84.AutoSize = true;
+            label84.Dock = DockStyle.Left;
+            label84.Location = new Point(3, 60);
+            label84.Name = "label84";
+            label84.Size = new Size(134, 20);
+            label84.TabIndex = 6;
+            label84.Text = "  с прошлым месяцем:";
+            label84.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblExpenseChange
+            // 
+            lblExpenseChange.AutoSize = true;
+            lblExpenseChange.Dock = DockStyle.Left;
+            lblExpenseChange.Location = new Point(189, 60);
+            lblExpenseChange.Name = "lblExpenseChange";
+            lblExpenseChange.Size = new Size(44, 20);
+            lblExpenseChange.TabIndex = 7;
+            lblExpenseChange.Text = "label85";
+            lblExpenseChange.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label86
+            // 
+            label86.AutoSize = true;
+            label86.Dock = DockStyle.Left;
+            label86.Location = new Point(3, 100);
+            label86.Name = "label86";
+            label86.Size = new Size(37, 20);
+            label86.TabIndex = 8;
+            label86.Text = "День:";
+            label86.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label87
+            // 
+            label87.AutoSize = true;
+            label87.Dock = DockStyle.Left;
+            label87.Location = new Point(3, 120);
+            label87.Name = "label87";
+            label87.Size = new Size(37, 20);
+            label87.TabIndex = 9;
+            label87.Text = "День:";
+            label87.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblBestDay
+            // 
+            lblBestDay.AutoSize = true;
+            lblBestDay.Dock = DockStyle.Left;
+            lblBestDay.Location = new Point(189, 100);
+            lblBestDay.Name = "lblBestDay";
+            lblBestDay.Size = new Size(44, 20);
+            lblBestDay.TabIndex = 10;
+            lblBestDay.Text = "label88";
+            lblBestDay.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblWorstDay
+            // 
+            lblWorstDay.AutoSize = true;
+            lblWorstDay.Dock = DockStyle.Left;
+            lblWorstDay.Location = new Point(189, 120);
+            lblWorstDay.Name = "lblWorstDay";
+            lblWorstDay.Size = new Size(44, 20);
+            lblWorstDay.TabIndex = 11;
+            lblWorstDay.Text = "label89";
+            lblWorstDay.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // pictureBox15
+            // 
+            pictureBox15.Location = new Point(169, 103);
+            pictureBox15.Name = "pictureBox15";
+            pictureBox15.Size = new Size(14, 14);
+            pictureBox15.TabIndex = 12;
+            pictureBox15.TabStop = false;
+            // 
+            // pictureBox16
+            // 
+            pictureBox16.Location = new Point(169, 123);
+            pictureBox16.Name = "pictureBox16";
+            pictureBox16.Size = new Size(14, 14);
+            pictureBox16.TabIndex = 13;
+            pictureBox16.TabStop = false;
+            // 
+            // flowLayoutPanel24
+            // 
+            flowLayoutPanel24.BackColor = Color.FromArgb(37, 118, 8);
+            flowLayoutPanel24.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel24.Controls.Add(pictureBox5);
+            flowLayoutPanel24.Controls.Add(label45);
+            flowLayoutPanel24.Dock = DockStyle.Top;
+            flowLayoutPanel24.Location = new Point(0, 0);
+            flowLayoutPanel24.Name = "flowLayoutPanel24";
+            flowLayoutPanel24.Padding = new Padding(3);
+            flowLayoutPanel24.Size = new Size(298, 27);
+            flowLayoutPanel24.TabIndex = 1;
+            // 
+            // pictureBox5
+            // 
+            pictureBox5.Dock = DockStyle.Bottom;
+            pictureBox5.Image = Properties.Resources.EditIcon;
+            pictureBox5.Location = new Point(6, 6);
+            pictureBox5.Name = "pictureBox5";
+            pictureBox5.Size = new Size(16, 16);
+            pictureBox5.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox5.TabIndex = 2;
+            pictureBox5.TabStop = false;
+            // 
+            // label45
+            // 
+            label45.AutoSize = true;
+            label45.Dock = DockStyle.Left;
+            label45.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label45.ForeColor = Color.White;
+            label45.Location = new Point(28, 3);
+            label45.Name = "label45";
+            label45.Size = new Size(54, 22);
+            label45.TabIndex = 3;
+            label45.Text = "Доходы";
+            label45.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // expensePanel
+            // 
+            expensePanel.BorderStyle = BorderStyle.FixedSingle;
+            expensePanel.Controls.Add(tableLayoutPanel45);
+            expensePanel.Controls.Add(flowLayoutPanel25);
+            expensePanel.Location = new Point(309, 209);
+            expensePanel.Name = "expensePanel";
+            expensePanel.Size = new Size(300, 200);
+            expensePanel.TabIndex = 4;
+            expensePanel.Tag = "Расходы";
+            // 
+            // tableLayoutPanel45
+            // 
+            tableLayoutPanel45.ColumnCount = 3;
+            tableLayoutPanel45.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel45.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel45.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel45.Controls.Add(lblExpense1Name, 0, 0);
+            tableLayoutPanel45.Controls.Add(lblExpense2Name, 0, 1);
+            tableLayoutPanel45.Controls.Add(lblExpense3Name, 0, 2);
+            tableLayoutPanel45.Controls.Add(lblExpense1Value, 2, 0);
+            tableLayoutPanel45.Controls.Add(lblExpense2Value, 2, 1);
+            tableLayoutPanel45.Controls.Add(lblExpense3Value, 2, 2);
+            tableLayoutPanel45.Controls.Add(pictureBox17, 1, 0);
+            tableLayoutPanel45.Controls.Add(pictureBox18, 1, 1);
+            tableLayoutPanel45.Controls.Add(pictureBox19, 1, 2);
+            tableLayoutPanel45.Dock = DockStyle.Fill;
+            tableLayoutPanel45.Location = new Point(0, 27);
+            tableLayoutPanel45.Name = "tableLayoutPanel45";
+            tableLayoutPanel45.RowCount = 8;
+            tableLayoutPanel45.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel45.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel45.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel45.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel45.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel45.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel45.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel45.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel45.Size = new Size(298, 171);
+            tableLayoutPanel45.TabIndex = 2;
+            // 
+            // lblExpense1Name
+            // 
+            lblExpense1Name.AutoSize = true;
+            lblExpense1Name.Dock = DockStyle.Left;
+            lblExpense1Name.Location = new Point(3, 0);
+            lblExpense1Name.Name = "lblExpense1Name";
+            lblExpense1Name.Size = new Size(44, 20);
+            lblExpense1Name.TabIndex = 0;
+            lblExpense1Name.Text = "label90";
+            lblExpense1Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblExpense2Name
+            // 
+            lblExpense2Name.AutoSize = true;
+            lblExpense2Name.Dock = DockStyle.Left;
+            lblExpense2Name.Location = new Point(3, 20);
+            lblExpense2Name.Name = "lblExpense2Name";
+            lblExpense2Name.Size = new Size(44, 20);
+            lblExpense2Name.TabIndex = 1;
+            lblExpense2Name.Text = "label91";
+            lblExpense2Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblExpense3Name
+            // 
+            lblExpense3Name.AutoSize = true;
+            lblExpense3Name.Dock = DockStyle.Left;
+            lblExpense3Name.Location = new Point(3, 40);
+            lblExpense3Name.Name = "lblExpense3Name";
+            lblExpense3Name.Size = new Size(44, 20);
+            lblExpense3Name.TabIndex = 2;
+            lblExpense3Name.Text = "label92";
+            lblExpense3Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblExpense1Value
+            // 
+            lblExpense1Value.AutoSize = true;
+            lblExpense1Value.Dock = DockStyle.Left;
+            lblExpense1Value.Location = new Point(189, 0);
+            lblExpense1Value.Name = "lblExpense1Value";
+            lblExpense1Value.Size = new Size(44, 20);
+            lblExpense1Value.TabIndex = 3;
+            lblExpense1Value.Text = "label93";
+            lblExpense1Value.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblExpense2Value
+            // 
+            lblExpense2Value.AutoSize = true;
+            lblExpense2Value.Dock = DockStyle.Left;
+            lblExpense2Value.Location = new Point(189, 20);
+            lblExpense2Value.Name = "lblExpense2Value";
+            lblExpense2Value.Size = new Size(44, 20);
+            lblExpense2Value.TabIndex = 4;
+            lblExpense2Value.Text = "label94";
+            lblExpense2Value.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblExpense3Value
+            // 
+            lblExpense3Value.AutoSize = true;
+            lblExpense3Value.Dock = DockStyle.Left;
+            lblExpense3Value.Location = new Point(189, 40);
+            lblExpense3Value.Name = "lblExpense3Value";
+            lblExpense3Value.Size = new Size(44, 20);
+            lblExpense3Value.TabIndex = 5;
+            lblExpense3Value.Text = "label95";
+            lblExpense3Value.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // pictureBox17
+            // 
+            pictureBox17.Location = new Point(169, 3);
+            pictureBox17.Name = "pictureBox17";
+            pictureBox17.Size = new Size(14, 14);
+            pictureBox17.TabIndex = 6;
+            pictureBox17.TabStop = false;
+            // 
+            // pictureBox18
+            // 
+            pictureBox18.Location = new Point(169, 23);
+            pictureBox18.Name = "pictureBox18";
+            pictureBox18.Size = new Size(14, 14);
+            pictureBox18.TabIndex = 7;
+            pictureBox18.TabStop = false;
+            // 
+            // pictureBox19
+            // 
+            pictureBox19.Location = new Point(169, 43);
+            pictureBox19.Name = "pictureBox19";
+            pictureBox19.Size = new Size(14, 14);
+            pictureBox19.TabIndex = 8;
+            pictureBox19.TabStop = false;
+            // 
+            // flowLayoutPanel25
+            // 
+            flowLayoutPanel25.BackColor = Color.FromArgb(37, 118, 8);
+            flowLayoutPanel25.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel25.Controls.Add(pictureBox6);
+            flowLayoutPanel25.Controls.Add(label46);
+            flowLayoutPanel25.Dock = DockStyle.Top;
+            flowLayoutPanel25.Location = new Point(0, 0);
+            flowLayoutPanel25.Name = "flowLayoutPanel25";
+            flowLayoutPanel25.Padding = new Padding(3);
+            flowLayoutPanel25.Size = new Size(298, 27);
+            flowLayoutPanel25.TabIndex = 1;
+            // 
+            // pictureBox6
+            // 
+            pictureBox6.Dock = DockStyle.Bottom;
+            pictureBox6.Image = Properties.Resources.EditIcon;
+            pictureBox6.Location = new Point(6, 6);
+            pictureBox6.Name = "pictureBox6";
+            pictureBox6.Size = new Size(16, 16);
+            pictureBox6.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox6.TabIndex = 2;
+            pictureBox6.TabStop = false;
+            // 
+            // label46
+            // 
+            label46.AutoSize = true;
+            label46.Dock = DockStyle.Left;
+            label46.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label46.ForeColor = Color.White;
+            label46.Location = new Point(28, 3);
+            label46.Name = "label46";
+            label46.Size = new Size(57, 22);
+            label46.TabIndex = 3;
+            label46.Text = "Расходы";
+            label46.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // incomePanel
+            // 
+            incomePanel.BorderStyle = BorderStyle.FixedSingle;
+            incomePanel.Controls.Add(tableLayoutPanel46);
+            incomePanel.Controls.Add(flowLayoutPanel26);
+            incomePanel.Location = new Point(615, 209);
+            incomePanel.Name = "incomePanel";
+            incomePanel.Size = new Size(300, 200);
+            incomePanel.TabIndex = 5;
+            incomePanel.Tag = "Приходы";
+            // 
+            // tableLayoutPanel46
+            // 
+            tableLayoutPanel46.ColumnCount = 3;
+            tableLayoutPanel46.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel46.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel46.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel46.Controls.Add(lblIncome1Name, 0, 0);
+            tableLayoutPanel46.Controls.Add(lblIncome2Name, 0, 1);
+            tableLayoutPanel46.Controls.Add(lblIncome3Name, 0, 2);
+            tableLayoutPanel46.Controls.Add(lblIncome1Value, 2, 0);
+            tableLayoutPanel46.Controls.Add(lblIncome2Value, 2, 1);
+            tableLayoutPanel46.Controls.Add(lblIncome3Value, 2, 2);
+            tableLayoutPanel46.Controls.Add(pictureBox20, 1, 0);
+            tableLayoutPanel46.Controls.Add(pictureBox21, 1, 1);
+            tableLayoutPanel46.Controls.Add(pictureBox22, 1, 2);
+            tableLayoutPanel46.Dock = DockStyle.Fill;
+            tableLayoutPanel46.Location = new Point(0, 27);
+            tableLayoutPanel46.Name = "tableLayoutPanel46";
+            tableLayoutPanel46.RowCount = 8;
+            tableLayoutPanel46.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel46.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel46.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel46.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel46.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel46.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel46.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel46.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel46.Size = new Size(298, 171);
+            tableLayoutPanel46.TabIndex = 2;
+            // 
+            // lblIncome1Name
+            // 
+            lblIncome1Name.AutoSize = true;
+            lblIncome1Name.Dock = DockStyle.Left;
+            lblIncome1Name.Location = new Point(3, 0);
+            lblIncome1Name.Name = "lblIncome1Name";
+            lblIncome1Name.Size = new Size(44, 20);
+            lblIncome1Name.TabIndex = 0;
+            lblIncome1Name.Text = "label96";
+            lblIncome1Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblIncome2Name
+            // 
+            lblIncome2Name.AutoSize = true;
+            lblIncome2Name.Dock = DockStyle.Left;
+            lblIncome2Name.Location = new Point(3, 20);
+            lblIncome2Name.Name = "lblIncome2Name";
+            lblIncome2Name.Size = new Size(44, 20);
+            lblIncome2Name.TabIndex = 1;
+            lblIncome2Name.Text = "label97";
+            lblIncome2Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblIncome3Name
+            // 
+            lblIncome3Name.AutoSize = true;
+            lblIncome3Name.Dock = DockStyle.Left;
+            lblIncome3Name.Location = new Point(3, 40);
+            lblIncome3Name.Name = "lblIncome3Name";
+            lblIncome3Name.Size = new Size(44, 20);
+            lblIncome3Name.TabIndex = 2;
+            lblIncome3Name.Text = "label98";
+            lblIncome3Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblIncome1Value
+            // 
+            lblIncome1Value.AutoSize = true;
+            lblIncome1Value.Dock = DockStyle.Left;
+            lblIncome1Value.Location = new Point(189, 0);
+            lblIncome1Value.Name = "lblIncome1Value";
+            lblIncome1Value.Size = new Size(44, 20);
+            lblIncome1Value.TabIndex = 3;
+            lblIncome1Value.Text = "label99";
+            lblIncome1Value.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblIncome2Value
+            // 
+            lblIncome2Value.AutoSize = true;
+            lblIncome2Value.Dock = DockStyle.Left;
+            lblIncome2Value.Location = new Point(189, 20);
+            lblIncome2Value.Name = "lblIncome2Value";
+            lblIncome2Value.Size = new Size(50, 20);
+            lblIncome2Value.TabIndex = 4;
+            lblIncome2Value.Text = "label100";
+            lblIncome2Value.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblIncome3Value
+            // 
+            lblIncome3Value.AutoSize = true;
+            lblIncome3Value.Dock = DockStyle.Left;
+            lblIncome3Value.Location = new Point(189, 40);
+            lblIncome3Value.Name = "lblIncome3Value";
+            lblIncome3Value.Size = new Size(50, 20);
+            lblIncome3Value.TabIndex = 5;
+            lblIncome3Value.Text = "label101";
+            lblIncome3Value.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // pictureBox20
+            // 
+            pictureBox20.Location = new Point(169, 3);
+            pictureBox20.Name = "pictureBox20";
+            pictureBox20.Size = new Size(14, 14);
+            pictureBox20.TabIndex = 6;
+            pictureBox20.TabStop = false;
+            // 
+            // pictureBox21
+            // 
+            pictureBox21.Location = new Point(169, 23);
+            pictureBox21.Name = "pictureBox21";
+            pictureBox21.Size = new Size(14, 14);
+            pictureBox21.TabIndex = 7;
+            pictureBox21.TabStop = false;
+            // 
+            // pictureBox22
+            // 
+            pictureBox22.Location = new Point(169, 43);
+            pictureBox22.Name = "pictureBox22";
+            pictureBox22.Size = new Size(14, 14);
+            pictureBox22.TabIndex = 8;
+            pictureBox22.TabStop = false;
+            // 
+            // flowLayoutPanel26
+            // 
+            flowLayoutPanel26.BackColor = Color.FromArgb(37, 118, 8);
+            flowLayoutPanel26.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel26.Controls.Add(pictureBox7);
+            flowLayoutPanel26.Controls.Add(label47);
+            flowLayoutPanel26.Dock = DockStyle.Top;
+            flowLayoutPanel26.Location = new Point(0, 0);
+            flowLayoutPanel26.Name = "flowLayoutPanel26";
+            flowLayoutPanel26.Padding = new Padding(3);
+            flowLayoutPanel26.Size = new Size(298, 27);
+            flowLayoutPanel26.TabIndex = 1;
+            // 
+            // pictureBox7
+            // 
+            pictureBox7.Dock = DockStyle.Bottom;
+            pictureBox7.Image = Properties.Resources.EditIcon;
+            pictureBox7.Location = new Point(6, 6);
+            pictureBox7.Name = "pictureBox7";
+            pictureBox7.Size = new Size(16, 16);
+            pictureBox7.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox7.TabIndex = 2;
+            pictureBox7.TabStop = false;
+            // 
+            // label47
+            // 
+            label47.AutoSize = true;
+            label47.Dock = DockStyle.Left;
+            label47.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label47.ForeColor = Color.White;
+            label47.Location = new Point(28, 3);
+            label47.Name = "label47";
+            label47.Size = new Size(62, 22);
+            label47.TabIndex = 3;
+            label47.Text = "Приходы";
+            label47.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // goalPanel
+            // 
+            goalPanel.BorderStyle = BorderStyle.FixedSingle;
+            goalPanel.Controls.Add(tableLayoutPanel47);
+            goalPanel.Controls.Add(flowLayoutPanel27);
+            goalPanel.Location = new Point(3, 415);
+            goalPanel.Name = "goalPanel";
+            goalPanel.Size = new Size(300, 200);
+            goalPanel.TabIndex = 6;
+            goalPanel.Tag = "Цели";
+            // 
+            // tableLayoutPanel47
+            // 
+            tableLayoutPanel47.ColumnCount = 3;
+            tableLayoutPanel47.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel47.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel47.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel47.Controls.Add(label132, 1, 2);
+            tableLayoutPanel47.Controls.Add(label131, 1, 1);
+            tableLayoutPanel47.Controls.Add(label130, 1, 0);
+            tableLayoutPanel47.Controls.Add(lblGoal1Name, 0, 0);
+            tableLayoutPanel47.Controls.Add(lblGoal2Name, 0, 1);
+            tableLayoutPanel47.Controls.Add(lblGoal3Name, 0, 2);
+            tableLayoutPanel47.Controls.Add(lblNearestGoalName, 0, 4);
+            tableLayoutPanel47.Controls.Add(lblGoal1Progress, 2, 0);
+            tableLayoutPanel47.Controls.Add(lblGoal2Progress, 2, 1);
+            tableLayoutPanel47.Controls.Add(lblGoal3Progress, 2, 2);
+            tableLayoutPanel47.Controls.Add(lblNearestGoalDate, 2, 4);
+            tableLayoutPanel47.Dock = DockStyle.Fill;
+            tableLayoutPanel47.Location = new Point(0, 27);
+            tableLayoutPanel47.Name = "tableLayoutPanel47";
+            tableLayoutPanel47.RowCount = 8;
+            tableLayoutPanel47.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel47.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel47.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel47.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel47.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel47.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel47.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel47.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel47.Size = new Size(298, 171);
+            tableLayoutPanel47.TabIndex = 2;
+            // 
+            // label132
+            // 
+            label132.AutoSize = true;
+            label132.Dock = DockStyle.Left;
+            label132.Location = new Point(169, 40);
+            label132.Name = "label132";
+            label132.Size = new Size(14, 20);
+            label132.TabIndex = 10;
+            label132.Text = "%";
+            label132.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label131
+            // 
+            label131.AutoSize = true;
+            label131.Dock = DockStyle.Left;
+            label131.Location = new Point(169, 20);
+            label131.Name = "label131";
+            label131.Size = new Size(14, 20);
+            label131.TabIndex = 9;
+            label131.Text = "%";
+            label131.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label130
+            // 
+            label130.AutoSize = true;
+            label130.Dock = DockStyle.Left;
+            label130.Location = new Point(169, 0);
+            label130.Name = "label130";
+            label130.Size = new Size(14, 20);
+            label130.TabIndex = 8;
+            label130.Text = "%";
+            label130.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblGoal1Name
+            // 
+            lblGoal1Name.AutoSize = true;
+            lblGoal1Name.Dock = DockStyle.Left;
+            lblGoal1Name.Location = new Point(3, 0);
+            lblGoal1Name.Name = "lblGoal1Name";
+            lblGoal1Name.Size = new Size(50, 20);
+            lblGoal1Name.TabIndex = 0;
+            lblGoal1Name.Text = "label102";
+            lblGoal1Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblGoal2Name
+            // 
+            lblGoal2Name.AutoSize = true;
+            lblGoal2Name.Dock = DockStyle.Left;
+            lblGoal2Name.Location = new Point(3, 20);
+            lblGoal2Name.Name = "lblGoal2Name";
+            lblGoal2Name.Size = new Size(50, 20);
+            lblGoal2Name.TabIndex = 1;
+            lblGoal2Name.Text = "label103";
+            lblGoal2Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblGoal3Name
+            // 
+            lblGoal3Name.AutoSize = true;
+            lblGoal3Name.Dock = DockStyle.Left;
+            lblGoal3Name.Location = new Point(3, 40);
+            lblGoal3Name.Name = "lblGoal3Name";
+            lblGoal3Name.Size = new Size(50, 20);
+            lblGoal3Name.TabIndex = 2;
+            lblGoal3Name.Text = "label104";
+            lblGoal3Name.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblNearestGoalName
+            // 
+            lblNearestGoalName.AutoSize = true;
+            lblNearestGoalName.Dock = DockStyle.Left;
+            lblNearestGoalName.Location = new Point(3, 80);
+            lblNearestGoalName.Name = "lblNearestGoalName";
+            lblNearestGoalName.Size = new Size(105, 20);
+            lblNearestGoalName.TabIndex = 3;
+            lblNearestGoalName.Text = "Ближайшая цель:";
+            lblNearestGoalName.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblGoal1Progress
+            // 
+            lblGoal1Progress.AutoSize = true;
+            lblGoal1Progress.Dock = DockStyle.Left;
+            lblGoal1Progress.Location = new Point(189, 0);
+            lblGoal1Progress.Name = "lblGoal1Progress";
+            lblGoal1Progress.Size = new Size(50, 20);
+            lblGoal1Progress.TabIndex = 4;
+            lblGoal1Progress.Text = "label106";
+            lblGoal1Progress.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblGoal2Progress
+            // 
+            lblGoal2Progress.AutoSize = true;
+            lblGoal2Progress.Dock = DockStyle.Left;
+            lblGoal2Progress.Location = new Point(189, 20);
+            lblGoal2Progress.Name = "lblGoal2Progress";
+            lblGoal2Progress.Size = new Size(50, 20);
+            lblGoal2Progress.TabIndex = 5;
+            lblGoal2Progress.Text = "label107";
+            lblGoal2Progress.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblGoal3Progress
+            // 
+            lblGoal3Progress.AutoSize = true;
+            lblGoal3Progress.Dock = DockStyle.Left;
+            lblGoal3Progress.Location = new Point(189, 40);
+            lblGoal3Progress.Name = "lblGoal3Progress";
+            lblGoal3Progress.Size = new Size(50, 20);
+            lblGoal3Progress.TabIndex = 6;
+            lblGoal3Progress.Text = "label108";
+            lblGoal3Progress.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblNearestGoalDate
+            // 
+            lblNearestGoalDate.AutoSize = true;
+            lblNearestGoalDate.Dock = DockStyle.Left;
+            lblNearestGoalDate.Location = new Point(189, 80);
+            lblNearestGoalDate.Name = "lblNearestGoalDate";
+            lblNearestGoalDate.Size = new Size(50, 20);
+            lblNearestGoalDate.TabIndex = 7;
+            lblNearestGoalDate.Text = "label109";
+            lblNearestGoalDate.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // flowLayoutPanel27
+            // 
+            flowLayoutPanel27.BackColor = Color.FromArgb(37, 118, 8);
+            flowLayoutPanel27.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel27.Controls.Add(pictureBox8);
+            flowLayoutPanel27.Controls.Add(label48);
+            flowLayoutPanel27.Dock = DockStyle.Top;
+            flowLayoutPanel27.Location = new Point(0, 0);
+            flowLayoutPanel27.Name = "flowLayoutPanel27";
+            flowLayoutPanel27.Padding = new Padding(3);
+            flowLayoutPanel27.Size = new Size(298, 27);
+            flowLayoutPanel27.TabIndex = 1;
+            // 
+            // pictureBox8
+            // 
+            pictureBox8.Dock = DockStyle.Bottom;
+            pictureBox8.Image = Properties.Resources.EditIcon;
+            pictureBox8.Location = new Point(6, 6);
+            pictureBox8.Name = "pictureBox8";
+            pictureBox8.Size = new Size(16, 16);
+            pictureBox8.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox8.TabIndex = 2;
+            pictureBox8.TabStop = false;
+            // 
+            // label48
+            // 
+            label48.AutoSize = true;
+            label48.Dock = DockStyle.Left;
+            label48.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label48.ForeColor = Color.White;
+            label48.Location = new Point(28, 3);
+            label48.Name = "label48";
+            label48.Size = new Size(39, 22);
+            label48.TabIndex = 3;
+            label48.Text = "Цели";
+            label48.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // debtPanel
+            // 
+            debtPanel.BorderStyle = BorderStyle.FixedSingle;
+            debtPanel.Controls.Add(tableLayoutPanel48);
+            debtPanel.Controls.Add(flowLayoutPanel28);
+            debtPanel.Location = new Point(309, 415);
+            debtPanel.Name = "debtPanel";
+            debtPanel.Size = new Size(300, 200);
+            debtPanel.TabIndex = 7;
+            debtPanel.Tag = "Долги";
+            // 
+            // tableLayoutPanel48
+            // 
+            tableLayoutPanel48.ColumnCount = 3;
+            tableLayoutPanel48.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel48.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel48.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel48.Controls.Add(label110, 0, 0);
+            tableLayoutPanel48.Controls.Add(label111, 0, 1);
+            tableLayoutPanel48.Controls.Add(label112, 0, 2);
+            tableLayoutPanel48.Controls.Add(label113, 0, 4);
+            tableLayoutPanel48.Controls.Add(label114, 0, 5);
+            tableLayoutPanel48.Controls.Add(label115, 0, 6);
+            tableLayoutPanel48.Controls.Add(lblTotalGivenDebt, 2, 0);
+            tableLayoutPanel48.Controls.Add(lblOverdueGivenDebt, 2, 1);
+            tableLayoutPanel48.Controls.Add(lblNextGivenDueDate, 2, 2);
+            tableLayoutPanel48.Controls.Add(lblTotalReceivedDebt, 2, 4);
+            tableLayoutPanel48.Controls.Add(lblOverdueReceivedDebt, 2, 5);
+            tableLayoutPanel48.Controls.Add(lblNextReceivedDueDate, 2, 6);
+            tableLayoutPanel48.Controls.Add(pictureBox27, 1, 0);
+            tableLayoutPanel48.Controls.Add(pictureBox28, 1, 4);
+            tableLayoutPanel48.Dock = DockStyle.Fill;
+            tableLayoutPanel48.Location = new Point(0, 27);
+            tableLayoutPanel48.Name = "tableLayoutPanel48";
+            tableLayoutPanel48.RowCount = 8;
+            tableLayoutPanel48.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel48.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel48.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel48.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel48.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel48.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel48.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel48.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel48.Size = new Size(298, 171);
+            tableLayoutPanel48.TabIndex = 2;
+            // 
+            // label110
+            // 
+            label110.AutoSize = true;
+            label110.Dock = DockStyle.Left;
+            label110.Location = new Point(3, 0);
+            label110.Name = "label110";
+            label110.Size = new Size(52, 20);
+            label110.TabIndex = 0;
+            label110.Text = "Выдано:";
+            label110.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label111
+            // 
+            label111.AutoSize = true;
+            label111.Dock = DockStyle.Left;
+            label111.Location = new Point(3, 20);
+            label111.Name = "label111";
+            label111.Size = new Size(80, 20);
+            label111.TabIndex = 1;
+            label111.Text = "Просрочено:";
+            label111.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label112
+            // 
+            label112.AutoSize = true;
+            label112.Dock = DockStyle.Left;
+            label112.Location = new Point(3, 40);
+            label112.Name = "label112";
+            label112.Size = new Size(78, 20);
+            label112.TabIndex = 2;
+            label112.Text = "Ближайший:";
+            label112.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label113
+            // 
+            label113.AutoSize = true;
+            label113.Dock = DockStyle.Left;
+            label113.Location = new Point(3, 80);
+            label113.Name = "label113";
+            label113.Size = new Size(66, 20);
+            label113.TabIndex = 3;
+            label113.Text = "Получено:";
+            label113.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label114
+            // 
+            label114.AutoSize = true;
+            label114.Dock = DockStyle.Left;
+            label114.Location = new Point(3, 100);
+            label114.Name = "label114";
+            label114.Size = new Size(80, 20);
+            label114.TabIndex = 4;
+            label114.Text = "Просрочено:";
+            label114.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label115
+            // 
+            label115.AutoSize = true;
+            label115.Dock = DockStyle.Left;
+            label115.Location = new Point(3, 120);
+            label115.Name = "label115";
+            label115.Size = new Size(78, 20);
+            label115.TabIndex = 5;
+            label115.Text = "Ближайший:";
+            label115.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblTotalGivenDebt
+            // 
+            lblTotalGivenDebt.AutoSize = true;
+            lblTotalGivenDebt.Dock = DockStyle.Left;
+            lblTotalGivenDebt.Location = new Point(189, 0);
+            lblTotalGivenDebt.Name = "lblTotalGivenDebt";
+            lblTotalGivenDebt.Size = new Size(50, 20);
+            lblTotalGivenDebt.TabIndex = 6;
+            lblTotalGivenDebt.Text = "label116";
+            lblTotalGivenDebt.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblOverdueGivenDebt
+            // 
+            lblOverdueGivenDebt.AutoSize = true;
+            lblOverdueGivenDebt.Dock = DockStyle.Left;
+            lblOverdueGivenDebt.Location = new Point(189, 20);
+            lblOverdueGivenDebt.Name = "lblOverdueGivenDebt";
+            lblOverdueGivenDebt.Size = new Size(50, 20);
+            lblOverdueGivenDebt.TabIndex = 7;
+            lblOverdueGivenDebt.Text = "label117";
+            lblOverdueGivenDebt.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblNextGivenDueDate
+            // 
+            lblNextGivenDueDate.AutoSize = true;
+            lblNextGivenDueDate.Dock = DockStyle.Left;
+            lblNextGivenDueDate.Location = new Point(189, 40);
+            lblNextGivenDueDate.Name = "lblNextGivenDueDate";
+            lblNextGivenDueDate.Size = new Size(50, 20);
+            lblNextGivenDueDate.TabIndex = 8;
+            lblNextGivenDueDate.Text = "label118";
+            lblNextGivenDueDate.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblTotalReceivedDebt
+            // 
+            lblTotalReceivedDebt.AutoSize = true;
+            lblTotalReceivedDebt.Dock = DockStyle.Left;
+            lblTotalReceivedDebt.Location = new Point(189, 80);
+            lblTotalReceivedDebt.Name = "lblTotalReceivedDebt";
+            lblTotalReceivedDebt.Size = new Size(50, 20);
+            lblTotalReceivedDebt.TabIndex = 9;
+            lblTotalReceivedDebt.Text = "label119";
+            lblTotalReceivedDebt.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblOverdueReceivedDebt
+            // 
+            lblOverdueReceivedDebt.AutoSize = true;
+            lblOverdueReceivedDebt.Dock = DockStyle.Left;
+            lblOverdueReceivedDebt.Location = new Point(189, 100);
+            lblOverdueReceivedDebt.Name = "lblOverdueReceivedDebt";
+            lblOverdueReceivedDebt.Size = new Size(50, 20);
+            lblOverdueReceivedDebt.TabIndex = 10;
+            lblOverdueReceivedDebt.Text = "label120";
+            lblOverdueReceivedDebt.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblNextReceivedDueDate
+            // 
+            lblNextReceivedDueDate.AutoSize = true;
+            lblNextReceivedDueDate.Dock = DockStyle.Left;
+            lblNextReceivedDueDate.Location = new Point(189, 120);
+            lblNextReceivedDueDate.Name = "lblNextReceivedDueDate";
+            lblNextReceivedDueDate.Size = new Size(50, 20);
+            lblNextReceivedDueDate.TabIndex = 11;
+            lblNextReceivedDueDate.Text = "label121";
+            lblNextReceivedDueDate.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // pictureBox27
+            // 
+            pictureBox27.Location = new Point(169, 3);
+            pictureBox27.Name = "pictureBox27";
+            pictureBox27.Size = new Size(14, 14);
+            pictureBox27.TabIndex = 12;
+            pictureBox27.TabStop = false;
+            // 
+            // pictureBox28
+            // 
+            pictureBox28.Location = new Point(169, 83);
+            pictureBox28.Name = "pictureBox28";
+            pictureBox28.Size = new Size(14, 14);
+            pictureBox28.TabIndex = 13;
+            pictureBox28.TabStop = false;
+            // 
+            // flowLayoutPanel28
+            // 
+            flowLayoutPanel28.BackColor = Color.FromArgb(37, 118, 8);
+            flowLayoutPanel28.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel28.Controls.Add(pictureBox9);
+            flowLayoutPanel28.Controls.Add(label49);
+            flowLayoutPanel28.Dock = DockStyle.Top;
+            flowLayoutPanel28.Location = new Point(0, 0);
+            flowLayoutPanel28.Name = "flowLayoutPanel28";
+            flowLayoutPanel28.Padding = new Padding(3);
+            flowLayoutPanel28.Size = new Size(298, 27);
+            flowLayoutPanel28.TabIndex = 1;
+            // 
+            // pictureBox9
+            // 
+            pictureBox9.Dock = DockStyle.Bottom;
+            pictureBox9.Image = Properties.Resources.EditIcon;
+            pictureBox9.Location = new Point(6, 6);
+            pictureBox9.Name = "pictureBox9";
+            pictureBox9.Size = new Size(16, 16);
+            pictureBox9.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox9.TabIndex = 2;
+            pictureBox9.TabStop = false;
+            // 
+            // label49
+            // 
+            label49.AutoSize = true;
+            label49.Dock = DockStyle.Left;
+            label49.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label49.ForeColor = Color.White;
+            label49.Location = new Point(28, 3);
+            label49.Name = "label49";
+            label49.Size = new Size(43, 22);
+            label49.TabIndex = 3;
+            label49.Text = "Долги";
+            label49.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // progressPanel
+            // 
+            progressPanel.BorderStyle = BorderStyle.FixedSingle;
+            progressPanel.Controls.Add(tableLayoutPanel49);
+            progressPanel.Controls.Add(flowLayoutPanel29);
+            progressPanel.Location = new Point(615, 415);
+            progressPanel.Name = "progressPanel";
+            progressPanel.Size = new Size(300, 200);
+            progressPanel.TabIndex = 8;
+            progressPanel.Tag = "Достижения";
+            // 
+            // tableLayoutPanel49
+            // 
+            tableLayoutPanel49.ColumnCount = 3;
+            tableLayoutPanel49.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel49.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel49.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel49.Controls.Add(label122, 0, 0);
+            tableLayoutPanel49.Controls.Add(label123, 0, 1);
+            tableLayoutPanel49.Controls.Add(label124, 0, 3);
+            tableLayoutPanel49.Controls.Add(label125, 0, 4);
+            tableLayoutPanel49.Controls.Add(label126, 2, 0);
+            tableLayoutPanel49.Controls.Add(label127, 2, 1);
+            tableLayoutPanel49.Controls.Add(label128, 2, 3);
+            tableLayoutPanel49.Controls.Add(label129, 2, 4);
+            tableLayoutPanel49.Controls.Add(pictureBox23, 1, 0);
+            tableLayoutPanel49.Controls.Add(pictureBox24, 1, 1);
+            tableLayoutPanel49.Controls.Add(pictureBox25, 1, 3);
+            tableLayoutPanel49.Controls.Add(pictureBox26, 1, 4);
+            tableLayoutPanel49.Dock = DockStyle.Fill;
+            tableLayoutPanel49.Location = new Point(0, 27);
+            tableLayoutPanel49.Name = "tableLayoutPanel49";
+            tableLayoutPanel49.RowCount = 8;
+            tableLayoutPanel49.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel49.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel49.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel49.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel49.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel49.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel49.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel49.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel49.Size = new Size(298, 171);
+            tableLayoutPanel49.TabIndex = 2;
+            // 
+            // label122
+            // 
+            label122.AutoSize = true;
+            label122.Dock = DockStyle.Left;
+            label122.Location = new Point(3, 0);
+            label122.Name = "label122";
+            label122.Size = new Size(96, 20);
+            label122.TabIndex = 0;
+            label122.Text = "Удачный месяц:";
+            label122.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label123
+            // 
+            label123.AutoSize = true;
+            label123.Dock = DockStyle.Left;
+            label123.Location = new Point(3, 20);
+            label123.Name = "label123";
+            label123.Size = new Size(113, 20);
+            label123.TabIndex = 1;
+            label123.Text = "Экономный месяц:";
+            label123.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label124
+            // 
+            label124.AutoSize = true;
+            label124.Dock = DockStyle.Left;
+            label124.Location = new Point(3, 60);
+            label124.Name = "label124";
+            label124.Size = new Size(118, 20);
+            label124.TabIndex = 2;
+            label124.Text = "Провальный месяц:";
+            label124.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label125
+            // 
+            label125.AutoSize = true;
+            label125.Dock = DockStyle.Left;
+            label125.Location = new Point(3, 80);
+            label125.Name = "label125";
+            label125.Size = new Size(106, 20);
+            label125.TabIndex = 3;
+            label125.Text = "Затратный месяц:";
+            label125.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label126
+            // 
+            label126.AutoSize = true;
+            label126.Dock = DockStyle.Left;
+            label126.Location = new Point(189, 0);
+            label126.Name = "label126";
+            label126.Size = new Size(50, 20);
+            label126.TabIndex = 4;
+            label126.Text = "label126";
+            label126.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label127
+            // 
+            label127.AutoSize = true;
+            label127.Dock = DockStyle.Left;
+            label127.Location = new Point(189, 20);
+            label127.Name = "label127";
+            label127.Size = new Size(50, 20);
+            label127.TabIndex = 5;
+            label127.Text = "label127";
+            label127.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label128
+            // 
+            label128.AutoSize = true;
+            label128.Dock = DockStyle.Left;
+            label128.Location = new Point(189, 60);
+            label128.Name = "label128";
+            label128.Size = new Size(50, 20);
+            label128.TabIndex = 6;
+            label128.Text = "label128";
+            label128.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label129
+            // 
+            label129.AutoSize = true;
+            label129.Dock = DockStyle.Left;
+            label129.Location = new Point(189, 80);
+            label129.Name = "label129";
+            label129.Size = new Size(50, 20);
+            label129.TabIndex = 7;
+            label129.Text = "label129";
+            label129.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // pictureBox23
+            // 
+            pictureBox23.Location = new Point(169, 3);
+            pictureBox23.Name = "pictureBox23";
+            pictureBox23.Size = new Size(14, 14);
+            pictureBox23.TabIndex = 8;
+            pictureBox23.TabStop = false;
+            // 
+            // pictureBox24
+            // 
+            pictureBox24.Location = new Point(169, 23);
+            pictureBox24.Name = "pictureBox24";
+            pictureBox24.Size = new Size(14, 14);
+            pictureBox24.TabIndex = 9;
+            pictureBox24.TabStop = false;
+            // 
+            // pictureBox25
+            // 
+            pictureBox25.Location = new Point(169, 63);
+            pictureBox25.Name = "pictureBox25";
+            pictureBox25.Size = new Size(14, 14);
+            pictureBox25.TabIndex = 10;
+            pictureBox25.TabStop = false;
+            // 
+            // pictureBox26
+            // 
+            pictureBox26.Location = new Point(169, 83);
+            pictureBox26.Name = "pictureBox26";
+            pictureBox26.Size = new Size(14, 14);
+            pictureBox26.TabIndex = 11;
+            pictureBox26.TabStop = false;
+            // 
+            // flowLayoutPanel29
+            // 
+            flowLayoutPanel29.BackColor = Color.FromArgb(37, 118, 8);
+            flowLayoutPanel29.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel29.Controls.Add(pictureBox10);
+            flowLayoutPanel29.Controls.Add(label50);
+            flowLayoutPanel29.Dock = DockStyle.Top;
+            flowLayoutPanel29.Location = new Point(0, 0);
+            flowLayoutPanel29.Name = "flowLayoutPanel29";
+            flowLayoutPanel29.Padding = new Padding(3);
+            flowLayoutPanel29.Size = new Size(298, 27);
+            flowLayoutPanel29.TabIndex = 1;
+            // 
+            // pictureBox10
+            // 
+            pictureBox10.Dock = DockStyle.Bottom;
+            pictureBox10.Image = Properties.Resources.EditIcon;
+            pictureBox10.Location = new Point(6, 6);
+            pictureBox10.Name = "pictureBox10";
+            pictureBox10.Size = new Size(16, 16);
+            pictureBox10.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox10.TabIndex = 2;
+            pictureBox10.TabStop = false;
+            // 
+            // label50
+            // 
+            label50.AutoSize = true;
+            label50.Dock = DockStyle.Left;
+            label50.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label50.ForeColor = Color.White;
+            label50.Location = new Point(28, 3);
+            label50.Name = "label50";
+            label50.Size = new Size(81, 22);
+            label50.TabIndex = 3;
+            label50.Text = "Достижения";
+            label50.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tpAccounts
             // 
@@ -1096,7 +3038,7 @@
             tpAccounts.Controls.Add(tableLayoutPanel2);
             tpAccounts.Location = new Point(4, 24);
             tpAccounts.Name = "tpAccounts";
-            tpAccounts.Size = new Size(1079, 531);
+            tpAccounts.Size = new Size(942, 679);
             tpAccounts.TabIndex = 1;
             tpAccounts.Text = "Счета";
             tpAccounts.UseVisualStyleBackColor = true;
@@ -1116,7 +3058,7 @@
             tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel18.RowStyles.Add(new RowStyle());
-            tableLayoutPanel18.Size = new Size(1079, 431);
+            tableLayoutPanel18.Size = new Size(942, 579);
             tableLayoutPanel18.TabIndex = 2;
             // 
             // label9
@@ -1127,7 +3069,7 @@
             label9.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label9.Location = new Point(8, 5);
             label9.Name = "label9";
-            label9.Size = new Size(1063, 26);
+            label9.Size = new Size(926, 26);
             label9.TabIndex = 0;
             label9.Text = "Счета";
             // 
@@ -1142,7 +3084,7 @@
             flowLayoutPanel3.Location = new Point(8, 34);
             flowLayoutPanel3.Name = "flowLayoutPanel3";
             flowLayoutPanel3.Padding = new Padding(5);
-            flowLayoutPanel3.Size = new Size(1063, 40);
+            flowLayoutPanel3.Size = new Size(926, 40);
             flowLayoutPanel3.TabIndex = 1;
             // 
             // btnAddAccounts
@@ -1214,7 +3156,7 @@
             dgwAccounts.RowHeadersVisible = false;
             dgwAccounts.RowHeadersWidth = 51;
             dgwAccounts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwAccounts.Size = new Size(1063, 343);
+            dgwAccounts.Size = new Size(926, 491);
             dgwAccounts.TabIndex = 2;
             dgwAccounts.CellDoubleClick += dgwAccounts_CellDoubleClick;
             dgwAccounts.CellFormatting += dataGridViewAccounts_CellFormatting;
@@ -1236,12 +3178,12 @@
             tableLayoutPanel2.Controls.Add(label2, 0, 0);
             tableLayoutPanel2.Controls.Add(tbDetailsAccount, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(0, 431);
+            tableLayoutPanel2.Location = new Point(0, 579);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(1079, 100);
+            tableLayoutPanel2.Size = new Size(942, 100);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // label2
@@ -1260,7 +3202,7 @@
             tbDetailsAccount.Multiline = true;
             tbDetailsAccount.Name = "tbDetailsAccount";
             tbDetailsAccount.ReadOnly = true;
-            tbDetailsAccount.Size = new Size(963, 89);
+            tbDetailsAccount.Size = new Size(826, 89);
             tbDetailsAccount.TabIndex = 1;
             // 
             // tpExpenses
@@ -1269,7 +3211,7 @@
             tpExpenses.Controls.Add(tableLayoutPanel3);
             tpExpenses.Location = new Point(4, 24);
             tpExpenses.Name = "tpExpenses";
-            tpExpenses.Size = new Size(1079, 531);
+            tpExpenses.Size = new Size(942, 679);
             tpExpenses.TabIndex = 2;
             tpExpenses.Text = "Расходы";
             tpExpenses.UseVisualStyleBackColor = true;
@@ -1291,7 +3233,7 @@
             tableLayoutPanel19.RowStyles.Add(new RowStyle());
             tableLayoutPanel19.RowStyles.Add(new RowStyle());
             tableLayoutPanel19.RowStyles.Add(new RowStyle());
-            tableLayoutPanel19.Size = new Size(1079, 431);
+            tableLayoutPanel19.Size = new Size(942, 579);
             tableLayoutPanel19.TabIndex = 3;
             // 
             // dgwExpenses
@@ -1310,7 +3252,7 @@
             dgwExpenses.RowHeadersVisible = false;
             dgwExpenses.RowHeadersWidth = 51;
             dgwExpenses.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwExpenses.Size = new Size(1063, 343);
+            dgwExpenses.Size = new Size(926, 491);
             dgwExpenses.TabIndex = 3;
             dgwExpenses.CellDoubleClick += dgwExpenses_CellDoubleClick;
             dgwExpenses.CellFormatting += dataGridView3_CellFormatting;
@@ -1324,7 +3266,7 @@
             lblPageExpensesCaption.ForeColor = Color.FromArgb(0, 37, 118, 8);
             lblPageExpensesCaption.Location = new Point(8, 5);
             lblPageExpensesCaption.Name = "lblPageExpensesCaption";
-            lblPageExpensesCaption.Size = new Size(1063, 26);
+            lblPageExpensesCaption.Size = new Size(926, 26);
             lblPageExpensesCaption.TabIndex = 0;
             lblPageExpensesCaption.Text = "Расходы";
             // 
@@ -1341,7 +3283,7 @@
             flowLayoutPanel6.Location = new Point(8, 34);
             flowLayoutPanel6.Name = "flowLayoutPanel6";
             flowLayoutPanel6.Padding = new Padding(5);
-            flowLayoutPanel6.Size = new Size(1063, 40);
+            flowLayoutPanel6.Size = new Size(926, 40);
             flowLayoutPanel6.TabIndex = 1;
             // 
             // btnAddExpenses
@@ -1421,12 +3363,12 @@
             tableLayoutPanel3.Controls.Add(label3, 0, 0);
             tableLayoutPanel3.Controls.Add(tbDetailsExpenses, 1, 0);
             tableLayoutPanel3.Dock = DockStyle.Bottom;
-            tableLayoutPanel3.Location = new Point(0, 431);
+            tableLayoutPanel3.Location = new Point(0, 579);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.Size = new Size(1079, 100);
+            tableLayoutPanel3.Size = new Size(942, 100);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // label3
@@ -1445,7 +3387,7 @@
             tbDetailsExpenses.Multiline = true;
             tbDetailsExpenses.Name = "tbDetailsExpenses";
             tbDetailsExpenses.ReadOnly = true;
-            tbDetailsExpenses.Size = new Size(963, 90);
+            tbDetailsExpenses.Size = new Size(826, 90);
             tbDetailsExpenses.TabIndex = 1;
             // 
             // tpIncome
@@ -1454,7 +3396,7 @@
             tpIncome.Controls.Add(tableLayoutPanel6);
             tpIncome.Location = new Point(4, 24);
             tpIncome.Name = "tpIncome";
-            tpIncome.Size = new Size(1079, 531);
+            tpIncome.Size = new Size(942, 679);
             tpIncome.TabIndex = 3;
             tpIncome.Text = "Доходы";
             tpIncome.UseVisualStyleBackColor = true;
@@ -1476,7 +3418,7 @@
             tableLayoutPanel20.RowStyles.Add(new RowStyle());
             tableLayoutPanel20.RowStyles.Add(new RowStyle());
             tableLayoutPanel20.RowStyles.Add(new RowStyle());
-            tableLayoutPanel20.Size = new Size(1079, 431);
+            tableLayoutPanel20.Size = new Size(942, 579);
             tableLayoutPanel20.TabIndex = 3;
             // 
             // dgwIncomes
@@ -1495,7 +3437,7 @@
             dgwIncomes.RowHeadersVisible = false;
             dgwIncomes.RowHeadersWidth = 51;
             dgwIncomes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwIncomes.Size = new Size(1063, 343);
+            dgwIncomes.Size = new Size(926, 491);
             dgwIncomes.TabIndex = 3;
             dgwIncomes.CellDoubleClick += dgwIncomes_CellDoubleClick;
             dgwIncomes.CellFormatting += dgwIncomes_CellFormatting;
@@ -1509,7 +3451,7 @@
             lblPageIncomesCaption.ForeColor = Color.FromArgb(0, 37, 118, 8);
             lblPageIncomesCaption.Location = new Point(8, 5);
             lblPageIncomesCaption.Name = "lblPageIncomesCaption";
-            lblPageIncomesCaption.Size = new Size(1063, 26);
+            lblPageIncomesCaption.Size = new Size(926, 26);
             lblPageIncomesCaption.TabIndex = 0;
             lblPageIncomesCaption.Text = "Доходы";
             // 
@@ -1525,7 +3467,7 @@
             flowLayoutPanel8.Location = new Point(8, 34);
             flowLayoutPanel8.Name = "flowLayoutPanel8";
             flowLayoutPanel8.Padding = new Padding(5);
-            flowLayoutPanel8.Size = new Size(1063, 40);
+            flowLayoutPanel8.Size = new Size(926, 40);
             flowLayoutPanel8.TabIndex = 1;
             // 
             // btnAddIncomes
@@ -1593,12 +3535,12 @@
             tableLayoutPanel6.Controls.Add(label4, 0, 0);
             tableLayoutPanel6.Controls.Add(tbDetailsIncome, 1, 0);
             tableLayoutPanel6.Dock = DockStyle.Bottom;
-            tableLayoutPanel6.Location = new Point(0, 431);
+            tableLayoutPanel6.Location = new Point(0, 579);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle());
-            tableLayoutPanel6.Size = new Size(1079, 100);
+            tableLayoutPanel6.Size = new Size(942, 100);
             tableLayoutPanel6.TabIndex = 1;
             // 
             // label4
@@ -1617,7 +3559,7 @@
             tbDetailsIncome.Multiline = true;
             tbDetailsIncome.Name = "tbDetailsIncome";
             tbDetailsIncome.ReadOnly = true;
-            tbDetailsIncome.Size = new Size(963, 90);
+            tbDetailsIncome.Size = new Size(826, 90);
             tbDetailsIncome.TabIndex = 1;
             // 
             // tpCategory
@@ -1625,7 +3567,7 @@
             tpCategory.Controls.Add(tableLayoutPanel1);
             tpCategory.Location = new Point(4, 24);
             tpCategory.Name = "tpCategory";
-            tpCategory.Size = new Size(1079, 531);
+            tpCategory.Size = new Size(942, 679);
             tpCategory.TabIndex = 4;
             tpCategory.Text = "Категории";
             tpCategory.UseVisualStyleBackColor = true;
@@ -1646,7 +3588,7 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(1079, 531);
+            tableLayoutPanel1.Size = new Size(942, 679);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel25
@@ -1657,7 +3599,7 @@
             tableLayoutPanel25.Controls.Add(label33, 0, 0);
             tableLayoutPanel25.Controls.Add(flowLayoutPanel13, 0, 1);
             tableLayoutPanel25.Dock = DockStyle.Fill;
-            tableLayoutPanel25.Location = new Point(539, 0);
+            tableLayoutPanel25.Location = new Point(471, 0);
             tableLayoutPanel25.Margin = new Padding(0);
             tableLayoutPanel25.Name = "tableLayoutPanel25";
             tableLayoutPanel25.Padding = new Padding(5);
@@ -1665,7 +3607,7 @@
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle());
-            tableLayoutPanel25.Size = new Size(540, 425);
+            tableLayoutPanel25.Size = new Size(471, 573);
             tableLayoutPanel25.TabIndex = 4;
             // 
             // dgwSubCategories
@@ -1684,7 +3626,7 @@
             dgwSubCategories.RowHeadersVisible = false;
             dgwSubCategories.RowHeadersWidth = 51;
             dgwSubCategories.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwSubCategories.Size = new Size(524, 337);
+            dgwSubCategories.Size = new Size(455, 485);
             dgwSubCategories.TabIndex = 3;
             dgwSubCategories.CellDoubleClick += dgwSubCategories_CellDoubleClick;
             dgwSubCategories.CellFormatting += dataGridViewSubCategories_CellFormatting;
@@ -1698,7 +3640,7 @@
             label33.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label33.Location = new Point(8, 5);
             label33.Name = "label33";
-            label33.Size = new Size(524, 26);
+            label33.Size = new Size(455, 26);
             label33.TabIndex = 0;
             label33.Text = "Подкатегории";
             // 
@@ -1711,7 +3653,7 @@
             flowLayoutPanel13.Location = new Point(8, 34);
             flowLayoutPanel13.Name = "flowLayoutPanel13";
             flowLayoutPanel13.Padding = new Padding(5);
-            flowLayoutPanel13.Size = new Size(524, 40);
+            flowLayoutPanel13.Size = new Size(455, 40);
             flowLayoutPanel13.TabIndex = 1;
             // 
             // btnAddSubCategories
@@ -1762,7 +3704,7 @@
             tableLayoutPanel24.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel24.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel24.RowStyles.Add(new RowStyle());
-            tableLayoutPanel24.Size = new Size(539, 425);
+            tableLayoutPanel24.Size = new Size(471, 573);
             tableLayoutPanel24.TabIndex = 3;
             // 
             // dgwCategorie
@@ -1781,7 +3723,7 @@
             dgwCategorie.RowHeadersVisible = false;
             dgwCategorie.RowHeadersWidth = 51;
             dgwCategorie.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwCategorie.Size = new Size(523, 337);
+            dgwCategorie.Size = new Size(455, 485);
             dgwCategorie.TabIndex = 3;
             dgwCategorie.CellDoubleClick += dgwCategorie_CellDoubleClick;
             dgwCategorie.SelectionChanged += dataGridViewCategories_SelectionChanged;
@@ -1794,7 +3736,7 @@
             label32.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label32.Location = new Point(8, 5);
             label32.Name = "label32";
-            label32.Size = new Size(523, 26);
+            label32.Size = new Size(455, 26);
             label32.TabIndex = 0;
             label32.Text = "Категории";
             // 
@@ -1807,7 +3749,7 @@
             flowLayoutPanel12.Location = new Point(8, 34);
             flowLayoutPanel12.Name = "flowLayoutPanel12";
             flowLayoutPanel12.Padding = new Padding(5);
-            flowLayoutPanel12.Size = new Size(523, 40);
+            flowLayoutPanel12.Size = new Size(455, 40);
             flowLayoutPanel12.TabIndex = 1;
             // 
             // btnAddCategories
@@ -1850,12 +3792,12 @@
             tableLayoutPanel17.Controls.Add(label8, 0, 0);
             tableLayoutPanel17.Controls.Add(tbDetailsSubCategory, 1, 0);
             tableLayoutPanel17.Dock = DockStyle.Fill;
-            tableLayoutPanel17.Location = new Point(542, 428);
+            tableLayoutPanel17.Location = new Point(474, 576);
             tableLayoutPanel17.Name = "tableLayoutPanel17";
             tableLayoutPanel17.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel17.RowCount = 1;
             tableLayoutPanel17.RowStyles.Add(new RowStyle());
-            tableLayoutPanel17.Size = new Size(534, 100);
+            tableLayoutPanel17.Size = new Size(465, 100);
             tableLayoutPanel17.TabIndex = 2;
             // 
             // label8
@@ -1875,7 +3817,7 @@
             tbDetailsSubCategory.Multiline = true;
             tbDetailsSubCategory.Name = "tbDetailsSubCategory";
             tbDetailsSubCategory.ReadOnly = true;
-            tbDetailsSubCategory.Size = new Size(418, 92);
+            tbDetailsSubCategory.Size = new Size(349, 92);
             tbDetailsSubCategory.TabIndex = 1;
             // 
             // tableLayoutPanel16
@@ -1886,12 +3828,12 @@
             tableLayoutPanel16.Controls.Add(label1, 0, 0);
             tableLayoutPanel16.Controls.Add(tbDetailsCategory, 1, 0);
             tableLayoutPanel16.Dock = DockStyle.Fill;
-            tableLayoutPanel16.Location = new Point(3, 428);
+            tableLayoutPanel16.Location = new Point(3, 576);
             tableLayoutPanel16.Name = "tableLayoutPanel16";
             tableLayoutPanel16.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel16.RowCount = 1;
             tableLayoutPanel16.RowStyles.Add(new RowStyle());
-            tableLayoutPanel16.Size = new Size(533, 100);
+            tableLayoutPanel16.Size = new Size(465, 100);
             tableLayoutPanel16.TabIndex = 1;
             // 
             // label1
@@ -1911,7 +3853,7 @@
             tbDetailsCategory.Multiline = true;
             tbDetailsCategory.Name = "tbDetailsCategory";
             tbDetailsCategory.ReadOnly = true;
-            tbDetailsCategory.Size = new Size(417, 92);
+            tbDetailsCategory.Size = new Size(349, 92);
             tbDetailsCategory.TabIndex = 1;
             // 
             // tpSource
@@ -1920,7 +3862,7 @@
             tpSource.Controls.Add(tableLayoutPanel9);
             tpSource.Location = new Point(4, 24);
             tpSource.Name = "tpSource";
-            tpSource.Size = new Size(1079, 531);
+            tpSource.Size = new Size(942, 679);
             tpSource.TabIndex = 5;
             tpSource.Text = "Источники";
             tpSource.UseVisualStyleBackColor = true;
@@ -1940,7 +3882,7 @@
             tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel21.RowStyles.Add(new RowStyle());
-            tableLayoutPanel21.Size = new Size(1079, 431);
+            tableLayoutPanel21.Size = new Size(942, 579);
             tableLayoutPanel21.TabIndex = 3;
             // 
             // dgwSource
@@ -1959,7 +3901,7 @@
             dgwSource.RowHeadersVisible = false;
             dgwSource.RowHeadersWidth = 51;
             dgwSource.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwSource.Size = new Size(1063, 343);
+            dgwSource.Size = new Size(926, 491);
             dgwSource.TabIndex = 3;
             dgwSource.CellDoubleClick += dgwSource_CellDoubleClick;
             dgwSource.SelectionChanged += dataGridViewSources_SelectionChanged;
@@ -1972,7 +3914,7 @@
             label22.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label22.Location = new Point(8, 5);
             label22.Name = "label22";
-            label22.Size = new Size(1063, 26);
+            label22.Size = new Size(926, 26);
             label22.TabIndex = 0;
             label22.Text = "Источники";
             // 
@@ -1985,7 +3927,7 @@
             flowLayoutPanel9.Location = new Point(8, 34);
             flowLayoutPanel9.Name = "flowLayoutPanel9";
             flowLayoutPanel9.Padding = new Padding(5);
-            flowLayoutPanel9.Size = new Size(1063, 40);
+            flowLayoutPanel9.Size = new Size(926, 40);
             flowLayoutPanel9.TabIndex = 1;
             // 
             // btnAddSources
@@ -2028,12 +3970,12 @@
             tableLayoutPanel9.Controls.Add(label5, 0, 0);
             tableLayoutPanel9.Controls.Add(tbDetailsSource, 1, 0);
             tableLayoutPanel9.Dock = DockStyle.Bottom;
-            tableLayoutPanel9.Location = new Point(0, 431);
+            tableLayoutPanel9.Location = new Point(0, 579);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
             tableLayoutPanel9.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel9.RowCount = 1;
             tableLayoutPanel9.RowStyles.Add(new RowStyle());
-            tableLayoutPanel9.Size = new Size(1079, 100);
+            tableLayoutPanel9.Size = new Size(942, 100);
             tableLayoutPanel9.TabIndex = 1;
             // 
             // label5
@@ -2052,7 +3994,7 @@
             tbDetailsSource.Multiline = true;
             tbDetailsSource.Name = "tbDetailsSource";
             tbDetailsSource.ReadOnly = true;
-            tbDetailsSource.Size = new Size(963, 90);
+            tbDetailsSource.Size = new Size(826, 90);
             tbDetailsSource.TabIndex = 1;
             // 
             // tpAdditionally
@@ -2061,7 +4003,7 @@
             tpAdditionally.Controls.Add(tableLayoutPanel11);
             tpAdditionally.Location = new Point(4, 24);
             tpAdditionally.Name = "tpAdditionally";
-            tpAdditionally.Size = new Size(1079, 531);
+            tpAdditionally.Size = new Size(942, 679);
             tpAdditionally.TabIndex = 6;
             tpAdditionally.Text = "Упоминания";
             tpAdditionally.UseVisualStyleBackColor = true;
@@ -2081,7 +4023,7 @@
             tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel22.RowStyles.Add(new RowStyle());
-            tableLayoutPanel22.Size = new Size(1079, 431);
+            tableLayoutPanel22.Size = new Size(942, 579);
             tableLayoutPanel22.TabIndex = 3;
             // 
             // dgwAdditionals
@@ -2100,7 +4042,7 @@
             dgwAdditionals.RowHeadersVisible = false;
             dgwAdditionals.RowHeadersWidth = 51;
             dgwAdditionals.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwAdditionals.Size = new Size(1063, 343);
+            dgwAdditionals.Size = new Size(926, 491);
             dgwAdditionals.TabIndex = 3;
             dgwAdditionals.CellDoubleClick += dgwAdditionals_CellDoubleClick;
             dgwAdditionals.SelectionChanged += dataGridViewAdditionals_SelectionChanged;
@@ -2113,7 +4055,7 @@
             label29.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label29.Location = new Point(8, 5);
             label29.Name = "label29";
-            label29.Size = new Size(1063, 26);
+            label29.Size = new Size(926, 26);
             label29.TabIndex = 0;
             label29.Text = "Упоминания";
             // 
@@ -2126,7 +4068,7 @@
             flowLayoutPanel10.Location = new Point(8, 34);
             flowLayoutPanel10.Name = "flowLayoutPanel10";
             flowLayoutPanel10.Padding = new Padding(5);
-            flowLayoutPanel10.Size = new Size(1063, 40);
+            flowLayoutPanel10.Size = new Size(926, 40);
             flowLayoutPanel10.TabIndex = 1;
             // 
             // btnAddAdditionals
@@ -2169,12 +4111,12 @@
             tableLayoutPanel11.Controls.Add(label6, 0, 0);
             tableLayoutPanel11.Controls.Add(tbDetailsAdditional, 1, 0);
             tableLayoutPanel11.Dock = DockStyle.Bottom;
-            tableLayoutPanel11.Location = new Point(0, 431);
+            tableLayoutPanel11.Location = new Point(0, 579);
             tableLayoutPanel11.Name = "tableLayoutPanel11";
             tableLayoutPanel11.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel11.RowCount = 1;
             tableLayoutPanel11.RowStyles.Add(new RowStyle());
-            tableLayoutPanel11.Size = new Size(1079, 100);
+            tableLayoutPanel11.Size = new Size(942, 100);
             tableLayoutPanel11.TabIndex = 1;
             // 
             // label6
@@ -2193,7 +4135,7 @@
             tbDetailsAdditional.Multiline = true;
             tbDetailsAdditional.Name = "tbDetailsAdditional";
             tbDetailsAdditional.ReadOnly = true;
-            tbDetailsAdditional.Size = new Size(963, 90);
+            tbDetailsAdditional.Size = new Size(826, 90);
             tbDetailsAdditional.TabIndex = 1;
             // 
             // tpCurrencies
@@ -2202,7 +4144,7 @@
             tpCurrencies.Controls.Add(tableLayoutPanel14);
             tpCurrencies.Location = new Point(4, 24);
             tpCurrencies.Name = "tpCurrencies";
-            tpCurrencies.Size = new Size(1079, 531);
+            tpCurrencies.Size = new Size(942, 679);
             tpCurrencies.TabIndex = 7;
             tpCurrencies.Text = "Валюты";
             tpCurrencies.UseVisualStyleBackColor = true;
@@ -2222,7 +4164,7 @@
             tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel23.RowStyles.Add(new RowStyle());
-            tableLayoutPanel23.Size = new Size(1079, 431);
+            tableLayoutPanel23.Size = new Size(942, 579);
             tableLayoutPanel23.TabIndex = 3;
             // 
             // dgwCurrencies
@@ -2241,7 +4183,7 @@
             dgwCurrencies.RowHeadersVisible = false;
             dgwCurrencies.RowHeadersWidth = 51;
             dgwCurrencies.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwCurrencies.Size = new Size(1063, 343);
+            dgwCurrencies.Size = new Size(926, 491);
             dgwCurrencies.TabIndex = 3;
             dgwCurrencies.CellDoubleClick += dgwCurrencies_CellDoubleClick;
             dgwCurrencies.SelectionChanged += dataGridViewCurrencies_SelectionChanged;
@@ -2254,7 +4196,7 @@
             label31.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label31.Location = new Point(8, 5);
             label31.Name = "label31";
-            label31.Size = new Size(1063, 26);
+            label31.Size = new Size(926, 26);
             label31.TabIndex = 0;
             label31.Text = "Валюты";
             // 
@@ -2267,7 +4209,7 @@
             flowLayoutPanel11.Location = new Point(8, 34);
             flowLayoutPanel11.Name = "flowLayoutPanel11";
             flowLayoutPanel11.Padding = new Padding(5);
-            flowLayoutPanel11.Size = new Size(1063, 40);
+            flowLayoutPanel11.Size = new Size(926, 40);
             flowLayoutPanel11.TabIndex = 1;
             // 
             // btnAddCurrency
@@ -2310,12 +4252,12 @@
             tableLayoutPanel14.Controls.Add(label7, 0, 0);
             tableLayoutPanel14.Controls.Add(tbDetailsCurrency, 1, 0);
             tableLayoutPanel14.Dock = DockStyle.Bottom;
-            tableLayoutPanel14.Location = new Point(0, 431);
+            tableLayoutPanel14.Location = new Point(0, 579);
             tableLayoutPanel14.Name = "tableLayoutPanel14";
             tableLayoutPanel14.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel14.RowCount = 1;
             tableLayoutPanel14.RowStyles.Add(new RowStyle());
-            tableLayoutPanel14.Size = new Size(1079, 100);
+            tableLayoutPanel14.Size = new Size(942, 100);
             tableLayoutPanel14.TabIndex = 1;
             // 
             // label7
@@ -2334,7 +4276,7 @@
             tbDetailsCurrency.Multiline = true;
             tbDetailsCurrency.Name = "tbDetailsCurrency";
             tbDetailsCurrency.ReadOnly = true;
-            tbDetailsCurrency.Size = new Size(963, 90);
+            tbDetailsCurrency.Size = new Size(826, 90);
             tbDetailsCurrency.TabIndex = 1;
             // 
             // tpReport
@@ -2342,7 +4284,7 @@
             tpReport.Controls.Add(tableLayoutPanel26);
             tpReport.Location = new Point(4, 24);
             tpReport.Name = "tpReport";
-            tpReport.Size = new Size(1079, 531);
+            tpReport.Size = new Size(942, 679);
             tpReport.TabIndex = 8;
             tpReport.Text = "Отчеты";
             tpReport.UseVisualStyleBackColor = true;
@@ -2374,7 +4316,7 @@
             tableLayoutPanel26.RowStyles.Add(new RowStyle());
             tableLayoutPanel26.RowStyles.Add(new RowStyle());
             tableLayoutPanel26.RowStyles.Add(new RowStyle());
-            tableLayoutPanel26.Size = new Size(1079, 531);
+            tableLayoutPanel26.Size = new Size(942, 679);
             tableLayoutPanel26.TabIndex = 4;
             // 
             // plotView1
@@ -2383,7 +4325,7 @@
             plotView1.Location = new Point(8, 267);
             plotView1.Name = "plotView1";
             plotView1.PanCursor = Cursors.Hand;
-            plotView1.Size = new Size(1063, 260);
+            plotView1.Size = new Size(926, 404);
             plotView1.TabIndex = 18;
             plotView1.Text = "plotView1";
             plotView1.ZoomHorizontalCursor = Cursors.SizeWE;
@@ -2398,7 +4340,7 @@
             label34.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label34.Location = new Point(8, 5);
             label34.Name = "label34";
-            label34.Size = new Size(1063, 26);
+            label34.Size = new Size(926, 26);
             label34.TabIndex = 0;
             label34.Text = "Отчеты";
             // 
@@ -2411,7 +4353,7 @@
             filterPanel.Dock = DockStyle.Fill;
             filterPanel.Location = new Point(8, 69);
             filterPanel.Name = "filterPanel";
-            filterPanel.Size = new Size(1063, 27);
+            filterPanel.Size = new Size(926, 27);
             filterPanel.TabIndex = 9;
             // 
             // label35
@@ -2456,7 +4398,7 @@
             pnlFilters.Dock = DockStyle.Fill;
             pnlFilters.Location = new Point(8, 102);
             pnlFilters.Name = "pnlFilters";
-            pnlFilters.Size = new Size(1063, 27);
+            pnlFilters.Size = new Size(926, 27);
             pnlFilters.TabIndex = 10;
             pnlFilters.Visible = false;
             // 
@@ -2475,7 +4417,7 @@
             flPanel3.Dock = DockStyle.Fill;
             flPanel3.Location = new Point(8, 135);
             flPanel3.Name = "flPanel3";
-            flPanel3.Size = new Size(1063, 27);
+            flPanel3.Size = new Size(926, 27);
             flPanel3.TabIndex = 11;
             flPanel3.Visible = false;
             // 
@@ -2494,7 +4436,7 @@
             flPanel4.Dock = DockStyle.Fill;
             flPanel4.Location = new Point(8, 168);
             flPanel4.Name = "flPanel4";
-            flPanel4.Size = new Size(1063, 27);
+            flPanel4.Size = new Size(926, 27);
             flPanel4.TabIndex = 12;
             flPanel4.Visible = false;
             // 
@@ -2513,7 +4455,7 @@
             flPanel5.Dock = DockStyle.Fill;
             flPanel5.Location = new Point(8, 201);
             flPanel5.Name = "flPanel5";
-            flPanel5.Size = new Size(1063, 27);
+            flPanel5.Size = new Size(926, 27);
             flPanel5.TabIndex = 13;
             flPanel5.Visible = false;
             // 
@@ -2532,7 +4474,7 @@
             flPanel6.Dock = DockStyle.Fill;
             flPanel6.Location = new Point(8, 234);
             flPanel6.Name = "flPanel6";
-            flPanel6.Size = new Size(1063, 27);
+            flPanel6.Size = new Size(926, 27);
             flPanel6.TabIndex = 14;
             flPanel6.Visible = false;
             // 
@@ -2554,7 +4496,7 @@
             flowLayoutPanel14.Dock = DockStyle.Fill;
             flowLayoutPanel14.Location = new Point(8, 34);
             flowLayoutPanel14.Name = "flowLayoutPanel14";
-            flowLayoutPanel14.Size = new Size(1063, 29);
+            flowLayoutPanel14.Size = new Size(926, 29);
             flowLayoutPanel14.TabIndex = 15;
             // 
             // cmbReports
@@ -2589,7 +4531,7 @@
             tpSettings.Controls.Add(tableLayoutPanel29);
             tpSettings.Location = new Point(4, 24);
             tpSettings.Name = "tpSettings";
-            tpSettings.Size = new Size(1079, 531);
+            tpSettings.Size = new Size(942, 679);
             tpSettings.TabIndex = 9;
             tpSettings.Text = "Настройки";
             tpSettings.UseVisualStyleBackColor = true;
@@ -2609,7 +4551,7 @@
             tableLayoutPanel29.RowStyles.Add(new RowStyle());
             tableLayoutPanel29.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel29.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel29.Size = new Size(1079, 531);
+            tableLayoutPanel29.Size = new Size(942, 679);
             tableLayoutPanel29.TabIndex = 6;
             // 
             // label11
@@ -2620,46 +4562,98 @@
             label11.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label11.Location = new Point(8, 5);
             label11.Name = "label11";
-            label11.Size = new Size(1063, 26);
+            label11.Size = new Size(926, 26);
             label11.TabIndex = 0;
             label11.Text = "Настройки";
             // 
             // panel1
             // 
-            panel1.Controls.Add(label27);
-            panel1.Controls.Add(checkBox1);
+            panel1.Controls.Add(tabControl1);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(8, 34);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1063, 489);
+            panel1.Size = new Size(926, 637);
             panel1.TabIndex = 1;
             // 
-            // label27
+            // tabControl1
             // 
-            label27.AutoSize = true;
-            label27.Location = new Point(23, 19);
-            label27.Name = "label27";
-            label27.Size = new Size(352, 15);
-            label27.TabIndex = 1;
-            label27.Text = "Пока настроек нет, запланированно под будушие обновления";
+            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Dock = DockStyle.Fill;
+            tabControl1.Location = new Point(0, 0);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(926, 637);
+            tabControl1.TabIndex = 2;
+            // 
+            // tabPage1
+            // 
+            tabPage1.Controls.Add(checkBox1);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(918, 609);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Общие";
+            tabPage1.UseVisualStyleBackColor = true;
             // 
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(23, 47);
+            checkBox1.Location = new Point(17, 18);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(200, 19);
-            checkBox1.TabIndex = 0;
+            checkBox1.TabIndex = 1;
             checkBox1.Text = "Показывать поле комментарий";
             checkBox1.UseVisualStyleBackColor = true;
-            checkBox1.CheckedChanged += checkBoxShowPanel_CheckedChanged;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Controls.Add(checkedListBox1);
+            tabPage2.Controls.Add(btnDown);
+            tabPage2.Controls.Add(btnUp);
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(918, 609);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "Главная страница";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // checkedListBox1
+            // 
+            checkedListBox1.Dock = DockStyle.Left;
+            checkedListBox1.FormattingEnabled = true;
+            checkedListBox1.Location = new Point(3, 3);
+            checkedListBox1.Name = "checkedListBox1";
+            checkedListBox1.Size = new Size(199, 603);
+            checkedListBox1.TabIndex = 3;
+            checkedListBox1.ItemCheck += checkedListBox1_ItemCheck;
+            // 
+            // btnDown
+            // 
+            btnDown.Location = new Point(224, 35);
+            btnDown.Name = "btnDown";
+            btnDown.Size = new Size(75, 23);
+            btnDown.TabIndex = 2;
+            btnDown.Text = "Ниже";
+            btnDown.UseVisualStyleBackColor = true;
+            // 
+            // btnUp
+            // 
+            btnUp.Location = new Point(224, 6);
+            btnUp.Name = "btnUp";
+            btnUp.Size = new Size(75, 23);
+            btnUp.TabIndex = 1;
+            btnUp.Text = "Выше";
+            btnUp.UseVisualStyleBackColor = true;
             // 
             // tpAbout
             // 
             tpAbout.Controls.Add(tableLayoutPanel27);
             tpAbout.Location = new Point(4, 24);
             tpAbout.Name = "tpAbout";
-            tpAbout.Size = new Size(1079, 531);
+            tpAbout.Size = new Size(942, 679);
             tpAbout.TabIndex = 10;
             tpAbout.Text = "О программе";
             tpAbout.UseVisualStyleBackColor = true;
@@ -2682,7 +4676,7 @@
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel27.Size = new Size(1079, 531);
+            tableLayoutPanel27.Size = new Size(942, 679);
             tableLayoutPanel27.TabIndex = 5;
             // 
             // tbVersionHistory
@@ -2696,7 +4690,7 @@
             tbVersionHistory.Name = "tbVersionHistory";
             tbVersionHistory.ReadOnly = true;
             tbVersionHistory.ScrollBars = ScrollBars.Both;
-            tbVersionHistory.Size = new Size(1059, 339);
+            tbVersionHistory.Size = new Size(922, 487);
             tbVersionHistory.TabIndex = 6;
             tbVersionHistory.Text = resources.GetString("tbVersionHistory.Text");
             // 
@@ -2708,7 +4702,7 @@
             label10.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label10.Location = new Point(8, 5);
             label10.Name = "label10";
-            label10.Size = new Size(1063, 26);
+            label10.Size = new Size(926, 26);
             label10.TabIndex = 0;
             label10.Text = "О программе";
             // 
@@ -2725,7 +4719,7 @@
             tableLayoutPanel28.Name = "tableLayoutPanel28";
             tableLayoutPanel28.RowCount = 1;
             tableLayoutPanel28.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel28.Size = new Size(1069, 100);
+            tableLayoutPanel28.Size = new Size(932, 100);
             tableLayoutPanel28.TabIndex = 4;
             // 
             // tbAbout
@@ -2738,7 +4732,7 @@
             tbAbout.Name = "tbAbout";
             tbAbout.ReadOnly = true;
             tbAbout.ScrollBars = ScrollBars.Both;
-            tbAbout.Size = new Size(965, 90);
+            tbAbout.Size = new Size(828, 90);
             tbAbout.TabIndex = 6;
             tbAbout.Text = resources.GetString("tbAbout.Text");
             // 
@@ -2759,16 +4753,16 @@
             flowLayoutPanel18.Controls.Add(button2);
             flowLayoutPanel18.Controls.Add(button4);
             flowLayoutPanel18.Dock = DockStyle.Fill;
-            flowLayoutPanel18.Location = new Point(8, 483);
+            flowLayoutPanel18.Location = new Point(8, 631);
             flowLayoutPanel18.Name = "flowLayoutPanel18";
             flowLayoutPanel18.Padding = new Padding(5);
             flowLayoutPanel18.RightToLeft = RightToLeft.Yes;
-            flowLayoutPanel18.Size = new Size(1063, 40);
+            flowLayoutPanel18.Size = new Size(926, 40);
             flowLayoutPanel18.TabIndex = 7;
             // 
             // button2
             // 
-            button2.Location = new Point(900, 8);
+            button2.Location = new Point(763, 8);
             button2.Name = "button2";
             button2.Size = new Size(150, 23);
             button2.TabIndex = 0;
@@ -2778,7 +4772,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(744, 8);
+            button4.Location = new Point(607, 8);
             button4.Name = "button4";
             button4.Size = new Size(150, 23);
             button4.TabIndex = 1;
@@ -2792,7 +4786,7 @@
             tpDebtGiven.Controls.Add(tableLayoutPanel31);
             tpDebtGiven.Location = new Point(4, 24);
             tpDebtGiven.Name = "tpDebtGiven";
-            tpDebtGiven.Size = new Size(1079, 531);
+            tpDebtGiven.Size = new Size(942, 679);
             tpDebtGiven.TabIndex = 11;
             tpDebtGiven.Text = "Долги мне";
             tpDebtGiven.UseVisualStyleBackColor = true;
@@ -2812,7 +4806,7 @@
             tableLayoutPanel33.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel33.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel33.RowStyles.Add(new RowStyle());
-            tableLayoutPanel33.Size = new Size(1079, 431);
+            tableLayoutPanel33.Size = new Size(942, 579);
             tableLayoutPanel33.TabIndex = 4;
             // 
             // dgwGivenDebts
@@ -2831,7 +4825,7 @@
             dgwGivenDebts.RowHeadersVisible = false;
             dgwGivenDebts.RowHeadersWidth = 51;
             dgwGivenDebts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwGivenDebts.Size = new Size(1063, 343);
+            dgwGivenDebts.Size = new Size(926, 491);
             dgwGivenDebts.TabIndex = 3;
             dgwGivenDebts.CellDoubleClick += dgwGivenDebts_CellDoubleClick;
             dgwGivenDebts.CellFormatting += dgwGivenDebts_CellFormatting;
@@ -2845,7 +4839,7 @@
             lblGivenDebtsTotal.ForeColor = Color.FromArgb(0, 37, 118, 8);
             lblGivenDebtsTotal.Location = new Point(8, 5);
             lblGivenDebtsTotal.Name = "lblGivenDebtsTotal";
-            lblGivenDebtsTotal.Size = new Size(1063, 26);
+            lblGivenDebtsTotal.Size = new Size(926, 26);
             lblGivenDebtsTotal.TabIndex = 0;
             lblGivenDebtsTotal.Text = "Долги выданные";
             // 
@@ -2861,7 +4855,7 @@
             flowLayoutPanel15.Location = new Point(8, 34);
             flowLayoutPanel15.Name = "flowLayoutPanel15";
             flowLayoutPanel15.Padding = new Padding(5);
-            flowLayoutPanel15.Size = new Size(1063, 40);
+            flowLayoutPanel15.Size = new Size(926, 40);
             flowLayoutPanel15.TabIndex = 1;
             // 
             // btnAddGivenDebt
@@ -2932,12 +4926,12 @@
             tableLayoutPanel31.Controls.Add(label15, 0, 0);
             tableLayoutPanel31.Controls.Add(tbDetailsGivenDebts, 1, 0);
             tableLayoutPanel31.Dock = DockStyle.Bottom;
-            tableLayoutPanel31.Location = new Point(0, 431);
+            tableLayoutPanel31.Location = new Point(0, 579);
             tableLayoutPanel31.Name = "tableLayoutPanel31";
             tableLayoutPanel31.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel31.RowCount = 1;
             tableLayoutPanel31.RowStyles.Add(new RowStyle());
-            tableLayoutPanel31.Size = new Size(1079, 100);
+            tableLayoutPanel31.Size = new Size(942, 100);
             tableLayoutPanel31.TabIndex = 2;
             // 
             // label15
@@ -2956,7 +4950,7 @@
             tbDetailsGivenDebts.Multiline = true;
             tbDetailsGivenDebts.Name = "tbDetailsGivenDebts";
             tbDetailsGivenDebts.ReadOnly = true;
-            tbDetailsGivenDebts.Size = new Size(963, 90);
+            tbDetailsGivenDebts.Size = new Size(826, 90);
             tbDetailsGivenDebts.TabIndex = 1;
             // 
             // tpDebtReceived
@@ -2965,7 +4959,7 @@
             tpDebtReceived.Controls.Add(tableLayoutPanel32);
             tpDebtReceived.Location = new Point(4, 24);
             tpDebtReceived.Name = "tpDebtReceived";
-            tpDebtReceived.Size = new Size(1079, 531);
+            tpDebtReceived.Size = new Size(942, 679);
             tpDebtReceived.TabIndex = 12;
             tpDebtReceived.Text = "Долги мои";
             tpDebtReceived.UseVisualStyleBackColor = true;
@@ -2985,7 +4979,7 @@
             tableLayoutPanel34.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel34.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel34.RowStyles.Add(new RowStyle());
-            tableLayoutPanel34.Size = new Size(1079, 431);
+            tableLayoutPanel34.Size = new Size(942, 579);
             tableLayoutPanel34.TabIndex = 4;
             // 
             // dgwReceivedDebts
@@ -3004,7 +4998,7 @@
             dgwReceivedDebts.RowHeadersVisible = false;
             dgwReceivedDebts.RowHeadersWidth = 51;
             dgwReceivedDebts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwReceivedDebts.Size = new Size(1063, 343);
+            dgwReceivedDebts.Size = new Size(926, 491);
             dgwReceivedDebts.TabIndex = 3;
             dgwReceivedDebts.CellDoubleClick += dgwReceivedDebts_CellDoubleClick;
             dgwReceivedDebts.CellFormatting += dgwReceivedDebts_CellFormatting;
@@ -3018,7 +5012,7 @@
             lblReceivedDebtsTotal.ForeColor = Color.FromArgb(0, 37, 118, 8);
             lblReceivedDebtsTotal.Location = new Point(8, 5);
             lblReceivedDebtsTotal.Name = "lblReceivedDebtsTotal";
-            lblReceivedDebtsTotal.Size = new Size(1063, 26);
+            lblReceivedDebtsTotal.Size = new Size(926, 26);
             lblReceivedDebtsTotal.TabIndex = 0;
             lblReceivedDebtsTotal.Text = "Долги полученные";
             // 
@@ -3034,7 +5028,7 @@
             flowLayoutPanel16.Location = new Point(8, 34);
             flowLayoutPanel16.Name = "flowLayoutPanel16";
             flowLayoutPanel16.Padding = new Padding(5);
-            flowLayoutPanel16.Size = new Size(1063, 40);
+            flowLayoutPanel16.Size = new Size(926, 40);
             flowLayoutPanel16.TabIndex = 1;
             // 
             // btnAddReceivedDebt
@@ -3105,12 +5099,12 @@
             tableLayoutPanel32.Controls.Add(label17, 0, 0);
             tableLayoutPanel32.Controls.Add(tbDetailsReceivedDebts, 1, 0);
             tableLayoutPanel32.Dock = DockStyle.Bottom;
-            tableLayoutPanel32.Location = new Point(0, 431);
+            tableLayoutPanel32.Location = new Point(0, 579);
             tableLayoutPanel32.Name = "tableLayoutPanel32";
             tableLayoutPanel32.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel32.RowCount = 1;
             tableLayoutPanel32.RowStyles.Add(new RowStyle());
-            tableLayoutPanel32.Size = new Size(1079, 100);
+            tableLayoutPanel32.Size = new Size(942, 100);
             tableLayoutPanel32.TabIndex = 2;
             // 
             // label17
@@ -3129,7 +5123,7 @@
             tbDetailsReceivedDebts.Multiline = true;
             tbDetailsReceivedDebts.Name = "tbDetailsReceivedDebts";
             tbDetailsReceivedDebts.ReadOnly = true;
-            tbDetailsReceivedDebts.Size = new Size(963, 90);
+            tbDetailsReceivedDebts.Size = new Size(826, 90);
             tbDetailsReceivedDebts.TabIndex = 1;
             // 
             // tbCounterparties
@@ -3138,7 +5132,7 @@
             tbCounterparties.Controls.Add(tableLayoutPanel35);
             tbCounterparties.Location = new Point(4, 24);
             tbCounterparties.Name = "tbCounterparties";
-            tbCounterparties.Size = new Size(1079, 531);
+            tbCounterparties.Size = new Size(942, 679);
             tbCounterparties.TabIndex = 13;
             tbCounterparties.Text = "Контрагенты";
             tbCounterparties.UseVisualStyleBackColor = true;
@@ -3158,7 +5152,7 @@
             tableLayoutPanel36.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel36.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel36.RowStyles.Add(new RowStyle());
-            tableLayoutPanel36.Size = new Size(1079, 431);
+            tableLayoutPanel36.Size = new Size(942, 579);
             tableLayoutPanel36.TabIndex = 4;
             // 
             // dgwCounterparties
@@ -3177,7 +5171,7 @@
             dgwCounterparties.RowHeadersVisible = false;
             dgwCounterparties.RowHeadersWidth = 51;
             dgwCounterparties.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwCounterparties.Size = new Size(1063, 343);
+            dgwCounterparties.Size = new Size(926, 491);
             dgwCounterparties.TabIndex = 3;
             dgwCounterparties.CellDoubleClick += dgwCounterparties_CellDoubleClick;
             dgwCounterparties.SelectionChanged += dgwCounterparties_SelectionChanged;
@@ -3190,7 +5184,7 @@
             label24.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label24.Location = new Point(8, 5);
             label24.Name = "label24";
-            label24.Size = new Size(1063, 26);
+            label24.Size = new Size(926, 26);
             label24.TabIndex = 0;
             label24.Text = "Контрагенты";
             // 
@@ -3203,7 +5197,7 @@
             flowLayoutPanel17.Location = new Point(8, 34);
             flowLayoutPanel17.Name = "flowLayoutPanel17";
             flowLayoutPanel17.Padding = new Padding(5);
-            flowLayoutPanel17.Size = new Size(1063, 40);
+            flowLayoutPanel17.Size = new Size(926, 40);
             flowLayoutPanel17.TabIndex = 1;
             // 
             // btnAddCounterparties
@@ -3246,12 +5240,12 @@
             tableLayoutPanel35.Controls.Add(label20, 0, 0);
             tableLayoutPanel35.Controls.Add(tbDetailsCounterparties, 1, 0);
             tableLayoutPanel35.Dock = DockStyle.Bottom;
-            tableLayoutPanel35.Location = new Point(0, 431);
+            tableLayoutPanel35.Location = new Point(0, 579);
             tableLayoutPanel35.Name = "tableLayoutPanel35";
             tableLayoutPanel35.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel35.RowCount = 1;
             tableLayoutPanel35.RowStyles.Add(new RowStyle());
-            tableLayoutPanel35.Size = new Size(1079, 100);
+            tableLayoutPanel35.Size = new Size(942, 100);
             tableLayoutPanel35.TabIndex = 2;
             // 
             // label20
@@ -3270,7 +5264,7 @@
             tbDetailsCounterparties.Multiline = true;
             tbDetailsCounterparties.Name = "tbDetailsCounterparties";
             tbDetailsCounterparties.ReadOnly = true;
-            tbDetailsCounterparties.Size = new Size(963, 90);
+            tbDetailsCounterparties.Size = new Size(826, 90);
             tbDetailsCounterparties.TabIndex = 1;
             // 
             // tbGoals
@@ -3279,7 +5273,7 @@
             tbGoals.Controls.Add(tableLayoutPanel37);
             tbGoals.Location = new Point(4, 24);
             tbGoals.Name = "tbGoals";
-            tbGoals.Size = new Size(1079, 531);
+            tbGoals.Size = new Size(942, 679);
             tbGoals.TabIndex = 14;
             tbGoals.Text = "Цели";
             tbGoals.UseVisualStyleBackColor = true;
@@ -3299,7 +5293,7 @@
             tableLayoutPanel38.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel38.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel38.RowStyles.Add(new RowStyle());
-            tableLayoutPanel38.Size = new Size(1079, 431);
+            tableLayoutPanel38.Size = new Size(942, 579);
             tableLayoutPanel38.TabIndex = 5;
             // 
             // dgwGoals
@@ -3318,7 +5312,7 @@
             dgwGoals.RowHeadersVisible = false;
             dgwGoals.RowHeadersWidth = 51;
             dgwGoals.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwGoals.Size = new Size(1063, 343);
+            dgwGoals.Size = new Size(926, 491);
             dgwGoals.TabIndex = 3;
             dgwGoals.CellDoubleClick += dgvGoals_CellDoubleClick;
             dgwGoals.CellFormatting += dgvGoals_CellFormatting;
@@ -3332,7 +5326,7 @@
             label26.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label26.Location = new Point(8, 5);
             label26.Name = "label26";
-            label26.Size = new Size(1063, 26);
+            label26.Size = new Size(926, 26);
             label26.TabIndex = 0;
             label26.Text = "Цели";
             // 
@@ -3349,7 +5343,7 @@
             flowLayoutPanel1.Location = new Point(8, 34);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(5);
-            flowLayoutPanel1.Size = new Size(1063, 40);
+            flowLayoutPanel1.Size = new Size(926, 40);
             flowLayoutPanel1.TabIndex = 1;
             // 
             // btnAddGoal
@@ -3429,12 +5423,12 @@
             tableLayoutPanel37.Controls.Add(label25, 0, 0);
             tableLayoutPanel37.Controls.Add(tbDetailsGoal, 1, 0);
             tableLayoutPanel37.Dock = DockStyle.Bottom;
-            tableLayoutPanel37.Location = new Point(0, 431);
+            tableLayoutPanel37.Location = new Point(0, 579);
             tableLayoutPanel37.Name = "tableLayoutPanel37";
             tableLayoutPanel37.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel37.RowCount = 1;
             tableLayoutPanel37.RowStyles.Add(new RowStyle());
-            tableLayoutPanel37.Size = new Size(1079, 100);
+            tableLayoutPanel37.Size = new Size(942, 100);
             tableLayoutPanel37.TabIndex = 3;
             // 
             // label25
@@ -3453,7 +5447,7 @@
             tbDetailsGoal.Multiline = true;
             tbDetailsGoal.Name = "tbDetailsGoal";
             tbDetailsGoal.ReadOnly = true;
-            tbDetailsGoal.Size = new Size(963, 90);
+            tbDetailsGoal.Size = new Size(826, 90);
             tbDetailsGoal.TabIndex = 1;
             // 
             // tbMeasurements
@@ -3462,7 +5456,7 @@
             tbMeasurements.Controls.Add(tableLayoutPanel39);
             tbMeasurements.Location = new Point(4, 24);
             tbMeasurements.Name = "tbMeasurements";
-            tbMeasurements.Size = new Size(1079, 531);
+            tbMeasurements.Size = new Size(942, 679);
             tbMeasurements.TabIndex = 15;
             tbMeasurements.Text = "Единицы";
             tbMeasurements.UseVisualStyleBackColor = true;
@@ -3482,7 +5476,7 @@
             tableLayoutPanel40.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel40.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
             tableLayoutPanel40.RowStyles.Add(new RowStyle());
-            tableLayoutPanel40.Size = new Size(1079, 431);
+            tableLayoutPanel40.Size = new Size(942, 579);
             tableLayoutPanel40.TabIndex = 4;
             // 
             // dgwMeasurement
@@ -3501,7 +5495,7 @@
             dgwMeasurement.RowHeadersVisible = false;
             dgwMeasurement.RowHeadersWidth = 51;
             dgwMeasurement.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgwMeasurement.Size = new Size(1063, 343);
+            dgwMeasurement.Size = new Size(926, 491);
             dgwMeasurement.TabIndex = 3;
             dgwMeasurement.CellDoubleClick += dgwMeasurementUnits_CellDoubleClick;
             dgwMeasurement.SelectionChanged += dgwMeasurementUnits_SelectionChanged;
@@ -3514,7 +5508,7 @@
             label42.ForeColor = Color.FromArgb(0, 37, 118, 8);
             label42.Location = new Point(8, 5);
             label42.Name = "label42";
-            label42.Size = new Size(1063, 26);
+            label42.Size = new Size(926, 26);
             label42.TabIndex = 0;
             label42.Text = "Единицы";
             // 
@@ -3527,7 +5521,7 @@
             flowLayoutPanel19.Location = new Point(8, 34);
             flowLayoutPanel19.Name = "flowLayoutPanel19";
             flowLayoutPanel19.Padding = new Padding(5);
-            flowLayoutPanel19.Size = new Size(1063, 40);
+            flowLayoutPanel19.Size = new Size(926, 40);
             flowLayoutPanel19.TabIndex = 1;
             // 
             // btnAddMeasurement
@@ -3570,12 +5564,12 @@
             tableLayoutPanel39.Controls.Add(label41, 0, 0);
             tableLayoutPanel39.Controls.Add(tbDetailsMeasurement, 1, 0);
             tableLayoutPanel39.Dock = DockStyle.Bottom;
-            tableLayoutPanel39.Location = new Point(0, 431);
+            tableLayoutPanel39.Location = new Point(0, 579);
             tableLayoutPanel39.Name = "tableLayoutPanel39";
             tableLayoutPanel39.Padding = new Padding(5, 5, 5, 0);
             tableLayoutPanel39.RowCount = 1;
             tableLayoutPanel39.RowStyles.Add(new RowStyle());
-            tableLayoutPanel39.Size = new Size(1079, 100);
+            tableLayoutPanel39.Size = new Size(942, 100);
             tableLayoutPanel39.TabIndex = 2;
             // 
             // label41
@@ -3594,14 +5588,14 @@
             tbDetailsMeasurement.Multiline = true;
             tbDetailsMeasurement.Name = "tbDetailsMeasurement";
             tbDetailsMeasurement.ReadOnly = true;
-            tbDetailsMeasurement.Size = new Size(963, 90);
+            tbDetailsMeasurement.Size = new Size(826, 90);
             tbDetailsMeasurement.TabIndex = 1;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1253, 559);
+            ClientSize = new Size(1104, 707);
             Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(3, 2, 3, 2);
@@ -3641,6 +5635,79 @@
             tpStart.ResumeLayout(false);
             tableLayoutPanel30.ResumeLayout(false);
             tableLayoutPanel30.PerformLayout();
+            flowLayoutPanel20.ResumeLayout(false);
+            accountPanel.ResumeLayout(false);
+            tableLayoutPanel41.ResumeLayout(false);
+            tableLayoutPanel41.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox12).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox13).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox14).EndInit();
+            flowLayoutPanel21.ResumeLayout(false);
+            flowLayoutPanel21.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            additionalPanel.ResumeLayout(false);
+            tableLayoutPanel42.ResumeLayout(false);
+            tableLayoutPanel42.PerformLayout();
+            flowLayoutPanel22.ResumeLayout(false);
+            flowLayoutPanel22.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+            budgetPanel.ResumeLayout(false);
+            tableLayoutPanel43.ResumeLayout(false);
+            tableLayoutPanel43.PerformLayout();
+            flowLayoutPanel23.ResumeLayout(false);
+            flowLayoutPanel23.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+            profitPanel.ResumeLayout(false);
+            tableLayoutPanel44.ResumeLayout(false);
+            tableLayoutPanel44.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox15).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox16).EndInit();
+            flowLayoutPanel24.ResumeLayout(false);
+            flowLayoutPanel24.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
+            expensePanel.ResumeLayout(false);
+            tableLayoutPanel45.ResumeLayout(false);
+            tableLayoutPanel45.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox17).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox18).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox19).EndInit();
+            flowLayoutPanel25.ResumeLayout(false);
+            flowLayoutPanel25.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
+            incomePanel.ResumeLayout(false);
+            tableLayoutPanel46.ResumeLayout(false);
+            tableLayoutPanel46.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox20).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox21).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox22).EndInit();
+            flowLayoutPanel26.ResumeLayout(false);
+            flowLayoutPanel26.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox7).EndInit();
+            goalPanel.ResumeLayout(false);
+            tableLayoutPanel47.ResumeLayout(false);
+            tableLayoutPanel47.PerformLayout();
+            flowLayoutPanel27.ResumeLayout(false);
+            flowLayoutPanel27.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox8).EndInit();
+            debtPanel.ResumeLayout(false);
+            tableLayoutPanel48.ResumeLayout(false);
+            tableLayoutPanel48.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox27).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox28).EndInit();
+            flowLayoutPanel28.ResumeLayout(false);
+            flowLayoutPanel28.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox9).EndInit();
+            progressPanel.ResumeLayout(false);
+            tableLayoutPanel49.ResumeLayout(false);
+            tableLayoutPanel49.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox23).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox24).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox25).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox26).EndInit();
+            flowLayoutPanel29.ResumeLayout(false);
+            flowLayoutPanel29.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).EndInit();
             tpAccounts.ResumeLayout(false);
             tableLayoutPanel18.ResumeLayout(false);
             tableLayoutPanel18.PerformLayout();
@@ -3716,7 +5783,10 @@
             tableLayoutPanel29.ResumeLayout(false);
             tableLayoutPanel29.PerformLayout();
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
+            tabPage2.ResumeLayout(false);
             tpAbout.ResumeLayout(false);
             tableLayoutPanel27.ResumeLayout(false);
             tableLayoutPanel27.PerformLayout();
@@ -3929,7 +5999,6 @@
         private PictureBox pictureBox1;
         private ContextMenuStrip contextMenu;
         private Panel panel1;
-        private CheckBox checkBox1;
         private Label label35;
         private Label label36;
         private Label label37;
@@ -3997,7 +6066,6 @@
         private TextBox tbDetailsGoal;
         private FlowLayoutPanel flowLayoutPanel18;
         private Button button2;
-        private Label label27;
         private TableLayoutPanel tableLayoutPanel16;
         private Label label1;
         private TextBox tbDetailsCategory;
@@ -4013,5 +6081,154 @@
         private TableLayoutPanel tableLayoutPanel39;
         private Label label41;
         private TextBox tbDetailsMeasurement;
+        private FlowLayoutPanel flowLayoutPanel20;
+        private Panel accountPanel;
+        private FlowLayoutPanel flowLayoutPanel21;
+        private TableLayoutPanel tableLayoutPanel41;
+        private PictureBox pictureBox2;
+        private Label lblTotalBalance;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private CheckBox checkBox1;
+        private TabPage tabPage2;
+        private Button btnDown;
+        private Button btnUp;
+        private CheckedListBox checkedListBox1;
+        private Panel additionalPanel;
+        private TableLayoutPanel tableLayoutPanel42;
+        private FlowLayoutPanel flowLayoutPanel22;
+        private PictureBox pictureBox3;
+        private Label label27;
+        private Panel budgetPanel;
+        private TableLayoutPanel tableLayoutPanel43;
+        private FlowLayoutPanel flowLayoutPanel23;
+        private PictureBox pictureBox4;
+        private Label label44;
+        private Panel profitPanel;
+        private TableLayoutPanel tableLayoutPanel44;
+        private FlowLayoutPanel flowLayoutPanel24;
+        private PictureBox pictureBox5;
+        private Label label45;
+        private Panel expensePanel;
+        private TableLayoutPanel tableLayoutPanel45;
+        private FlowLayoutPanel flowLayoutPanel25;
+        private PictureBox pictureBox6;
+        private Label label46;
+        private Panel incomePanel;
+        private TableLayoutPanel tableLayoutPanel46;
+        private FlowLayoutPanel flowLayoutPanel26;
+        private PictureBox pictureBox7;
+        private Label label47;
+        private Panel goalPanel;
+        private TableLayoutPanel tableLayoutPanel47;
+        private FlowLayoutPanel flowLayoutPanel27;
+        private PictureBox pictureBox8;
+        private Label label48;
+        private Panel debtPanel;
+        private TableLayoutPanel tableLayoutPanel48;
+        private FlowLayoutPanel flowLayoutPanel28;
+        private PictureBox pictureBox9;
+        private Label label49;
+        private Panel progressPanel;
+        private TableLayoutPanel tableLayoutPanel49;
+        private FlowLayoutPanel flowLayoutPanel29;
+        private PictureBox pictureBox10;
+        private Label label50;
+        private Label label51;
+        private Label label52;
+        private Label lblYesterdayIncome;
+        private Label lblYesterdayExpense;
+        private Label lblTodayIncome;
+        private Label lblTodayExpense;
+        private Label lblAdditional1Name;
+        private Label lblAdditional2Name;
+        private Label lblAdditional3Name;
+        private Label lblAdditional1Value;
+        private Label lblAdditional2Value;
+        private Label lblAdditional3Value;
+        private Label label67;
+        private Label label68;
+        private Label label69;
+        private Label label70;
+        private Label label71;
+        private Label label72;
+        private Label lblBudgetTopCategory;
+        private Label lblBudgetLimit;
+        private Label lblBudgetSpent;
+        private Label lblBudgetRemaining;
+        private Label lblBudgetProgress;
+        private Label label78;
+        private Label lblTotalIncome;
+        private Label label80;
+        private Label lblIncomeChange;
+        private Label label82;
+        private Label lblTotalExpense;
+        private Label label84;
+        private Label lblExpenseChange;
+        private Label label86;
+        private Label label87;
+        private Label lblBestDay;
+        private Label lblWorstDay;
+        private Label lblExpense1Name;
+        private Label lblExpense2Name;
+        private Label lblExpense3Name;
+        private Label lblExpense1Value;
+        private Label lblExpense2Value;
+        private Label lblExpense3Value;
+        private Label lblIncome1Name;
+        private Label lblIncome2Name;
+        private Label lblIncome3Name;
+        private Label lblIncome1Value;
+        private Label lblIncome2Value;
+        private Label lblIncome3Value;
+        private Label lblGoal1Name;
+        private Label lblGoal2Name;
+        private Label lblGoal3Name;
+        private Label lblNearestGoalName;
+        private Label lblGoal1Progress;
+        private Label lblGoal2Progress;
+        private Label lblGoal3Progress;
+        private Label lblNearestGoalDate;
+        private Label label110;
+        private Label label111;
+        private Label label112;
+        private Label label113;
+        private Label label114;
+        private Label label115;
+        private Label lblTotalGivenDebt;
+        private Label lblOverdueGivenDebt;
+        private Label lblNextGivenDueDate;
+        private Label lblTotalReceivedDebt;
+        private Label lblOverdueReceivedDebt;
+        private Label lblNextReceivedDueDate;
+        private Label label122;
+        private Label label123;
+        private Label label124;
+        private Label label125;
+        private Label label126;
+        private Label label127;
+        private Label label128;
+        private Label label129;
+        private PictureBox pictureBox11;
+        private PictureBox pictureBox12;
+        private PictureBox pictureBox13;
+        private PictureBox pictureBox14;
+        private PictureBox pictureBox15;
+        private PictureBox pictureBox16;
+        private PictureBox pictureBox17;
+        private PictureBox pictureBox18;
+        private PictureBox pictureBox19;
+        private PictureBox pictureBox20;
+        private PictureBox pictureBox21;
+        private PictureBox pictureBox22;
+        private PictureBox pictureBox27;
+        private PictureBox pictureBox28;
+        private PictureBox pictureBox23;
+        private PictureBox pictureBox24;
+        private PictureBox pictureBox25;
+        private PictureBox pictureBox26;
+        private Label label132;
+        private Label label131;
+        private Label label130;
     }
 }

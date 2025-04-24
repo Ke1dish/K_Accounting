@@ -587,10 +587,12 @@ namespace K_Accounting.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), // Фиксированная дата
                             IsDeleted = false,
-                            Name = "БЕИ",
+                            Name = "БЕИ",                                                       //::::::::::::::::::::::::::::::::::
                             Symbol = ""
-                        });
-                });
+                        }
+                    );
+                }
+            );
 
             modelBuilder.Entity("K_Accounting.Models.Source", b =>
                 {

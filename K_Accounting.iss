@@ -1,6 +1,6 @@
 [Setup]
 AppName=Мои финансы
-AppVersion=1.25.4.17
+AppVersion=1.25.4.18
 DefaultDirName={autopf}\Мои финансы
 DefaultGroupName=Мои финансы
 OutputBaseFilename=K_Accounting_Setup
